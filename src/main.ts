@@ -28,8 +28,6 @@ async function bootstrap() {
   //   httpClient = await NestFactory.create(AppModule);
   // else httpClient = await NestFactory.create(AppModule);
 
-  // Test husky
-
   const httpClient = await NestFactory.create(AppModule);
 
   // Setup Swagger/Open Api
