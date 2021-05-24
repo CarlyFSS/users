@@ -26,7 +26,6 @@ async function bootstrap() {
   //   httpClient = await NestFactory.create(AppModule, certConfig);
 
   //   httpClient = await NestFactory.create(AppModule);
-  // else httpClient = await NestFactory.create(AppModule);
 
   const httpClient = await NestFactory.create(AppModule);
 
