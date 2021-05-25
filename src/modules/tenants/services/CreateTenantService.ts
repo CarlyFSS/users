@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { log_verbose } from '../../../shared/helper/app-logger';
-import CreateTenantDTO from '../dtos/create-tenant.dto';
-import Tenant from '../infra/typeorm/entities/tenant.entity';
-import TenantsRepository from '../infra/typeorm/repositories/tenants.repository';
+import CreateTenantDTO from '../dtos/CreateTenantDTO';
+import Tenant from '../infra/typeorm/entities/Tenant';
+import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
 export default class CreateTenantService {

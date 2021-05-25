@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import TenantsRepository from '../infra/typeorm/repositories/tenants.repository';
-import FakeTenantsRepository from '../repositories/fakes/fake-tenants.repository';
-import UpdateTenantService from './update-tenant.service';
+import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
+import FakeTenantsRepository from '../repositories/fakes/FakeTenantsRepository';
+import UpdateTenantService from './UpdateTenantService';
 
 let updateTenantService: UpdateTenantService;
 let tenantsRepository: TenantsRepository;

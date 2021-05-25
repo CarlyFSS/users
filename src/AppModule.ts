@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import TenantsModule from '@modules/tenants/tenants.module';
+import TenantsModule from '@modules/tenants/TenantsModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TerminusModule } from '@nestjs/terminus';
-import HealthController from './modules/health/health.controller';
+import HealthController from './modules/health/HealthController';
 
 @Module({
   imports: [

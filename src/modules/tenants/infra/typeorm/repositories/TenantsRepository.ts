@@ -1,12 +1,13 @@
-import CreateTenantDTO from '@modules/tenants/dtos/create-tenant.dto';
+import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import ITenantsRepository from '../../../repositories/i-tenants.repository';
-import Tenant from '../entities/tenant.entity';
+import ITenantsRepository from '../../../repositories/ITenantsRepository';
+import Tenant from '../entities/Tenant';
 
 @EntityRepository(Tenant)
 export default class TenantsRepository
   extends AbstractRepository<Tenant>
-  implements ITenantsRepository {
+  implements ITenantsRepository
+{
   private ormRepository = getRepository(Tenant);
 
   public async create(data: CreateTenantDTO): Promise<Tenant> {
