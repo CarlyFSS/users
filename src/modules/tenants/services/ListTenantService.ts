@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { log_verbose } from '../../../shared/helper/app-logger';
 import Tenant from '../infra/typeorm/entities/Tenant';
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
@@ -13,8 +12,6 @@ export default class ListTenantService {
     if (!tenant) {
       throw new BadRequestException(`User with id "${id}" does not exists!`);
     }
-
-    log_verbose('Tenants Controller', `SYSADMIN: Listed tenant ${tenant.name}`);
 
     return tenant;
   }

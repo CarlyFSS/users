@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { log_verbose } from '../../../shared/helper/app-logger';
 import CreateTenantDTO from '../dtos/CreateTenantDTO';
 import Tenant from '../infra/typeorm/entities/Tenant';
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
@@ -16,8 +15,6 @@ export default class CreateTenantService {
     }
 
     const tenant = await this.tenantsRepository.create({ name });
-
-    log_verbose('Tenants Controller', `SYSADMIN: Created tenant ${name}`);
 
     return tenant;
   }
