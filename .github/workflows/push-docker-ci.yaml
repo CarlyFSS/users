@@ -5,6 +5,7 @@ on:
       - develop
 jobs:
   push_docker_image:
+    name: Push development Docker image
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
