@@ -20,10 +20,9 @@ jobs:
         # you can also use v1 tag which _should_ automatically upgrade to latest
         # uses: lukaszraczylo/semver-generator@v1
         with:
-          config_file: semver.yaml
           repository_url: https://github.com/fireheet/users
           # when using remote repository, especially with private one:
-          github_username: carlyfss
+          github_username: CarlyFSS
           github_token: C@rlaokick824672
       - name: Semver check
         run: |
