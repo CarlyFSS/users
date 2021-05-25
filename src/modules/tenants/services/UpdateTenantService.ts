@@ -6,18 +6,20 @@ import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
 export default class UpdateTenantService {
-  constructor(private tenantsRepository: TenantsRepository) {}
+  constructor(private readonly tenantsRepository: TenantsRepository) {}
 
   public async execute({ id, name }: UpdateTenantDTO): Promise<Tenant> {
     const tenant = await this.tenantsRepository.findByID(id);
 
-    if (!tenant)
+    if (!tenant) {
       throw new BadRequestException(`User with ID "${id}" not found!`);
+    }
 
     const checkName = await this.tenantsRepository.findByName(name);
 
-    if (checkName)
+    if (checkName) {
       throw new BadRequestException(`User with name "${name}" alredy exists!`);
+    }
 
     tenant.name = name;
 

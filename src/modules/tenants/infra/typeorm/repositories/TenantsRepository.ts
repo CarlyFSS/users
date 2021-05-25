@@ -8,7 +8,7 @@ export default class TenantsRepository
   extends AbstractRepository<Tenant>
   implements ITenantsRepository
 {
-  private ormRepository = getRepository(Tenant);
+  private readonly ormRepository = getRepository(Tenant);
 
   public async create(data: CreateTenantDTO): Promise<Tenant> {
     const tenant = this.ormRepository.create(data);

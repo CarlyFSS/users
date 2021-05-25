@@ -8,8 +8,8 @@ export default class FakeTenantsRepository implements ITenantsRepository {
 
   public async create({ name }: CreateTenantDTO): Promise<Tenant> {
     const tenant: Tenant = {
-      id: datatype.uuid(),
       name,
+      id: datatype.uuid(),
       created_at: new Date(),
       updated_at: new Date(),
     };

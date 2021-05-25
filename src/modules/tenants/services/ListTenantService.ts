@@ -5,13 +5,14 @@ import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
 export default class ListTenantService {
-  constructor(private tenantsRepository: TenantsRepository) {}
+  constructor(private readonly tenantsRepository: TenantsRepository) {}
 
   public async execute(id: string): Promise<Tenant> {
     const tenant = await this.tenantsRepository.findByID(id);
 
-    if (!tenant)
+    if (!tenant) {
       throw new BadRequestException(`User with id "${id}" does not exists!`);
+    }
 
     log_verbose('Tenants Controller', `SYSADMIN: Listed tenant ${tenant.name}`);
 
