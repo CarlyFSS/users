@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/CreateTenantService.spec.ts">
+        <testCase name="CreateTenantService should be able create an tenant with a valid name" duration="25"/>
+        <testCase name="CreateTenantService should not be able create an tenant with a alredy existing one" duration="3"/>
+    </file>
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/UpdateTenantService.spec.ts">
+        <testCase name="UpdateTenantService should be able to update an existing tenant" duration="25"/>
+        <testCase name="UpdateTenantService should not update an non existing tenant" duration="3"/>
+        <testCase name="UpdateTenantService should not be able to update an tenant&apos;s name to an alredy existing one" duration="3"/>
+    </file>
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/ListTenantService.spec.ts">
+        <testCase name="ListTenantService should be able to list an tenant with a valid id" duration="25"/>
+        <testCase name="ListTenantService should not be able to list an tenant with a invalid id" duration="3"/>
+    </file>
+</testExecutions>
