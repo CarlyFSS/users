@@ -1,15 +1,15 @@
-import CreateTenantDTO from '@modules/tenants/dtos/create-tenant.dto';
-import Tenant from '@modules/tenants/infra/typeorm/entities/tenant.entity';
-import { random } from 'faker';
-import ITenantsRepository from '../i-tenants.repository';
+import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
+import Tenant from '@modules/tenants/infra/typeorm/entities/Tenant';
+import { datatype } from 'faker';
+import ITenantsRepository from '../ITenantsRepository';
 
 export default class FakeTenantsRepository implements ITenantsRepository {
   private tenants: Tenant[] = [];
 
   public async create({ name }: CreateTenantDTO): Promise<Tenant> {
     const tenant: Tenant = {
-      id: random.uuid(),
       name,
+      id: datatype.uuid(),
       created_at: new Date(),
       updated_at: new Date(),
     };

@@ -11,9 +11,9 @@ import {
 @Controller('/healthz')
 export default class HealthController {
   constructor(
-    private health: HealthCheckService,
-    private http: HttpHealthIndicator,
-    private typeorm: TypeOrmHealthIndicator,
+    private readonly health: HealthCheckService,
+    private readonly http: HttpHealthIndicator,
+    private readonly typeorm: TypeOrmHealthIndicator,
   ) {}
 
   @Get()

@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-// import elastic from 'elastic-apm-node';
-// import certConfig from '@config/cert.config';
 import 'reflect-metadata';
 import { log_verbose } from '@shared/helper/app-logger';
 import { SwaggerModule } from '@nestjs/swagger';
-import { INestApplication } from '@nestjs/common';
 import openApiDoc from '@shared/docs/create-swagger-docs';
-import AppModule from './app.module';
+import AppModule from './AppModule';
 
-const PORT = process.env.PORT || '3000';
+/**
+ * Imports for elastic and prod config
+ *
+ * import { INestApplication } from '@nestjs/common';
+ * import elastic from 'elastic-apm-node';
+ * import certConfig from '@config/cert.config';
+ */
+
+const PORT = process.env.PORT || '3333';
 
 async function bootstrap() {
   // Starts Elastic Search APM Agent
@@ -27,8 +32,6 @@ async function bootstrap() {
 
   //   httpClient = await NestFactory.create(AppModule);
   // else httpClient = await NestFactory.create(AppModule);
-
-  // Test husky
 
   const httpClient = await NestFactory.create(AppModule);
 

@@ -15,7 +15,9 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
-/coverage
+/coverage/*
+!coverage/lcov.info
+!coverage/test-reporter.xml
 /.nyc_output
 
 # IDEs and editors
@@ -37,6 +39,7 @@ lerna-debug.log*
 # Ignore certificates files
 certificates/*
 !.gitkeep
+
 
 # Others
 users-msvc.code-workspace
