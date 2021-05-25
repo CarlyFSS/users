@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Install node modules
+      - name: Install NPM Modules
         run: yarn
       - name: Run unit tests
         run: yarn test
