@@ -44,4 +44,3 @@ yarn.lock
 package-lock.json
 .env
 /k8s
-sonar-project.properties
