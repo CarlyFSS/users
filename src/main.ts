@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { log_verbose } from '@shared/helper/app-logger';
+import { logVerbose } from '@shared/helper/AppLogger';
 import { SwaggerModule } from '@nestjs/swagger';
 import openApiDoc from '@shared/docs/create-swagger-docs';
 import AppModule from './AppModule';
@@ -40,7 +40,7 @@ async function bootstrap() {
 
   await httpClient.listen(PORT);
 
-  log_verbose('Application', `Server listening on port: ${PORT}`);
+  logVerbose('Application', `Server listening on port: ${PORT}`);
 }
 
 bootstrap();
