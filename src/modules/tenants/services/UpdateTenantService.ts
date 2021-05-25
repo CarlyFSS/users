@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { log_verbose } from '../../../shared/helper/app-logger';
 import UpdateTenantDTO from '../dtos/UpdateTenantDTO';
 import Tenant from '../infra/typeorm/entities/Tenant';
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
@@ -24,13 +23,6 @@ export default class UpdateTenantService {
     tenant.name = name;
 
     await this.tenantsRepository.update(tenant);
-
-    log_verbose(
-      'Tenants Controller',
-      `SYSADMIN: Updated tenant to ${JSON.stringify({
-        name,
-      })}`,
-    );
 
     return tenant;
   }
