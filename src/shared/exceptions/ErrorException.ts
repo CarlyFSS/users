@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import httpLog from '@config/log.config';
-import { log_error } from '@shared/helper/app-logger';
+import { logError } from '@shared/helper/AppLogger';
 
 @Catch(HttpException)
 export default class ErrorException implements ExceptionFilter {
@@ -17,7 +17,7 @@ export default class ErrorException implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-    log_error('Exception', exception.message);
+    logError('Exception', exception.message);
 
     httpLog.post('/', {
       message: exception.message,
