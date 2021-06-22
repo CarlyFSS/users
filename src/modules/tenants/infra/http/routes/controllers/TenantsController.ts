@@ -9,9 +9,12 @@ import {
   Param,
   UseFilters,
   Get,
+  Inject,
 } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
+import { logError } from '../../../../../../shared/helper/AppLogger';
 import ListTenantService from '../../../../services/ListTenantService';
 import Tenant from '../../../typeorm/entities/Tenant';
 
@@ -23,10 +26,14 @@ export default class TenantsController {
     private readonly createTenant: CreateTenantService,
     private readonly updateTenant: UpdateTenantService,
     private readonly listTenant: ListTenantService,
+    @Inject('TENANTS_SERVICE')
+    private readonly client: ClientProxy,
   ) {}
 
   @Post()
   async create(@Body() data: CreateTenantDTO): Promise<Tenant> {
+    this.client.emit<string>('tenants', 'test');
+
     return this.createTenant.execute(data);
   }
 
@@ -40,6 +47,12 @@ export default class TenantsController {
 
   @Get(':id')
   async show(@Param('id') id: string): Promise<Tenant> {
+    try {
+      const t = this.client.emit<string>('tenants', 'test');
+    } catch (error) {
+      logError('error', error);
+    }
+
     return this.listTenant.execute(id);
   }
 }

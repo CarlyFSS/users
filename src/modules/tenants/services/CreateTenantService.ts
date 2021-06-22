@@ -14,8 +14,6 @@ export default class CreateTenantService {
       throw new BadRequestException(`User with name "${name}" alredy exists!`);
     }
 
-    const tenant = await this.tenantsRepository.create({ name });
-
-    return tenant;
+    return this.tenantsRepository.create({ name });
   }
 }

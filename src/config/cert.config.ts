@@ -4,10 +4,24 @@ import { resolve } from 'path';
 export default {
   httpsOptions: {
     key: readFileSync(
-      resolve(__dirname, '..', '..', '..', 'certificates', 'fireheet.key'),
+      resolve(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'certificates',
+        `${process.env.CERT_KEY_NAME}`,
+      ),
     ),
     cert: readFileSync(
-      resolve(__dirname, '..', '..', '..', 'certificates', 'fireheet.pem'),
+      resolve(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'certificates',
+        `${process.env.CERT_NAME}`,
+      ),
     ),
   },
 };

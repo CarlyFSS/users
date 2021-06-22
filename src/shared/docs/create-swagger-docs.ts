@@ -9,7 +9,5 @@ export default (app): OpenAPIObject => {
     .setVersion('0.0.1')
     .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-
-  return document;
+  return SwaggerModule.createDocument(app, swaggerConfig);
 };

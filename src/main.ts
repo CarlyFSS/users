@@ -3,6 +3,8 @@ import 'reflect-metadata';
 import { logVerbose } from '@shared/helper/AppLogger';
 import { SwaggerModule } from '@nestjs/swagger';
 import openApiDoc from '@shared/docs/create-swagger-docs';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { INestApplication } from '@nestjs/common';
 import AppModule from './AppModule';
 
 /**
@@ -13,9 +15,10 @@ import AppModule from './AppModule';
  * import certConfig from '@config/cert.config';
  */
 
-const PORT = process.env.PORT || '3333';
+const PORT = +process.env.PORT;
 
 async function bootstrap() {
+  logVerbose('Application', process.env.ORM_TYPE);
   // Starts Elastic Search APM Agent
   // elastic.start({
   //   serviceName: 'users',
@@ -25,22 +28,29 @@ async function bootstrap() {
   // });
 
   // Setup Nest.Js app
-  // let httpClient: INestApplication;
-
   // if (process.env.NODE_ENV === 'production')
   //   httpClient = await NestFactory.create(AppModule, certConfig);
 
-  //   httpClient = await NestFactory.create(AppModule);
-  // else httpClient = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-  const httpClient = await NestFactory.create(AppModule);
+  // Create another transport
+  // const amqpClient = app.connectMicroservice({
+  //   transport: Transport.RMQ,
+  //   options: {
+  //     urls: [process.env.RABBITMQ_URI],
+  //     queue: 'tenants_queue',
+  //     queueOptions: {
+  //       durable: false,
+  //     },
+  //   },
+  // });
 
   // Setup Swagger/Open Api
-  SwaggerModule.setup('api', httpClient, openApiDoc(httpClient));
+  // SwaggerModule.setup('api', httpClient, openApiDoc(httpClient));
 
-  await httpClient.listen(PORT);
+  // await app.startAllMicroservices();
 
-  logVerbose('Application', `Server listening on port: ${PORT}`);
+  await app.listen(PORT);
 }
 
 bootstrap();
