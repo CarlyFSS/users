@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
 import CreateTenantDTO from '../dtos/CreateTenantDTO';
-import Tenant from '../infra/typeorm/entities/Tenant';
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
@@ -14,8 +14,6 @@ export default class CreateTenantService {
       throw new BadRequestException(`User with name "${name}" alredy exists!`);
     }
 
-    const tenant = await this.tenantsRepository.create({ name });
-
-    return tenant;
+    return this.tenantsRepository.create({ name });
   }
 }

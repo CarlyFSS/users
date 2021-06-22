@@ -1,19 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { logVerbose } from '@shared/helper/AppLogger';
 import { SwaggerModule } from '@nestjs/swagger';
 import openApiDoc from '@shared/docs/create-swagger-docs';
+import { INestApplication } from '@nestjs/common';
+import certConfig from '@config/cert.config';
 import AppModule from './AppModule';
-
-/**
- * Imports for elastic and prod config
- *
- * import { INestApplication } from '@nestjs/common';
- * import elastic from 'elastic-apm-node';
- * import certConfig from '@config/cert.config';
- */
-
-const PORT = process.env.PORT || '3333';
 
 async function bootstrap() {
   // Starts Elastic Search APM Agent
@@ -24,23 +15,21 @@ async function bootstrap() {
   //   environment: 'development',
   // });
 
-  // Setup Nest.Js app
-  // let httpClient: INestApplication;
+  const PORT = +process.env.PORT || 3333;
 
-  // if (process.env.NODE_ENV === 'production')
-  //   httpClient = await NestFactory.create(AppModule, certConfig);
+  let app: INestApplication;
 
-  //   httpClient = await NestFactory.create(AppModule);
-  // else httpClient = await NestFactory.create(AppModule);
+  if (process.env.NODE_ENV === 'production') {
+    app = await NestFactory.create(AppModule, certConfig);
+  } else {
+    app = await NestFactory.create(AppModule);
+  }
 
-  const httpClient = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('v1');
 
-  // Setup Swagger/Open Api
-  SwaggerModule.setup('api', httpClient, openApiDoc(httpClient));
+  SwaggerModule.setup('api', app, openApiDoc(app));
 
-  await httpClient.listen(PORT);
-
-  logVerbose('Application', `Server listening on port: ${PORT}`);
+  await app.listen(PORT);
 }
 
 bootstrap();

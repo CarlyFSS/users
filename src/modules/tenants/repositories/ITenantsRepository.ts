@@ -1,5 +1,5 @@
+import Tenant from '@fireheet/entities/typeorm/Tenant';
 import CreateTenantDTO from '../dtos/CreateTenantDTO';
-import Tenant from '../infra/typeorm/entities/Tenant';
 
 export default interface ITenantsRepository {
   create(data: CreateTenantDTO): Promise<Tenant>;

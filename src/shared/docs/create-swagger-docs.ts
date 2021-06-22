@@ -1,6 +1,7 @@
+import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
-export default (app): OpenAPIObject => {
+export default (app: INestApplication): OpenAPIObject => {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Users Microservice')
     .setDescription(
@@ -9,7 +10,5 @@ export default (app): OpenAPIObject => {
     .setVersion('0.0.1')
     .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-
-  return document;
+  return SwaggerModule.createDocument(app, swaggerConfig);
 };

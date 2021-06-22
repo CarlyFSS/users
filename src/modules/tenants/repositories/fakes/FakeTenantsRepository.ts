@@ -1,5 +1,5 @@
 import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
-import Tenant from '@modules/tenants/infra/typeorm/entities/Tenant';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
 import { datatype } from 'faker';
 import ITenantsRepository from '../ITenantsRepository';
 

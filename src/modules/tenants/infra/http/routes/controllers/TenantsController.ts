@@ -12,8 +12,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import ListTenantService from '../../../../services/ListTenantService';
-import Tenant from '../../../typeorm/entities/Tenant';
+import ListTenantService from '@modules/tenants/services/ListTenantService';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @ApiTags('Tenants Routes')
 @Controller('tenants')
@@ -23,11 +24,20 @@ export default class TenantsController {
     private readonly createTenant: CreateTenantService,
     private readonly updateTenant: UpdateTenantService,
     private readonly listTenant: ListTenantService,
+    private readonly amqpConnection: AmqpConnection,
   ) {}
 
   @Post()
   async create(@Body() data: CreateTenantDTO): Promise<Tenant> {
-    return this.createTenant.execute(data);
+    const tenant = this.createTenant.execute(data);
+
+    this.amqpConnection.publish(
+      'users_exchange',
+      'tenant',
+      JSON.stringify(tenant),
+    );
+
+    return tenant;
   }
 
   @Patch(':id')
@@ -35,7 +45,15 @@ export default class TenantsController {
     @Param('id') id: string,
     @Body('name') name: string,
   ): Promise<Tenant> {
-    return this.updateTenant.execute({ id, name });
+    const tenant = await this.updateTenant.execute({ id, name });
+
+    this.amqpConnection.publish(
+      'users_exchange',
+      'tenant',
+      JSON.stringify(tenant),
+    );
+
+    return tenant;
   }
 
   @Get(':id')

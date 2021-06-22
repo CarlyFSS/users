@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
 import UpdateTenantDTO from '../dtos/UpdateTenantDTO';
-import Tenant from '../infra/typeorm/entities/Tenant';
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
@@ -17,7 +17,7 @@ export default class UpdateTenantService {
     const checkName = await this.tenantsRepository.findByName(name);
 
     if (checkName) {
-      throw new BadRequestException(`User with name "${name}" alredy exists!`);
+      throw new BadRequestException(`User with name "${name}" already exists!`);
     }
 
     tenant.name = name;
