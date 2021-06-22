@@ -1,6 +1,7 @@
+import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
-export default (app): OpenAPIObject => {
+export default (app: INestApplication): OpenAPIObject => {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Users Microservice')
     .setDescription(

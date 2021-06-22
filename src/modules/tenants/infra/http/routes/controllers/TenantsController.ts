@@ -9,14 +9,12 @@ import {
   Param,
   UseFilters,
   Get,
-  Inject,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { logError } from '../../../../../../shared/helper/AppLogger';
-import ListTenantService from '../../../../services/ListTenantService';
-import Tenant from '../../../typeorm/entities/Tenant';
+import ListTenantService from '@modules/tenants/services/ListTenantService';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @ApiTags('Tenants Routes')
 @Controller('tenants')
@@ -26,15 +24,20 @@ export default class TenantsController {
     private readonly createTenant: CreateTenantService,
     private readonly updateTenant: UpdateTenantService,
     private readonly listTenant: ListTenantService,
-    @Inject('TENANTS_SERVICE')
-    private readonly client: ClientProxy,
+    private readonly amqpConnection: AmqpConnection,
   ) {}
 
   @Post()
   async create(@Body() data: CreateTenantDTO): Promise<Tenant> {
-    this.client.emit<string>('tenants', 'test');
+    const tenant = this.createTenant.execute(data);
 
-    return this.createTenant.execute(data);
+    this.amqpConnection.publish(
+      'users_exchange',
+      'tenant',
+      JSON.stringify(tenant),
+    );
+
+    return tenant;
   }
 
   @Patch(':id')
@@ -42,17 +45,19 @@ export default class TenantsController {
     @Param('id') id: string,
     @Body('name') name: string,
   ): Promise<Tenant> {
-    return this.updateTenant.execute({ id, name });
+    const tenant = await this.updateTenant.execute({ id, name });
+
+    this.amqpConnection.publish(
+      'users_exchange',
+      'tenant',
+      JSON.stringify(tenant),
+    );
+
+    return tenant;
   }
 
   @Get(':id')
   async show(@Param('id') id: string): Promise<Tenant> {
-    try {
-      const t = this.client.emit<string>('tenants', 'test');
-    } catch (error) {
-      logError('error', error);
-    }
-
     return this.listTenant.execute(id);
   }
 }

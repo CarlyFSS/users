@@ -1,5 +1,11 @@
 import { Logger } from '@nestjs/common';
 
+export function logNormal(context: string, message: string) {
+  const logger = new Logger(context);
+
+  logger.log(message);
+}
+
 export function logVerbose(context: string, message: string) {
   const logger = new Logger(context);
 

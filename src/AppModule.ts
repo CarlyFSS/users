@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import TenantsModule from '@modules/tenants/TenantsModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TerminusModule } from '@nestjs/terminus';
-import envConfig from '@config/env.config';
 import { ConfigModule } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import exchanges from '@config/exchanges.config';
+import dotenv from 'dotenv';
 import HealthController from './modules/health/HealthController';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(envConfig),
+    ConfigModule.forRoot({ cache: true, isGlobal: true }),
     TypeOrmModule.forRoot({
       type: (`${process.env.ORM_TYPE}` as 'postgres') || 'postgres',
       host: `${process.env.ORM_HOST}` || 'localhost',
@@ -21,8 +22,15 @@ import HealthController from './modules/health/HealthController';
       autoLoadEntities: true,
     }),
     TerminusModule,
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges,
+      uri: dotenv.config().parsed.AMQP_URI,
+      connectionInitOptions: { wait: false },
+    }),
     TenantsModule,
   ],
+  providers: [],
   controllers: [HealthController],
+  exports: [TypeOrmModule, ConfigModule, RabbitMQModule],
 })
 export default class AppModule {}

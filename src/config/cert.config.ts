@@ -1,6 +1,10 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+import dotenv from 'dotenv';
+
+const result = dotenv.config();
+
 export default {
   httpsOptions: {
     key: readFileSync(
@@ -10,7 +14,7 @@ export default {
         '..',
         '..',
         'certificates',
-        `${process.env.CERT_KEY_NAME}`,
+        `${result.parsed.CERT_KEY_NAME}.key`,
       ),
     ),
     cert: readFileSync(
@@ -20,7 +24,7 @@ export default {
         '..',
         '..',
         'certificates',
-        `${process.env.CERT_NAME}`,
+        `${result.parsed.CERT_NAME}.pem`,
       ),
     ),
   },

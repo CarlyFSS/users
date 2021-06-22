@@ -49,6 +49,9 @@
 			"titleBar.activeBackground": "#5A3903",
 			"titleBar.activeForeground": "#FFFAF3"
 		},
-		"git.ignoreLimitWarning": true
+		"git.ignoreLimitWarning": true,
+		"cSpell.words": [
+			"fortio"
+		]
 	}
 }

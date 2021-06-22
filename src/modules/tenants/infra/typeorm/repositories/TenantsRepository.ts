@@ -1,7 +1,7 @@
 import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
+import Tenant from '@fireheet/entities/typeorm/Tenant';
 import ITenantsRepository from '../../../repositories/ITenantsRepository';
-import Tenant from '../entities/Tenant';
 
 @EntityRepository(Tenant)
 export default class TenantsRepository

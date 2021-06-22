@@ -12,7 +12,6 @@ import {
 export default class HealthController {
   constructor(
     private readonly health: HealthCheckService,
-    private readonly http: HttpHealthIndicator,
     private readonly typeorm: TypeOrmHealthIndicator,
   ) {}
 
