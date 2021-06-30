@@ -1,13 +1,12 @@
-import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
-import FakeRolesRepository from '../repositories/fakes/FakeTenantsRepository';
-import ListRoleService from './ListRoleService';
+import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
+import ListAllRolesService from './ListAllRolesService';
 
-let listRoleService: ListRoleService;
+let listAllRolesService: ListAllRolesService;
 let rolesRepository: RolesRepository;
 
-describe('ListTenantService', () => {
+describe('ListAllRolesService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -15,23 +14,17 @@ describe('ListTenantService', () => {
           provide: RolesRepository,
           useValue: new FakeRolesRepository(),
         },
-        ListRoleService,
+        ListAllRolesService,
       ],
     }).compile();
 
-    listRoleService = module.get<ListRoleService>(ListRoleService);
+    listAllRolesService = module.get<ListAllRolesService>(ListAllRolesService);
     rolesRepository = module.get<RolesRepository>(RolesRepository);
   });
 
-  it('should be able to list a tenant with a valid id', async () => {
-    const tenantId = await listRoleService.execute('1');
+  it('should be able to list all roles', async () => {
+    const roles = await listAllRolesService.execute();
 
-    expect(tenantId).toHaveProperty('id');
-  });
-
-  it('should not be able to list a tenant with a invalid id', async () => {
-    await expect(listRoleService.execute('invalid')).rejects.toBeInstanceOf(
-      BadRequestException,
-    );
+    expect(roles.length).toBeGreaterThan(1);
   });
 });

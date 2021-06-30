@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
-import FakeRolesRepository from '../repositories/fakes/FakeTenantsRepository';
+import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
 import ListRoleService from './ListRoleService';
 
 let listRoleService: ListRoleService;
@@ -23,13 +23,13 @@ describe('ListTenantService', () => {
     rolesRepository = module.get<RolesRepository>(RolesRepository);
   });
 
-  it('should be able to list a tenant with a valid id', async () => {
-    const tenantId = await listRoleService.execute('1');
+  it('should be able to list a role with a valid id', async () => {
+    const roleId = await listRoleService.execute('1');
 
-    expect(tenantId).toHaveProperty('id');
+    expect(roleId).toHaveProperty('id');
   });
 
-  it('should not be able to list a tenant with a invalid id', async () => {
+  it('should not be able to list a role with a invalid id', async () => {
     await expect(listRoleService.execute('invalid')).rejects.toBeInstanceOf(
       BadRequestException,
     );

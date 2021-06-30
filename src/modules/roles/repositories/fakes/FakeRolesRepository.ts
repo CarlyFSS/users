@@ -10,10 +10,16 @@ export default class FakeRolesRepository implements IRolesRepository {
       created_at: new Date(),
       updated_at: new Date(),
     },
+    {
+      id: '2',
+      name: 'admin',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
   ];
 
-  public async findByID(id: string): Promise<Tenant | undefined> {
-    return this.roles.find(tenant => tenant.id === id);
+  public async findByID(id: string): Promise<Role | undefined> {
+    return this.roles.find(role => role.id === id);
   }
 
   public async listAll(): Promise<Role[]> {

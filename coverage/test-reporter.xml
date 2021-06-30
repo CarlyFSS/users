@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
     <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/CreateTenantService.spec.ts">
-        <testCase name="CreateTenantService should be able create an tenant with a valid name" duration="25"/>
-        <testCase name="CreateTenantService should not be able create an tenant with a alredy existing one" duration="3"/>
-    </file>
-    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/UpdateTenantService.spec.ts">
-        <testCase name="UpdateTenantService should be able to update an existing tenant" duration="25"/>
-        <testCase name="UpdateTenantService should not update an non existing tenant" duration="3"/>
-        <testCase name="UpdateTenantService should not be able to update an tenant&apos;s name to an alredy existing one" duration="3"/>
+        <testCase name="CreateTenantService should be able create a tenant with a valid name" duration="12"/>
+        <testCase name="CreateTenantService should not be able create a tenant with a already existing one" duration="4"/>
     </file>
     <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/ListTenantService.spec.ts">
-        <testCase name="ListTenantService should be able to list an tenant with a valid id" duration="25"/>
-        <testCase name="ListTenantService should not be able to list an tenant with a invalid id" duration="3"/>
+        <testCase name="ListTenantService should be able to list a tenant with a valid id" duration="13"/>
+        <testCase name="ListTenantService should not be able to list a tenant with a invalid id" duration="3"/>
+    </file>
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/tenants/services/UpdateTenantService.spec.ts">
+        <testCase name="UpdateTenantService should be able to update a existing tenant" duration="18"/>
+        <testCase name="UpdateTenantService should not update a non existing tenant" duration="9"/>
+        <testCase name="UpdateTenantService should not be able to update a tenant&apos;s name to a already existing one" duration="4"/>
+    </file>
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/roles/services/ListAllRolesService.spec.ts">
+        <testCase name="ListAllRolesService should be able to list all roles" duration="11"/>
+    </file>
+    <file path="/home/kron/Projects/Fireheet/Microservices/Users/src/modules/roles/services/ListRoleService.spec.ts">
+        <testCase name="ListTenantService should be able to list a role with a valid id" duration="11"/>
+        <testCase name="ListTenantService should not be able to list a role with a invalid id" duration="2"/>
     </file>
 </testExecutions>

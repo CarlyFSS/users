@@ -7,12 +7,12 @@ export default class ListRoleService {
   constructor(private readonly rolesRepository: RolesRepository) {}
 
   public async execute(id: string): Promise<Role> {
-    const tenant = await this.rolesRepository.findByID(id);
+    const role = await this.rolesRepository.findByID(id);
 
-    if (!tenant) {
-      throw new BadRequestException(`User with id "${id}" does not exists!`);
+    if (!role) {
+      throw new BadRequestException(`Role with id "${id}" does not exists!`);
     }
 
-    return tenant;
+    return role;
   }
 }
