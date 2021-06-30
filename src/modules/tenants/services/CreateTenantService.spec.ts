@@ -23,13 +23,13 @@ describe('CreateTenantService', () => {
     tenantsRepository = module.get<TenantsRepository>(TenantsRepository);
   });
 
-  it('should be able create an tenant with a valid name', async () => {
+  it('should be able create a tenant with a valid name', async () => {
     const tenant = await createTenantService.execute({ name: 'jon' });
 
     expect(tenant).toHaveProperty('id');
   });
 
-  it('should not be able create an tenant with a alredy existing one', async () => {
+  it('should not be able create a tenant with a already existing one', async () => {
     await createTenantService.execute({ name: 'jon' });
 
     await expect(

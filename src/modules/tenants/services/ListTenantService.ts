@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import Tenant from '@fireheet/entities/typeorm/Tenant';
+
 import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
 
 @Injectable()
