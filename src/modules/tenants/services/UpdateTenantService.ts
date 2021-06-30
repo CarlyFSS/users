@@ -11,13 +11,15 @@ export default class UpdateTenantService {
     const tenant = await this.tenantsRepository.findByID(id);
 
     if (!tenant) {
-      throw new BadRequestException(`User with ID "${id}" not found!`);
+      throw new BadRequestException(`Tenant with ID "${id}" not found!`);
     }
 
     const checkName = await this.tenantsRepository.findByName(name);
 
     if (checkName) {
-      throw new BadRequestException(`User with name "${name}" already exists!`);
+      throw new BadRequestException(
+        `Tenant with name "${name}" already exists!`,
+      );
     }
 
     tenant.name = name;

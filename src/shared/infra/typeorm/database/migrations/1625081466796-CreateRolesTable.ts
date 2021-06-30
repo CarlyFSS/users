@@ -1,18 +1,13 @@
+import { query } from 'express';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-/**
- * @ignore
- */
-export default class CreateTenantsTable1616527155532
+export default class CreateRolesTable1625081466796
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Enables UUID generation (doesn't need to be removed in rollback)
-    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-
     await queryRunner.createTable(
       new Table({
-        name: 'tenants',
+        name: 'roles',
         columns: [
           {
             name: 'id',
@@ -40,6 +35,13 @@ export default class CreateTenantsTable1616527155532
         ],
       }),
     );
+
+    // Add default roles
+    await queryRunner.query(`INSERT INTO roles(name) VALUES ('SYSADMIN');`);
+    await queryRunner.query(`INSERT INTO roles(name) VALUES ('ADMIN');`);
+    await queryRunner.query(`INSERT INTO roles(name) VALUES ('MANAGER');`);
+    await queryRunner.query(`INSERT INTO roles(name) VALUES ('EMPLOYEE');`);
+    await queryRunner.query(`INSERT INTO roles(name) VALUES ('CLIENT');`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

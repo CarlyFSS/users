@@ -11,7 +11,7 @@ export default class ListTenantService {
     const tenant = await this.tenantsRepository.findByID(id);
 
     if (!tenant) {
-      throw new BadRequestException(`User with id "${id}" does not exists!`);
+      throw new BadRequestException(`Tenant with id "${id}" does not exists!`);
     }
 
     return tenant;

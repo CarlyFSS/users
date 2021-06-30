@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package roles;
+
+service RolesGrpcController {
+  rpc List(RoleID) returns (Role);
+  rpc ListAll(Empty) returns (Roles);
+}
+
+message Role {
+  string id = 1;
+  string name = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+
+message Roles {
+  repeated Role roles = 1;
+}
+
+message RoleID {
+  string id = 1;
+}
+
+message Empty {}

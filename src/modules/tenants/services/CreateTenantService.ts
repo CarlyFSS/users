@@ -11,7 +11,9 @@ export default class CreateTenantService {
     const tenantExists = await this.tenantsRepository.findByName(name);
 
     if (tenantExists) {
-      throw new BadRequestException(`User with name "${name}" already exists!`);
+      throw new BadRequestException(
+        `Tenant with name "${name}" already exists!`,
+      );
     }
 
     return this.tenantsRepository.create({ name });
