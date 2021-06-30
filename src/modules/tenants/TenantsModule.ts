@@ -11,6 +11,7 @@ import CreateTenantService from './services/CreateTenantService';
 import ListTenantService from './services/ListTenantService';
 import UpdateTenantService from './services/UpdateTenantService';
 import TenantsEventController from './infra/events/controllers/TenantsEventController';
+import TenantsGrpcController from './infra/grpc/routes/controllers/TenantsGrpcController';
 
 @Module({
   imports: [
@@ -19,7 +20,11 @@ import TenantsEventController from './infra/events/controllers/TenantsEventContr
     CacheModule.register(redisConfig),
     AMQPProviderModule,
   ],
-  controllers: [TenantsController, TenantsEventController],
+  controllers: [
+    TenantsController,
+    TenantsEventController,
+    TenantsGrpcController,
+  ],
   providers: [CreateTenantService, UpdateTenantService, ListTenantService],
   exports: [TypeOrmModule],
 })
