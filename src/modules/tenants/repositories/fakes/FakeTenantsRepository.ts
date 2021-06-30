@@ -1,6 +1,6 @@
 import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
 import Tenant from '@fireheet/entities/typeorm/Tenant';
-import { datatype } from 'faker';
+import faker from 'faker';
 import ITenantsRepository from '../ITenantsRepository';
 
 export default class FakeTenantsRepository implements ITenantsRepository {
@@ -9,7 +9,7 @@ export default class FakeTenantsRepository implements ITenantsRepository {
   public async create({ name }: CreateTenantDTO): Promise<Tenant> {
     const tenant: Tenant = {
       name,
-      id: datatype.uuid(),
+      id: faker.datatype.uuid(),
       created_at: new Date(),
       updated_at: new Date(),
     };

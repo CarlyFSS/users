@@ -7,14 +7,6 @@ import certConfig from '@config/cert.config';
 import AppModule from './AppModule';
 
 async function bootstrap() {
-  // Starts Elastic Search APM Agent
-  // elastic.start({
-  //   serviceName: 'users',
-  //   serverUrl: 'http://elasticsearch:8200',
-  //   secretToken: '0e42111bb2384abd4691700e71cccfca',
-  //   environment: 'development',
-  // });
-
   const PORT = +process.env.PORT || 3333;
 
   let app: INestApplication;

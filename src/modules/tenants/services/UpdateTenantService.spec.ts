@@ -23,7 +23,7 @@ describe('UpdateTenantService', () => {
     tenantsRepository = module.get<TenantsRepository>(TenantsRepository);
   });
 
-  it('should be able to update an existing tenant', async () => {
+  it('should be able to update a existing tenant', async () => {
     const tenant = await tenantsRepository.create({ name: 'jon' });
 
     await updateTenantService.execute({ id: tenant.id, name: 'jonathan' });
@@ -31,13 +31,13 @@ describe('UpdateTenantService', () => {
     expect(tenant).toHaveProperty('id');
   });
 
-  it('should not update an non existing tenant', async () => {
+  it('should not update a non existing tenant', async () => {
     await expect(
       updateTenantService.execute({ id: 'undefined', name: 'jon' }),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
-  it("should not be able to update an tenant's name to an alredy existing one", async () => {
+  it("should not be able to update a tenant's name to a already existing one", async () => {
     const tenant = await tenantsRepository.create({ name: 'grace' });
 
     await tenantsRepository.create({ name: 'marry' });

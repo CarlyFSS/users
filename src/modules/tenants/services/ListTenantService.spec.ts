@@ -27,7 +27,7 @@ describe('ListTenantService', () => {
     createTenantService = module.get<CreateTenantService>(CreateTenantService);
   });
 
-  it('should be able to list an tenant with a valid id', async () => {
+  it('should be able to list a tenant with a valid id', async () => {
     const tenant = await createTenantService.execute({ name: 'jon' });
 
     const tenantId = await listTenantService.execute(tenant.id);
@@ -35,7 +35,7 @@ describe('ListTenantService', () => {
     expect(tenantId).toHaveProperty('id');
   });
 
-  it('should not be able to list an tenant with a invalid id', async () => {
+  it('should not be able to list a tenant with a invalid id', async () => {
     await expect(listTenantService.execute('invalid')).rejects.toBeInstanceOf(
       BadRequestException,
     );
