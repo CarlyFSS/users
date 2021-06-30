@@ -1,51 +1,25 @@
 import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
 import CreateTenantService from '@modules/tenants/services/CreateTenantService';
-import UpdateTenantService from '@modules/tenants/services/UpdateTenantService';
-import {
-  Body,
-  Controller,
-  Patch,
-  Post,
-  Param,
-  UseFilters,
-  Get,
-  CACHE_MANAGER,
-  Inject,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, UseFilters, CACHE_MANAGER, Inject } from '@nestjs/common';
 import ErrorException from '@shared/exceptions/ErrorException';
-import ListTenantService from '@modules/tenants/services/ListTenantService';
 import Tenant from '@fireheet/entities/typeorm/Tenant';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager-redis-store';
+import { GrpcMethod } from '@nestjs/microservices';
+import ListTenantService from '../../../../services/ListTenantService';
 
-@ApiTags('Tenants Routes')
-@Controller('tenants')
-@UseFilters(ErrorException)
-export default class TenantsController {
+@Controller()
+export default class TenantsGrpcController {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
     private readonly createTenant: CreateTenantService,
-    private readonly updateTenant: UpdateTenantService,
     private readonly listTenant: ListTenantService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body('name') name: string,
-  ): Promise<Tenant> {
-    const tenant = await this.updateTenant.execute({ id, name });
-
-    this.eventEmitter.emit('tenant.updated', tenant);
-
-    return tenant;
-  }
-
-  @Get(':id')
-  async show(@Param('id') id: string): Promise<Tenant> {
+  @GrpcMethod()
+  async list(id: string): Promise<Tenant> {
     let tenant: Tenant;
     const cachedTenant = await this.cacheManager.get<Tenant>(`${id}-tenant`);
 
