@@ -4,7 +4,11 @@ import { SwaggerModule } from '@nestjs/swagger';
 import openApiDoc from '@shared/docs/create-swagger-docs';
 import { INestApplication } from '@nestjs/common';
 import certConfig from '@config/cert.config';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import AppModule from './AppModule';
 import grpcConfig from './config/grpc.config';
 
@@ -14,9 +18,15 @@ async function bootstrap() {
   let app: INestApplication;
 
   if (process.env.NODE_ENV === 'production') {
-    app = await NestFactory.create(AppModule, certConfig);
+    app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      certConfig,
+    );
   } else {
-    app = await NestFactory.create(AppModule);
+    app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(),
+    );
   }
 
   app.setGlobalPrefix('v1');
