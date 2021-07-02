@@ -12,6 +12,7 @@ import ListTenantService from './services/ListTenantService';
 import UpdateTenantService from './services/UpdateTenantService';
 import TenantsEventController from './infra/events/controllers/TenantsEventController';
 import TenantsGrpcController from './infra/grpc/routes/controllers/TenantsGrpcController';
+import ListTenantByNameService from './services/ListTenantByNameService';
 
 @Module({
   imports: [
@@ -25,7 +26,12 @@ import TenantsGrpcController from './infra/grpc/routes/controllers/TenantsGrpcCo
     TenantsEventController,
     TenantsGrpcController,
   ],
-  providers: [CreateTenantService, UpdateTenantService, ListTenantService],
+  providers: [
+    CreateTenantService,
+    UpdateTenantService,
+    ListTenantService,
+    ListTenantByNameService,
+  ],
   exports: [TypeOrmModule],
 })
 export default class TenantsModule {

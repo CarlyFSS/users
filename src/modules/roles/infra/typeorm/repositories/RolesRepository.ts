@@ -17,4 +17,8 @@ export default class RolesRepository
   public async findByID(id: string): Promise<Role | undefined> {
     return this.ormRepository.findOne({ where: { id } });
   }
+
+  public async findByName(name: string): Promise<Role | undefined> {
+    return this.ormRepository.findOne({ where: { name } });
+  }
 }

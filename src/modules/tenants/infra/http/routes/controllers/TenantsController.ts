@@ -1,5 +1,3 @@
-import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
-import CreateTenantService from '@modules/tenants/services/CreateTenantService';
 import UpdateTenantService from '@modules/tenants/services/UpdateTenantService';
 import {
   Body,
@@ -16,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
 import ListTenantService from '@modules/tenants/services/ListTenantService';
 import Tenant from '@fireheet/entities/typeorm/Tenant';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager-redis-store';
 
 @ApiTags('Tenants Routes')
@@ -26,10 +23,8 @@ export default class TenantsController {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
-    private readonly createTenant: CreateTenantService,
     private readonly updateTenant: UpdateTenantService,
     private readonly listTenant: ListTenantService,
-    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Patch(':id')
@@ -38,8 +33,6 @@ export default class TenantsController {
     @Body('name') name: string,
   ): Promise<Tenant> {
     const tenant = await this.updateTenant.execute({ id, name });
-
-    this.eventEmitter.emit('tenant.updated', tenant);
 
     return tenant;
   }

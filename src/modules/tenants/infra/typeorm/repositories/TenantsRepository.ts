@@ -21,7 +21,9 @@ export default class TenantsRepository
   }
 
   public async findByName(name: string): Promise<Tenant | undefined> {
-    return this.ormRepository.findOne({ where: { name } });
+    const tenant = await this.ormRepository.findOne({ where: { name } });
+
+    return tenant;
   }
 
   public async findByID(id: string): Promise<Tenant | undefined> {

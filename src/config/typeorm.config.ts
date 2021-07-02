@@ -12,6 +12,7 @@ const typeormConfig: TypeOrmModuleOptions = {
   database: `${result.parsed.ORM_DATABASE}` || 'postgres',
   entities: ['../modules/**/infra/typeorm/entities/*.ts'],
   autoLoadEntities: true,
+  logging: false,
 };
 
 export default typeormConfig;

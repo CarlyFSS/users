@@ -10,6 +10,7 @@ import RolesController from './infra/http/routes/controllers/RolesController';
 import RolesGrpcController from './infra/grpc/routes/controllers/RolesGrpcController';
 import ListAllRolesService from './services/ListAllRolesService';
 import ListRoleService from './services/ListRoleService';
+import ListRoleByNameService from './services/ListRoleByNameService';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import ListRoleService from './services/ListRoleService';
     AMQPProviderModule,
   ],
   controllers: [RolesController, RolesGrpcController],
-  providers: [ListAllRolesService, ListRoleService],
+  providers: [ListAllRolesService, ListRoleService, ListRoleByNameService],
   exports: [TypeOrmModule],
 })
 export default class RolesModule {

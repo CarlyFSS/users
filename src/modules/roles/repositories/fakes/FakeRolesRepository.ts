@@ -22,6 +22,10 @@ export default class FakeRolesRepository implements IRolesRepository {
     return this.roles.find(role => role.id === id);
   }
 
+  public async findByName(name: string): Promise<Role | undefined> {
+    return this.roles.find(role => role.name === name);
+  }
+
   public async listAll(): Promise<Role[]> {
     return this.roles;
   }
