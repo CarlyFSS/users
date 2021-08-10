@@ -1,0 +1,8 @@
+_id: spc_0098ae9c8eb340499894f9f9e5747cd9
+type: ApiSpec
+parentId: wrk_666e7c1d8ba54d41ac6699326282086b
+modified: 1628606899545
+created: 1628606875292
+fileName: FAD - Users
+contents: "openapi: 3.0.0"
+contentType: yaml
