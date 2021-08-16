@@ -11,32 +11,30 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager-redis-store';
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import CreateUserService from '@modules/users/services/CreateUserService';
+import ValidationException from '@shared/exceptions/ValidationException';
 import CreateUserDTO from '../../../../dtos/CreateUserDTO';
 import UpdateUserService from '../../../../services/UpdateUserService';
-import BcryptHashProvider from '../../../../providers/HashProvider/implementations/BcryptHashProvider';
+import ListUserService from '../../../../services/ListUserService';
+import UpdateUserDTO from '../../../../dtos/UpdateUserDTO';
 
 @ApiTags('Users Routes')
 @Controller('users')
-@UseFilters(ErrorException)
+@UseFilters(ErrorException, ValidationException)
 export default class UsersController {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
-    private readonly eventEmitter: EventEmitter2,
     private readonly createUser: CreateUserService,
+    private readonly listUser: ListUserService,
     private readonly updateUser: UpdateUserService,
-    private readonly hashProvider: BcryptHashProvider,
   ) {}
 
   @Post()
   async create(@Body() data: CreateUserDTO): Promise<User> {
     const user = await this.createUser.execute(data);
-
-    delete user.password;
 
     return user;
   }
@@ -45,26 +43,27 @@ export default class UsersController {
   async update(
     @Param('id')
     id: string,
-    @Body('name') name: string,
+    @Body() data: UpdateUserDTO,
   ): Promise<User> {
-    // const user = await this.updateUser.execute();
+    const user = await this.updateUser.execute(id, data);
 
-    // return user;
-
-    return new User();
+    return user;
   }
 
   @Get(':id')
   async show(@Param('id') id: string): Promise<User> {
-    // let tenant: Tenant;
-    // const cachedTenant = await this.cacheManager.get<Tenant>(`${id}-tenant`);
-    // if (!cachedTenant) {
-    //   tenant = await this.listTenant.execute(id);
-    //   await this.cacheManager.set(`${id}-tenant`, tenant);
-    //   return tenant;
-    // }
-    // return cachedTenant;
+    let user: User;
 
-    return new User();
+    const cachedUser = await this.cacheManager.get<User>(`${id}-user`);
+
+    if (!cachedUser) {
+      user = await this.listUser.execute(id);
+
+      await this.cacheManager.set(`${id}-user`, user);
+
+      return user;
+    }
+
+    return cachedUser;
   }
 }

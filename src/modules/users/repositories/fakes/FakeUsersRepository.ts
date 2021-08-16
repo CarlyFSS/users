@@ -1,7 +1,5 @@
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import faker from 'faker';
-import Tenant from '@fireheet/entities/typeorm/Tenant';
-import Role from '@fireheet/entities/typeorm/Role';
 import IUsersRepository from '../IUsersRepository';
 import CreateUserDTO from '../../dtos/CreateUserDTO';
 
@@ -13,18 +11,17 @@ export default class FakeUsersRepository implements IUsersRepository {
     email,
     password,
     role_id,
-    tenant_id,
     document_number,
   }: CreateUserDTO): Promise<User> {
     const user: User = {
       id: faker.datatype.uuid(),
-      tenant_id,
       role_id,
       name,
       email,
       password,
       document_number,
       sex: null,
+      birthdate: new Date(),
       created_at: new Date(),
       updated_at: new Date(),
       deleted_at: null,

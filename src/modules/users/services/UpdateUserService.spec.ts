@@ -1,49 +1,84 @@
-import { BadRequestException } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
-import TenantsRepository from '../infra/typeorm/repositories/TenantsRepository';
-import FakeTenantsRepository from '../repositories/fakes/FakeTenantsRepository';
-import UpdateTenantService from './UpdateTenantService';
+import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
+import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
+import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
+import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
+import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import CreateUserService from './CreateUserService';
 
-let updateTenantService: UpdateTenantService;
-let tenantsRepository: TenantsRepository;
+let createUserService: CreateUserService;
 
-describe('UpdateTenantService', () => {
+const userModel = {
+  name: 'jon',
+  email: 'email@email.com',
+  password: '123',
+  document_number: '123',
+  role_id: '123',
+  birthdate: new Date(),
+};
+
+describe('UpdateUserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        EventEmitter2,
         {
-          provide: TenantsRepository,
-          useValue: new FakeTenantsRepository(),
+          provide: RolesRepository,
+          useValue: new FakeRolesRepository(),
         },
-        UpdateTenantService,
+        {
+          provide: UsersRepository,
+          useValue: new FakeUsersRepository(),
+        },
+        CreateUserService,
+        ListRoleByNameService,
+        {
+          provide: BcryptHashProvider,
+          useValue: new FakeBcryptHashProvider(),
+        },
       ],
     }).compile();
 
-    updateTenantService = module.get<UpdateTenantService>(UpdateTenantService);
-    tenantsRepository = module.get<TenantsRepository>(TenantsRepository);
+    createUserService = module.get<CreateUserService>(CreateUserService);
   });
 
-  it('should be able to update a existing tenant', async () => {
-    const tenant = await tenantsRepository.create({ name: 'jon' });
+  it('should be able create a user with a valid credentials', async () => {
+    const user = await createUserService.execute(userModel);
 
-    await updateTenantService.execute({ id: tenant.id, name: 'jonathan' });
-
-    expect(tenant).toHaveProperty('id');
+    expect(user).toHaveProperty('id');
   });
 
-  it('should not update a non existing tenant', async () => {
-    await expect(
-      updateTenantService.execute({ id: 'undefined', name: 'jon' }),
-    ).rejects.toBeInstanceOf(BadRequestException);
+  it('should not be able create a user with same email', async () => {
+    await createUserService.execute(userModel);
+
+    const user2 = userModel;
+    user2.document_number = '1234';
+
+    await expect(createUserService.execute(user2)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
   });
 
-  it("should not be able to update a tenant's name to a already existing one", async () => {
-    const tenant = await tenantsRepository.create({ name: 'grace' });
+  it('should not be able create a user with same document number', async () => {
+    const user2 = userModel;
+    user2.email = 'email2@email.com';
 
-    await tenantsRepository.create({ name: 'marry' });
+    await createUserService.execute(userModel);
 
-    await expect(
-      updateTenantService.execute({ id: tenant.id, name: 'marry' }),
-    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(createUserService.execute(user2)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+  });
+
+  it('should be able create a user without informing the role', async () => {
+    delete userModel.role_id;
+
+    const user = await createUserService.execute(userModel);
+
+    expect(user).toHaveProperty('id');
   });
 });

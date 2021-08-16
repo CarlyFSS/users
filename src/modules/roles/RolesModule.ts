@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import redisConfig from '@config/redis.config';
 import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
-import Role from '@fireheet/entities/typeorm/Role';
+import { Role } from '@fireheet/entities';
 import RolesRepository from './infra/typeorm/repositories/RolesRepository';
 import RolesController from './infra/http/routes/controllers/RolesController';
 import RolesGrpcController from './infra/grpc/routes/controllers/RolesGrpcController';

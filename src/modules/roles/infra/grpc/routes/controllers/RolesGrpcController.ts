@@ -1,5 +1,5 @@
 import { Controller, CACHE_MANAGER, Inject } from '@nestjs/common';
-import Role from '@fireheet/entities/typeorm/Role';
+import { Role } from '@fireheet/entities';
 import { Cache } from 'cache-manager-redis-store';
 import { GrpcMethod } from '@nestjs/microservices';
 import ListRoleService from '../../../../services/ListRoleService';
@@ -15,22 +15,6 @@ export default class RolesGrpcController {
   ) {}
 
   @GrpcMethod()
-  async listAll(): Promise<Role[]> {
-    let roles: Role[];
-    const cachedRoles = await this.cacheManager.get<Role[]>(`all-roles`);
-
-    if (!cachedRoles) {
-      roles = await this.listAllRoles.execute();
-
-      await this.cacheManager.set(`all-roles`, roles);
-
-      return roles;
-    }
-
-    return cachedRoles;
-  }
-
-  @GrpcMethod()
   async list(id: string): Promise<Role> {
     let role: Role;
     const cachedRole = await this.cacheManager.get<Role>(`${id}-role`);
@@ -44,5 +28,21 @@ export default class RolesGrpcController {
     }
 
     return cachedRole;
+  }
+
+  @GrpcMethod()
+  async listAll(): Promise<Role[]> {
+    let roles: Role[];
+    const cachedRoles = await this.cacheManager.get<Role[]>(`all-roles`);
+
+    if (!cachedRoles) {
+      roles = await this.listAllRoles.execute();
+
+      await this.cacheManager.set(`all-roles`, roles);
+
+      return roles;
+    }
+
+    return cachedRoles;
   }
 }

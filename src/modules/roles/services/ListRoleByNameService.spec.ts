@@ -2,12 +2,12 @@ import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
-import ListRoleService from './ListRoleService';
+import ListRoleByNameService from './ListRoleByNameService';
 
-let listRoleService: ListRoleService;
+let listRoleByName: ListRoleByNameService;
 let rolesRepository: RolesRepository;
 
-describe('ListRoleService', () => {
+describe('ListRolesByNameService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -15,22 +15,22 @@ describe('ListRoleService', () => {
           provide: RolesRepository,
           useValue: new FakeRolesRepository(),
         },
-        ListRoleService,
+        ListRoleByNameService,
       ],
     }).compile();
 
-    listRoleService = module.get<ListRoleService>(ListRoleService);
+    listRoleByName = module.get<ListRoleByNameService>(ListRoleByNameService);
     rolesRepository = module.get<RolesRepository>(RolesRepository);
   });
 
-  it('should be able to list a role with a valid id', async () => {
-    const roleId = await listRoleService.execute('1');
+  it('should be able to list a role with a valid name', async () => {
+    const roleId = await listRoleByName.execute('CLIENT');
 
     expect(roleId).toHaveProperty('id');
   });
 
-  it('should not be able to list a role with a invalid id', async () => {
-    await expect(listRoleService.execute('invalid')).rejects.toBeInstanceOf(
+  it('should not be able to list a role with a invalid name', async () => {
+    await expect(listRoleByName.execute('orange')).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });

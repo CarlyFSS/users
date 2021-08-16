@@ -2,15 +2,15 @@ import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  HttpException,
+  NotAcceptableException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import httpLog from '@config/log.config';
 import { logError } from '@shared/utils/AppLogger';
 
-@Catch(HttpException)
-export default class ErrorException implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+@Catch(NotAcceptableException)
+export default class ValidationExcepetion implements ExceptionFilter {
+  catch(exception: NotAcceptableException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -18,13 +18,8 @@ export default class ErrorException implements ExceptionFilter {
 
     logError('Exception', exception.message);
 
-    // Sends the error to elastic search
-    // httpLog.post('/', {
-    //   message: exception.message,
-    //   status_code: status,
-    //   timestamp: new Date().toISOString(),
-    //   stack: exception.stack,
-    // });
+    const validationParse = JSON.stringify(exception.getResponse());
+    const validationError = JSON.parse(validationParse);
 
     response.status(status);
 
@@ -32,6 +27,7 @@ export default class ErrorException implements ExceptionFilter {
       status_code: status,
       message: exception.message,
       path: request.url,
+      validations: validationError.message,
       method: request.method,
       timestamp: new Date().toISOString(),
     });

@@ -1,4 +1,4 @@
-import Role from '@fireheet/entities/typeorm/Role';
+import { Role } from '@fireheet/entities';
 import {
   Controller,
   Param,

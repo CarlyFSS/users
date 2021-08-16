@@ -1,34 +1,18 @@
-import { IsNotEmpty, IsString, IsEmail, IsNumberString } from 'class-validator';
+import { IsString, IsEmail, IsOptional } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 export default class UpdateUserDTO {
-  @IsNotEmpty()
-  @IsString()
-  readonly tenant_id: string;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly role_id: string;
-
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   readonly name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @IsEmail()
   readonly email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @Exclude()
   readonly password: string;
-
-  @IsNotEmpty()
-  @IsNumberString()
-  readonly document_number: string;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly sex: string;
 }

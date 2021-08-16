@@ -1,21 +1,18 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import User from '@fireheet/entities/typeorm/User';
-import Role from '@fireheet/entities/typeorm/Role';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { User, Role } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import CreateTenantService from '../../tenants/services/CreateTenantService';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
-import ListTenantByNameService from '../../tenants/services/ListTenantByNameService';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 
 interface UserTemplate {
-  tenant_id?: string;
   role_id?: string;
   name: string;
   document_number: string;
   email: string;
   password: string;
+  birthdate: Date;
 }
 
 @Injectable()
@@ -23,8 +20,6 @@ export default class CreateUserService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly usersRepository: UsersRepository,
-    private readonly createTenant: CreateTenantService,
-    private readonly listTenantByName: ListTenantByNameService,
     private readonly listRoleByName: ListRoleByNameService,
     private readonly hashProvider: BcryptHashProvider,
   ) {}
@@ -35,13 +30,14 @@ export default class CreateUserService {
     email,
     password,
     name,
+    birthdate,
   }: CreateUserDTO): Promise<User> {
     const userDocumentExists = await this.usersRepository.findByDocument(
       document_number,
     );
 
     if (userDocumentExists) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         `User with document "${document_number}" already exists!`,
       );
     }
@@ -49,16 +45,25 @@ export default class CreateUserService {
     const userEmailExists = await this.usersRepository.findByEmail(email);
 
     if (userEmailExists) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         `User with email "${email}" already exists!`,
       );
     }
+
+    const splicedBirthdate = birthdate.toString().split('/');
+
+    const day = +splicedBirthdate[0];
+    const month = +splicedBirthdate[1] - 1;
+    const year = +splicedBirthdate[2];
+
+    const userBirthDate = new Date(year, month, day);
 
     const user: UserTemplate = {
       name,
       password,
       email,
       document_number,
+      birthdate: userBirthDate,
     };
 
     let role: Role;
@@ -71,12 +76,6 @@ export default class CreateUserService {
       user.role_id = role_id;
     }
 
-    const createdUserTenant = await this.createTenant.execute({
-      name: document_number,
-    });
-
-    user.tenant_id = createdUserTenant.id;
-
     const encryptedPassword = await this.hashProvider.encrypt(password);
 
     user.password = encryptedPassword;
@@ -84,6 +83,9 @@ export default class CreateUserService {
     const createdUser = await this.usersRepository.create(user);
 
     this.eventEmitter.emit('user.created', createdUser);
+
+    delete createdUser.role_id;
+    delete createdUser.password;
 
     return createdUser;
   }

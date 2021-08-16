@@ -3,7 +3,7 @@ import ErrorException from '@shared/exceptions/ErrorException';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager-redis-store';
 import RabbitMQProvider from '@shared/providers/AMQPProvider/implementations/RabbitMQProvider';
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 
 @Controller('users-event-controller')
 @UseFilters(ErrorException)

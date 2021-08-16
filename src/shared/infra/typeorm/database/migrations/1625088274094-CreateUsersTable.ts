@@ -22,10 +22,6 @@ export default class CreateUsersTable1625088274094
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'tenant_id',
-            type: 'uuid',
-          },
-          {
             name: 'role_id',
             type: 'uuid',
           },
@@ -53,34 +49,27 @@ export default class CreateUsersTable1625088274094
             isNullable: true,
           },
           {
+            name: 'birthdate',
+            type: 'timestamptz',
+          },
+          {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'now()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'now()',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             isNullable: true,
           },
         ],
       }),
     );
-
-    await queryRunner.createForeignKeys('users', [
-      new TableForeignKey({
-        name: 'UsersTenant',
-        columnNames: ['tenant_id'],
-        referencedTableName: 'tenants',
-        referencedColumnNames: ['id'],
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      }),
-    ]);
 
     await queryRunner.createForeignKeys('users', [
       new TableForeignKey({
@@ -95,7 +84,6 @@ export default class CreateUsersTable1625088274094
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('users', 'UsersTenant');
     await queryRunner.dropForeignKey('users', 'UsersRole');
 
     await queryRunner.dropTable('users');

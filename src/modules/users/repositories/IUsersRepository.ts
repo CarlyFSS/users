@@ -1,4 +1,4 @@
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 
 export default interface IUsersRepository {

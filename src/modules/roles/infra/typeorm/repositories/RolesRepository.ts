@@ -1,6 +1,5 @@
-import CreateTenantDTO from '@modules/tenants/dtos/CreateTenantDTO';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import Role from '@fireheet/entities/typeorm/Role';
+import { Role } from '@fireheet/entities';
 import IRolesRepository from '../../../repositories/IRolesRepository';
 
 @EntityRepository(Role)

@@ -1,4 +1,4 @@
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import CreateUserDTO from '../../../dtos/CreateUserDTO';
 import IUsersRepository from '../../../repositories/IUsersRepository';
@@ -44,7 +44,9 @@ export default class UsersRepository
     document_number: string,
   ): Promise<User | undefined> {
     return this.ormRepository.findOne({
-      where: { document_number },
+      where: {
+        document_number,
+      },
     });
   }
 

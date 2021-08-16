@@ -1,9 +1,9 @@
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
 @Injectable()
-export default class ListTenantService {
+export default class ListUserService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   public async execute(id: string): Promise<User> {

@@ -1,12 +1,11 @@
 import { Controller, CACHE_MANAGER, Inject } from '@nestjs/common';
-import Tenant from '@fireheet/entities/typeorm/Tenant';
 import { Cache } from 'cache-manager-redis-store';
 import { GrpcMethod } from '@nestjs/microservices';
-import User from '@fireheet/entities/typeorm/User';
+import { User } from '@fireheet/entities';
 import ListUserService from '../../../../services/ListUserService';
 
 @Controller()
-export default class TenantsGrpcController {
+export default class UsersGrpcController {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -14,14 +13,14 @@ export default class TenantsGrpcController {
   ) {}
 
   @GrpcMethod()
-  async list(id: string): Promise<Tenant> {
+  async list(id: string): Promise<User> {
     let user: User;
-    const cachedUser = await this.cacheManager.get<User>(`${id}-tenant`);
+    const cachedUser = await this.cacheManager.get<User>(`${id}-user`);
 
     if (!cachedUser) {
       user = await this.listUser.execute(id);
 
-      await this.cacheManager.set(`${id}-tenant`, user);
+      await this.cacheManager.set(`${id}-user`, user);
 
       return user;
     }
