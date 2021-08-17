@@ -1,8 +1,8 @@
 export default interface IAMQPProvider {
-  publishInQueue(queue: string, payload: any): Promise<void>;
-  publishInExchange(
+  publishInQueue<T>(queue: string, payload: T): Promise<void>;
+  publishInExchange<T>(
     exchange: string,
     routingKey: string,
-    payload: any,
+    payload: T,
   ): Promise<void>;
 }

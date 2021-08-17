@@ -2,7 +2,7 @@ import { Role } from '@fireheet/entities';
 import IRolesRepository from '../IRolesRepository';
 
 export default class FakeRolesRepository implements IRolesRepository {
-  private roles: Role[] = [
+  private readonly roles: Role[] = [
     {
       id: '1',
       name: 'SYSADMIN',

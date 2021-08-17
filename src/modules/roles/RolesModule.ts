@@ -25,6 +25,4 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
   providers: [ListAllRolesService, ListRoleService, ListRoleByNameService],
   exports: [TypeOrmModule],
 })
-export default class RolesModule {
-  constructor() {}
-}
+export default class RolesModule {}

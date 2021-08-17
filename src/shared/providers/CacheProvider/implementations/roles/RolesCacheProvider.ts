@@ -1,4 +1,3 @@
-import { Role } from '@fireheet/entities';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager-redis-store';
 import ICacheProvider from '../../model/ICacheProvider';
