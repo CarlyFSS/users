@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import FeaturesModule from './FeaturesModule';
 import ControlModule from './ControlModule';
-import typeormConfig from './config/typeorm.config';
+import TypeormConfig from './config/TypeormConfig';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeormConfig),
+    TypeOrmModule.forRoot(TypeormConfig),
     FeaturesModule,
     ControlModule,
   ],

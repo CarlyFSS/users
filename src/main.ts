@@ -9,10 +9,12 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import AppModule from './AppModule';
-import grpcConfig from './config/grpc.config';
+import GrpcConfig from './config/GrpcConfig';
 
 async function bootstrap() {
-  const PORT = +process.env.PORT || 3333;
+  const defaultPort = 3333;
+
+  const PORT = +process.env.PORT || defaultPort;
 
   const app: INestApplication =
     await NestFactory.create<NestFastifyApplication>(
@@ -35,7 +37,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, openApiDoc(app));
 
-  app.connectMicroservice<MicroserviceOptions>(grpcConfig);
+  app.connectMicroservice<MicroserviceOptions>(GrpcConfig);
 
   await app.listen(PORT);
   await app.startAllMicroservicesAsync();

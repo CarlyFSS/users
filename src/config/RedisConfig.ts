@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 const result = dotenv.config();
 
-const redisConfig: CacheModuleOptions = {
+const RedisConfig: CacheModuleOptions = {
   ttl: +result.parsed.REDIS_DEFAULT_TTL,
   store: redisStore,
   auth_pass: result.parsed.REDIS_PASSWORD,
@@ -12,4 +12,4 @@ const redisConfig: CacheModuleOptions = {
   port: result.parsed.REDIS_PORT,
 };
 
-export default redisConfig;
+export default RedisConfig;

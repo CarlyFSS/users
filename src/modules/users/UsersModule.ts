@@ -2,7 +2,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from '@fireheet/entities';
-import redisConfig from '@config/redis.config';
+import RedisConfig from '@config/RedisConfig';
 import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
 import UsersRepository from './infra/typeorm/repositories/UsersRepository';
 import HashProviderModule from './providers/HashProvider/HashProviderModule';
@@ -19,7 +19,7 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
 @Module({
   imports: [
     RolesModule,
-    CacheModule.register(redisConfig),
+    CacheModule.register(RedisConfig),
     CacheProviderModule,
     TypeOrmModule.forFeature([User, UsersRepository]),
     AMQPProviderModule,
