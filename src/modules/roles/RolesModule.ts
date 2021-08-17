@@ -2,7 +2,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import redisConfig from '@config/redis.config';
+import RedisConfig from '@config/RedisConfig';
 import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
 import { Role } from '@fireheet/entities';
 import RolesRepository from './infra/typeorm/repositories/RolesRepository';
@@ -17,7 +17,7 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
   imports: [
     ConfigModule,
     TypeOrmModule.forFeature([Role, RolesRepository]),
-    CacheModule.register(redisConfig),
+    CacheModule.register(RedisConfig),
     AMQPProviderModule,
     CacheProviderModule,
   ],
@@ -25,6 +25,4 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
   providers: [ListAllRolesService, ListRoleService, ListRoleByNameService],
   exports: [TypeOrmModule],
 })
-export default class RolesModule {
-  constructor() {}
-}
+export default class RolesModule {}

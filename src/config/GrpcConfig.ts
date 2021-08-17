@@ -4,7 +4,7 @@ import { join } from 'path';
 const userProtoPath = join(__dirname, '../../modules/users/proto/user.proto');
 const roleProtoPath = join(__dirname, '../../modules/roles/proto/role.proto');
 
-const grpcConfig: MicroserviceOptions = {
+const GrpcConfig: MicroserviceOptions = {
   transport: Transport.GRPC,
   options: {
     package: ['users', 'roles'],
@@ -12,4 +12,4 @@ const grpcConfig: MicroserviceOptions = {
   },
 };
 
-export default grpcConfig;
+export default GrpcConfig;

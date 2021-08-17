@@ -6,7 +6,7 @@ import AMQPConnection from '../utils/AMQPConnection';
 export default class RabbitMQProvider implements IAMQPProvider {
   constructor(private readonly amqpConnection: AMQPConnection) {}
 
-  async publishInQueue(queue: string, payload: any): Promise<void> {
+  async publishInQueue<T>(queue: string, payload: T): Promise<void> {
     const { channel } = this.amqpConnection;
 
     channel.assertQueue(queue);
@@ -14,10 +14,10 @@ export default class RabbitMQProvider implements IAMQPProvider {
     channel.sendToQueue(queue, Buffer.from(JSON.stringify(payload)));
   }
 
-  async publishInExchange(
+  async publishInExchange<T>(
     exchange: string,
     routingKey: string,
-    payload: any,
+    payload: T,
   ): Promise<void> {
     const { channel } = this.amqpConnection;
 

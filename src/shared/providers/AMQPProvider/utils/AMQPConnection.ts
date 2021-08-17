@@ -18,8 +18,6 @@ export default class AMQPConnection {
 
     this.connection = conn;
 
-    const channel = await conn.createChannel();
-
-    return channel;
+    return conn.createChannel();
   }
 }
