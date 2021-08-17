@@ -10,13 +10,22 @@ import BcryptHashProvider from '../providers/HashProvider/implementations/Bcrypt
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
-let createUserService: CreateUserService;
+let createUser: CreateUserService;
 
 const userModel = {
   name: 'jon',
   email: 'email1',
   password: '123',
   document_number: '123',
+  role_id: '123',
+  birthdate: new Date(),
+};
+
+const userModel2 = {
+  name: 'jon',
+  email: 'email2',
+  password: '123',
+  document_number: '321',
   role_id: '123',
   birthdate: new Date(),
 };
@@ -43,32 +52,31 @@ describe('CreateUserService', () => {
       ],
     }).compile();
 
-    createUserService = module.get<CreateUserService>(CreateUserService);
+    createUser = module.get<CreateUserService>(CreateUserService);
   });
 
   it('should be able create a user with a valid credentials', async () => {
-    const user = await createUserService.execute(userModel);
+    const user = await createUser.execute(userModel);
 
     expect(user).toHaveProperty('id');
   });
 
   it('should not be able create a user with same email', async () => {
-    const user2 = userModel;
-    user2.document_number = '1234';
+    await createUser.execute(userModel);
 
-    await createUserService.execute(userModel);
+    userModel2.email = userModel.email;
 
-    await expect(createUserService.execute(user2)).rejects.toBeInstanceOf(
+    await expect(createUser.execute(userModel2)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
 
   it('should not be able create a user with same document number', async () => {
-    await createUserService.execute(userModel);
+    await createUser.execute(userModel);
 
     userModel.email = '123';
 
-    await expect(createUserService.execute(userModel)).rejects.toBeInstanceOf(
+    await expect(createUser.execute(userModel)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
@@ -76,7 +84,7 @@ describe('CreateUserService', () => {
   it('should be able create a user without informing the role', async () => {
     delete userModel.role_id;
 
-    const user = await createUserService.execute(userModel);
+    const user = await createUser.execute(userModel);
 
     expect(user).toHaveProperty('id');
   });

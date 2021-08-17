@@ -6,15 +6,15 @@ import {
   Param,
   UseFilters,
   Get,
-  CACHE_MANAGER,
-  Inject,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { Cache } from 'cache-manager-redis-store';
 import { User } from '@fireheet/entities';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ValidationException from '@shared/exceptions/ValidationException';
+import UsersCacheProvider from '@shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 import CreateUserDTO from '../../../../dtos/CreateUserDTO';
 import UpdateUserService from '../../../../services/UpdateUserService';
 import ListUserService from '../../../../services/ListUserService';
@@ -23,10 +23,10 @@ import UpdateUserDTO from '../../../../dtos/UpdateUserDTO';
 @ApiTags('Users Routes')
 @Controller('users')
 @UseFilters(ErrorException, ValidationException)
+@UseInterceptors(ClassSerializerInterceptor)
 export default class UsersController {
   constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
+    private readonly userCache: UsersCacheProvider,
     private readonly createUser: CreateUserService,
     private readonly listUser: ListUserService,
     private readonly updateUser: UpdateUserService,
@@ -54,16 +54,14 @@ export default class UsersController {
   async show(@Param('id') id: string): Promise<User> {
     let user: User;
 
-    const cachedUser = await this.cacheManager.get<User>(`${id}-user`);
+    user = await this.userCache.get<User>(id);
 
-    if (!cachedUser) {
+    if (!user) {
       user = await this.listUser.execute(id);
 
-      await this.cacheManager.set(`${id}-user`, user);
-
-      return user;
+      await this.userCache.store(id, user);
     }
 
-    return cachedUser;
+    return user;
   }
 }

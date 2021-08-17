@@ -2,14 +2,14 @@
 <testExecutions version="1">
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListRoleByNameService.spec.ts">
         <testCase name="ListRolesByNameService should be able to list a role with a valid name" duration="11"/>
-        <testCase name="ListRolesByNameService should not be able to list a role with a invalid name" duration="6"/>
+        <testCase name="ListRolesByNameService should not be able to list a role with a invalid name" duration="2"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListRoleService.spec.ts">
-        <testCase name="ListRoleService should be able to list a role with a valid id" duration="13"/>
+        <testCase name="ListRoleService should be able to list a role with a valid id" duration="12"/>
         <testCase name="ListRoleService should not be able to list a role with a invalid id" duration="3"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListAllRolesService.spec.ts">
-        <testCase name="ListAllRolesService should be able to list all roles" duration="14"/>
+        <testCase name="ListAllRolesService should be able to list all roles" duration="13"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/ListUserService.spec.ts">
         <testCase name="ListUserService should be able to list a user with a valid id" duration="14"/>
@@ -17,14 +17,13 @@
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/CreateUserService.spec.ts">
         <testCase name="CreateUserService should be able create a user with a valid credentials" duration="13"/>
-        <testCase name="CreateUserService should not be able create a user with same email" duration="5"/>
-        <testCase name="CreateUserService should not be able create a user with same document number" duration="3"/>
-        <testCase name="CreateUserService should be able create a user without informing the role" duration="4"/>
+        <testCase name="CreateUserService should not be able create a user with same email" duration="4"/>
+        <testCase name="CreateUserService should not be able create a user with same document number" duration="4"/>
+        <testCase name="CreateUserService should be able create a user without informing the role" duration="3"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/UpdateUserService.spec.ts">
-        <testCase name="UpdateUserService should be able create a user with a valid credentials" duration="13"/>
-        <testCase name="UpdateUserService should not be able create a user with same email" duration="4"/>
-        <testCase name="UpdateUserService should not be able create a user with same document number" duration="3"/>
-        <testCase name="UpdateUserService should be able create a user without informing the role" duration="3"/>
+        <testCase name="UpdateUserService should be able update a user with a valid id" duration="13"/>
+        <testCase name="UpdateUserService should not be able update a user with a invalid id" duration="4"/>
+        <testCase name="UpdateUserService should not be able update a user email to a already existing one" duration="4"/>
     </file>
 </testExecutions>

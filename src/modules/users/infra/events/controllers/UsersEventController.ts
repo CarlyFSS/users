@@ -1,16 +1,16 @@
 import { CACHE_MANAGER, Controller, Inject, UseFilters } from '@nestjs/common';
 import ErrorException from '@shared/exceptions/ErrorException';
 import { OnEvent } from '@nestjs/event-emitter';
-import { Cache } from 'cache-manager-redis-store';
 import RabbitMQProvider from '@shared/providers/AMQPProvider/implementations/RabbitMQProvider';
 import { User } from '@fireheet/entities';
+import UsersCacheProvider from '@shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 
 @Controller('users-event-controller')
 @UseFilters(ErrorException)
 export default class UsersEventController {
   constructor(
     @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
+    private readonly userCache: UsersCacheProvider,
     private readonly rabbitMQProvider: RabbitMQProvider,
   ) {}
 
@@ -34,7 +34,7 @@ export default class UsersEventController {
 
     this.rabbitMQProvider.publishInExchange(exchange, routingKey, user);
 
-    await this.cacheManager.del(`${user.id}-user`);
+    await this.userCache.delete(user.id);
 
     // Send the email notifying that the password was changed
 

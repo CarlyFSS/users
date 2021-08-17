@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
@@ -20,7 +24,7 @@ export default class UpdateUserService {
     const userExists = await this.usersRepository.findByID(id);
 
     if (!userExists) {
-      throw new ForbiddenException(`User with id ${id} not found!`);
+      throw new BadRequestException(`User with id ${id} not found!`);
     }
 
     if (password) {

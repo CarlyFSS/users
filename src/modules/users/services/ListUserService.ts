@@ -13,6 +13,8 @@ export default class ListUserService {
       throw new BadRequestException(`User with id "${id}" does not exists!`);
     }
 
+    delete user.role_id;
+
     return user;
   }
 }

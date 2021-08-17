@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
@@ -9,14 +9,25 @@ import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHa
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
+import UpdateUserService from './UpdateUserService';
 
-let createUserService: CreateUserService;
+let updateUser: UpdateUserService;
+let createUser: CreateUserService;
 
 const userModel = {
   name: 'jon',
-  email: 'email@email.com',
+  email: 'email1',
   password: '123',
   document_number: '123',
+  role_id: '123',
+  birthdate: new Date(),
+};
+
+const userModel2 = {
+  name: 'jon',
+  email: 'email2',
+  password: '123',
+  document_number: '321',
   role_id: '123',
   birthdate: new Date(),
 };
@@ -34,6 +45,7 @@ describe('UpdateUserService', () => {
           provide: UsersRepository,
           useValue: new FakeUsersRepository(),
         },
+        UpdateUserService,
         CreateUserService,
         ListRoleByNameService,
         {
@@ -43,42 +55,41 @@ describe('UpdateUserService', () => {
       ],
     }).compile();
 
-    createUserService = module.get<CreateUserService>(CreateUserService);
+    updateUser = module.get<UpdateUserService>(UpdateUserService);
+    createUser = module.get<CreateUserService>(CreateUserService);
   });
 
-  it('should be able create a user with a valid credentials', async () => {
-    const user = await createUserService.execute(userModel);
+  it('should be able update a user with a valid id', async () => {
+    const user = await createUser.execute(userModel);
 
-    expect(user).toHaveProperty('id');
+    const updatedUser = await updateUser.execute(user.id, {
+      email: 'email2',
+      name: 'jon doe',
+      password: '1234',
+    });
+
+    expect(updatedUser.email).toEqual('email2');
+    expect(updatedUser.name).toEqual('jon doe');
   });
 
-  it('should not be able create a user with same email', async () => {
-    await createUserService.execute(userModel);
-
-    const user2 = userModel;
-    user2.document_number = '1234';
-
-    await expect(createUserService.execute(user2)).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+  it('should not be able update a user with a invalid id', async () => {
+    await expect(
+      updateUser.execute('123', {
+        email: 'email2',
+        name: 'jon doe',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
-  it('should not be able create a user with same document number', async () => {
-    const user2 = userModel;
-    user2.email = 'email2@email.com';
+  it('should not be able update a user email to a already existing one', async () => {
+    const user = await createUser.execute(userModel);
 
-    await createUserService.execute(userModel);
+    await createUser.execute(userModel2);
 
-    await expect(createUserService.execute(user2)).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
-  });
-
-  it('should be able create a user without informing the role', async () => {
-    delete userModel.role_id;
-
-    const user = await createUserService.execute(userModel);
-
-    expect(user).toHaveProperty('id');
+    await expect(
+      updateUser.execute(user.id, {
+        email: 'email2',
+      }),
+    ).rejects.toBeInstanceOf(ForbiddenException);
   });
 });

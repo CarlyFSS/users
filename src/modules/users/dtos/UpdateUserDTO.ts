@@ -4,15 +4,15 @@ import { Exclude } from 'class-transformer';
 export default class UpdateUserDTO {
   @IsOptional()
   @IsString()
-  readonly name: string;
+  readonly name?: string;
 
   @IsOptional()
   @IsString()
   @IsEmail()
-  readonly email: string;
+  readonly email?: string;
 
   @IsOptional()
   @IsString()
   @Exclude()
-  readonly password: string;
+  readonly password?: string;
 }

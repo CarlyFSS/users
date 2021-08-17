@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@fireheet/entities';
 import redisConfig from '@config/redis.config';
 import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
-import { APP_GUARD } from '@nestjs/core';
 import UsersRepository from './infra/typeorm/repositories/UsersRepository';
 import HashProviderModule from './providers/HashProvider/HashProviderModule';
 import UsersController from './infra/http/routes/controllers/UsersController';
@@ -16,13 +15,14 @@ import UsersEventController from './infra/events/controllers/UsersEventControlle
 import RolesModule from '../roles/RolesModule';
 import ListRoleByNameService from '../roles/services/ListRoleByNameService';
 import UsersGrpcController from './infra/grpc/routes/controllers/UsersGrpcController';
+import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 
 @Module({
   imports: [
-    ConfigModule,
     RolesModule,
-    TypeOrmModule.forFeature([User, UsersRepository]),
     CacheModule.register(redisConfig),
+    CacheProviderModule,
+    TypeOrmModule.forFeature([User, UsersRepository]),
     AMQPProviderModule,
     HashProviderModule,
   ],

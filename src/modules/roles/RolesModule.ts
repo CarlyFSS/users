@@ -11,6 +11,7 @@ import RolesGrpcController from './infra/grpc/routes/controllers/RolesGrpcContro
 import ListAllRolesService from './services/ListAllRolesService';
 import ListRoleService from './services/ListRoleService';
 import ListRoleByNameService from './services/ListRoleByNameService';
+import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import ListRoleByNameService from './services/ListRoleByNameService';
     TypeOrmModule.forFeature([Role, RolesRepository]),
     CacheModule.register(redisConfig),
     AMQPProviderModule,
+    CacheProviderModule,
   ],
   controllers: [RolesController, RolesGrpcController],
   providers: [ListAllRolesService, ListRoleService, ListRoleByNameService],

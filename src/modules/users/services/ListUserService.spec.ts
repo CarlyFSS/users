@@ -11,8 +11,8 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 import ListUserService from './ListUserService';
 
-let listUserService: ListUserService;
-let createUserService: CreateUserService;
+let listUser: ListUserService;
+let createUser: CreateUserService;
 
 const userModel = {
   name: 'jon',
@@ -46,20 +46,20 @@ describe('ListUserService', () => {
       ],
     }).compile();
 
-    listUserService = module.get<ListUserService>(ListUserService);
-    createUserService = module.get<CreateUserService>(CreateUserService);
+    listUser = module.get<ListUserService>(ListUserService);
+    createUser = module.get<CreateUserService>(CreateUserService);
   });
 
   it('should be able to list a user with a valid id', async () => {
-    const user = await createUserService.execute(userModel);
+    const user = await createUser.execute(userModel);
 
-    const userID = await listUserService.execute(user.id);
+    const userID = await listUser.execute(user.id);
 
     expect(userID).toHaveProperty('id');
   });
 
   it('should not be able to list a user with a invalid id', async () => {
-    await expect(listUserService.execute('invalid')).rejects.toBeInstanceOf(
+    await expect(listUser.execute('invalid')).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });
