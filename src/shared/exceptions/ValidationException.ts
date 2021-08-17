@@ -5,11 +5,10 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import httpLog from '@config/log.config';
 import { logError } from '@shared/utils/AppLogger';
 
 @Catch(NotAcceptableException)
-export default class ValidationExcepetion implements ExceptionFilter {
+export default class ValidationException implements ExceptionFilter {
   catch(exception: NotAcceptableException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

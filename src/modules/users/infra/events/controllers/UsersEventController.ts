@@ -34,7 +34,7 @@ export default class UsersEventController {
 
     this.rabbitMQProvider.publishInExchange(exchange, routingKey, user);
 
-    await this.userCache.delete(user.id);
+    this.userCache.delete(user.id);
 
     // Send the email notifying that the password was changed
 

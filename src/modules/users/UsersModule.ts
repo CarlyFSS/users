@@ -1,5 +1,4 @@
 import { CacheModule, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from '@fireheet/entities';
@@ -35,6 +34,4 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
   ],
   exports: [TypeOrmModule],
 })
-export default class UsersModule {
-  constructor() {}
-}
+export default class UsersModule {}

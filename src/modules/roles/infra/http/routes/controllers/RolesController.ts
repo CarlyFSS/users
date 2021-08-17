@@ -20,12 +20,12 @@ export default class RolesController {
   async index(): Promise<Role[]> {
     let roles: Role[];
 
-    const cachedRoles = await this.rolesCache.get<Role[]>(`all-roles`);
+    const cachedRoles = this.rolesCache.get<Role[]>(`all-roles`);
 
     if (!cachedRoles) {
       roles = await this.listAllRoles.execute();
 
-      await this.rolesCache.storeMany(roles);
+      this.rolesCache.storeMany(roles);
 
       return roles;
     }
@@ -37,12 +37,12 @@ export default class RolesController {
   async show(@Param('id') id: string): Promise<Role> {
     let role: Role;
 
-    const cachedRole = await this.rolesCache.get<Role>(`${id}-role`);
+    const cachedRole = this.rolesCache.get<Role>(`${id}-role`);
 
     if (!cachedRole) {
       role = await this.listRole.execute(id);
 
-      await this.rolesCache.store(id, role);
+      this.rolesCache.store(id, role);
 
       return role;
     }

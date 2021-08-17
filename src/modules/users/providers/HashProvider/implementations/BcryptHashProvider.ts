@@ -4,10 +4,10 @@ import IHashProvider from '../model/IHashProvider';
 
 @Injectable()
 export default class BcryptHashProvider implements IHashProvider {
-  constructor() {}
-
   async encrypt(data: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
+    const rounds = 10;
+
+    const salt = await bcrypt.genSalt(rounds);
 
     return bcrypt.hash(data, salt);
   }

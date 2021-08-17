@@ -5,7 +5,6 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import httpLog from '@config/log.config';
 import { logError } from '@shared/utils/AppLogger';
 
 @Catch(HttpException)

@@ -14,12 +14,12 @@ export default class FakeUsersRepository implements IUsersRepository {
     document_number,
   }: CreateUserDTO): Promise<User> {
     const user: User = {
-      id: faker.datatype.uuid(),
-      role_id,
       name,
       email,
       password,
+      role_id,
       document_number,
+      id: faker.datatype.uuid(),
       sex: null,
       birthdate: new Date(),
       created_at: new Date(),

@@ -10,12 +10,12 @@ export default class UsersCacheProvider implements ICacheProvider {
     private readonly cacheManager: Cache,
   ) {}
 
-  async store(key: string, data: User): Promise<void> {
-    await this.cacheManager.set(`${key}-user`, data);
+  store<T>(key: string, data: T): void {
+    this.cacheManager.set(`${key}-user`, data);
   }
 
-  async get<T>(key: string): Promise<T> {
-    const cachedUser = await this.cacheManager.get<T>(`${key}-user`);
+  get<T>(key: string): T {
+    const cachedUser = this.cacheManager.get<T>(`${key}-user`);
 
     delete cachedUser.password;
     delete cachedUser.document_number;
@@ -24,7 +24,7 @@ export default class UsersCacheProvider implements ICacheProvider {
     return cachedUser;
   }
 
-  async delete(key: string): Promise<void> {
-    await this.cacheManager.del(`${key}-user`);
+  delete(key: string): void {
+    this.cacheManager.del(`${key}-user`);
   }
 }

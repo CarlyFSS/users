@@ -34,9 +34,7 @@ export default class UsersController {
 
   @Post()
   async create(@Body() data: CreateUserDTO): Promise<User> {
-    const user = await this.createUser.execute(data);
-
-    return user;
+    return this.createUser.execute(data);
   }
 
   @Patch(':id')
@@ -45,21 +43,19 @@ export default class UsersController {
     id: string,
     @Body() data: UpdateUserDTO,
   ): Promise<User> {
-    const user = await this.updateUser.execute(id, data);
-
-    return user;
+    return this.updateUser.execute(id, data);
   }
 
   @Get(':id')
   async show(@Param('id') id: string): Promise<User> {
     let user: User;
 
-    user = await this.userCache.get<User>(id);
+    user = this.userCache.get<User>(id);
 
     if (!user) {
       user = await this.listUser.execute(id);
 
-      await this.userCache.store(id, user);
+      this.userCache.store(id, user);
     }
 
     return user;

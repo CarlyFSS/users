@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { User, Role } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import CreateUserDTO from '../dtos/CreateUserDTO';
