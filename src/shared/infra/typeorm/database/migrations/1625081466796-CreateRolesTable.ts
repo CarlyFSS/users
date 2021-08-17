@@ -1,10 +1,12 @@
-import { query } from 'express';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export default class CreateRolesTable1625081466796
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    // Enables UUID generation (doesn't need to be removed in rollback)
+    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+
     await queryRunner.createTable(
       new Table({
         name: 'roles',
@@ -24,12 +26,12 @@ export default class CreateRolesTable1625081466796
           },
           {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'now()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamptz',
             default: 'now()',
           },
         ],
@@ -45,6 +47,6 @@ export default class CreateRolesTable1625081466796
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('tenants');
+    await queryRunner.dropTable('roles');
   }
 }

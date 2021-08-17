@@ -1,15 +1,8 @@
-import Role from '@fireheet/entities/typeorm/Role';
-import {
-  Controller,
-  Param,
-  UseFilters,
-  Get,
-  CACHE_MANAGER,
-  Inject,
-} from '@nestjs/common';
+import { Role } from '@fireheet/entities';
+import { Controller, Param, UseFilters, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { Cache } from 'cache-manager-redis-store';
+import RolesCacheProvider from '@shared/providers/CacheProvider/implementations/roles/RolesCacheProvider';
 import ListAllRolesService from '../../../../services/ListAllRolesService';
 import ListRoleService from '../../../../services/ListRoleService';
 
@@ -18,8 +11,7 @@ import ListRoleService from '../../../../services/ListRoleService';
 @UseFilters(ErrorException)
 export default class RolesController {
   constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
+    private readonly rolesCache: RolesCacheProvider,
     private readonly listRole: ListRoleService,
     private readonly listAllRoles: ListAllRolesService,
   ) {}
@@ -27,12 +19,13 @@ export default class RolesController {
   @Get()
   async index(): Promise<Role[]> {
     let roles: Role[];
-    const cachedRoles = await this.cacheManager.get<Role[]>(`all-roles`);
+
+    const cachedRoles = this.rolesCache.get<Role[]>(`all-roles`);
 
     if (!cachedRoles) {
       roles = await this.listAllRoles.execute();
 
-      await this.cacheManager.set(`all-roles`, roles);
+      this.rolesCache.storeMany(roles);
 
       return roles;
     }
@@ -43,16 +36,17 @@ export default class RolesController {
   @Get(':id')
   async show(@Param('id') id: string): Promise<Role> {
     let role: Role;
-    const cachedTenant = await this.cacheManager.get<Role>(`${id}-role`);
 
-    if (!cachedTenant) {
+    const cachedRole = this.rolesCache.get<Role>(`${id}-role`);
+
+    if (!cachedRole) {
       role = await this.listRole.execute(id);
 
-      await this.cacheManager.set(`${id}-role`, role);
+      this.rolesCache.store(id, role);
 
       return role;
     }
 
-    return cachedTenant;
+    return cachedRole;
   }
 }
