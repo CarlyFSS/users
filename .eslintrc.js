@@ -37,6 +37,7 @@ module.exports = {
     "import/no-unresolved": "error",
     "no-useless-constructor": "off", 
     "no-empty-function": "off",
+    "no-param-reassign": ["error", { "props": false }],
     "class-methods-use-this": "off",
     "prettier/prettier": "error",
     "no-unused-vars": ["off", {

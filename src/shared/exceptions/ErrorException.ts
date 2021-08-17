@@ -3,15 +3,13 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import httpLog from '@config/log.config';
 import { logError } from '@shared/utils/AppLogger';
 
 @Catch(HttpException)
 export default class ErrorException implements ExceptionFilter {
-  catch(exception: InternalServerErrorException, host: ArgumentsHost) {
+  catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -19,17 +17,22 @@ export default class ErrorException implements ExceptionFilter {
 
     logError('Exception', exception.message);
 
-    httpLog.post('/', {
-      message: exception.message,
-      status_code: status,
-      stack: exception.stack,
-    });
+    // Sends the error to elastic search
+    // httpLog.post('/', {
+    //   message: exception.message,
+    //   status_code: status,
+    //   timestamp: new Date().toISOString(),
+    //   stack: exception.stack,
+    // });
 
-    response.status(status).json({
-      statusCode: status,
+    response.status(status);
+
+    response.send({
+      status_code: status,
       message: exception.message,
-      timestamp: new Date().toISOString(),
       path: request.url,
+      method: request.method,
+      timestamp: new Date().toISOString(),
     });
   }
 }

@@ -1,11 +1,11 @@
-name: ci-test-app
+name: ci-unit-tests
 on:
   pull_request:
     branches:
       - develop
 jobs:
   test:
-    name: Test Application
+    name: Run Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Pull repository

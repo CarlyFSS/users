@@ -7,7 +7,7 @@ import ListRoleService from './ListRoleService';
 let listRoleService: ListRoleService;
 let rolesRepository: RolesRepository;
 
-describe('ListTenantService', () => {
+describe('ListRoleService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
