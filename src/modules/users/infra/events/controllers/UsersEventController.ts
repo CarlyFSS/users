@@ -1,42 +1,31 @@
-import { CACHE_MANAGER, Controller, Inject, UseFilters } from '@nestjs/common';
+import { Controller, UseFilters } from '@nestjs/common';
 import ErrorException from '@shared/exceptions/ErrorException';
 import { OnEvent } from '@nestjs/event-emitter';
-import RabbitMQProvider from '@shared/providers/AMQPProvider/implementations/RabbitMQProvider';
 import { User } from '@fireheet/entities';
-import UsersCacheProvider from '@shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 
 @Controller('users-event-controller')
 @UseFilters(ErrorException)
 export default class UsersEventController {
-  constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly userCache: UsersCacheProvider,
-    private readonly rabbitMQProvider: RabbitMQProvider,
-  ) {}
+  constructor() {}
 
   @OnEvent('user.created', { async: true })
   async handleTenantCreatedEvent(user: User): Promise<User> {
-    const exchange = 'users.exchange';
-    const routingKey = 'user';
-
-    // Send to exchange
-    this.rabbitMQProvider.publishInExchange(exchange, routingKey, user);
-
-    // Then send the confirmation email
+    // Send email confirmation
 
     return user;
   }
 
   @OnEvent('user.updated', { async: true })
-  async handleTenantUpdatedEvent(user: User): Promise<User> {
-    const exchange = 'users.exchange';
-    const routingKey = 'user';
+  async handleTenantUpdatedEvent(user: User): Promise<void> {}
 
-    this.rabbitMQProvider.publishInExchange(exchange, routingKey, user);
+  @OnEvent('user.email.updated', { async: true })
+  async handleUserEmailUpdatedEvent(user: User): Promise<void> {
+    // Send email confirmation
+  }
 
-    this.userCache.delete(user.id);
-
-    // Send the email notifying that the password was changed
+  @OnEvent('user.password.updated', { async: true })
+  async handleUserPasswordUpdatedEvent(user: User): Promise<User> {
+    // Send email to notify password change
 
     return user;
   }

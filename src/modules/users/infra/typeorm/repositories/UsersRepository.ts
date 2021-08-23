@@ -17,7 +17,9 @@ export default class UsersRepository
   }
 
   public async update(user: User): Promise<User> {
-    return this.ormRepository.save(user);
+    await this.ormRepository.save(user);
+
+    return this.findByID(user.id);
   }
 
   public async activate(user_id: string): Promise<User> {

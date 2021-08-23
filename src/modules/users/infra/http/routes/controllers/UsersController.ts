@@ -21,7 +21,7 @@ import ListUserService from '../../../../services/ListUserService';
 import UpdateUserDTO from '../../../../dtos/UpdateUserDTO';
 
 @ApiTags('Users Routes')
-@Controller('users')
+@Controller()
 @UseFilters(ErrorException, ValidationException)
 @UseInterceptors(ClassSerializerInterceptor)
 export default class UsersController {
@@ -50,14 +50,16 @@ export default class UsersController {
   async show(@Param('id') id: string): Promise<User> {
     let user: User;
 
-    user = this.userCache.get<User>(id);
+    const cached = await this.userCache.get(id);
 
-    if (!user) {
+    if (!cached) {
       user = await this.listUser.execute(id);
 
       this.userCache.store(id, user);
+
+      return user;
     }
 
-    return user;
+    return cached;
   }
 }

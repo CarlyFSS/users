@@ -8,18 +8,20 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import UpdateUserDTO from '../dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import UsersCacheProvider from '../../../shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 
 @Injectable()
 export default class UpdateUserService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly usersCache: UsersCacheProvider,
     private readonly hashProvider: BcryptHashProvider,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute(
     id: string,
-    { email, password, name }: UpdateUserDTO,
+    { email, password, name, main_address_id }: UpdateUserDTO,
   ): Promise<User> {
     const userExists = await this.usersRepository.findByID(id);
 
@@ -31,6 +33,8 @@ export default class UpdateUserService {
       const encryptedPassword = await this.hashProvider.encrypt(password);
 
       userExists.password = encryptedPassword;
+
+      this.eventEmitter.emit('user.password.updated', userExists.email);
     }
 
     userExists.name = name;
@@ -49,7 +53,11 @@ export default class UpdateUserService {
       this.eventEmitter.emit('user.email.updated', email);
     }
 
+    userExists.main_address_id = main_address_id;
+
     const updatedUser = await this.usersRepository.update(userExists);
+
+    await this.usersCache.delete<User>(updatedUser.id);
 
     this.eventEmitter.emit('user.updated', updatedUser);
 
