@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Address } from '@fireheet/entities';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import CreateAddressDTO from '../dtos/CreateAddressDTO';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
@@ -9,6 +10,7 @@ export default class CreateAddressService {
   constructor(
     private readonly addressesRepository: AddressesRepository,
     private readonly usersRepository: UsersRepository,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute(
@@ -28,6 +30,8 @@ export default class CreateAddressService {
     userExists.main_address_id = address.id;
 
     await this.usersRepository.update(userExists);
+
+    this.eventEmitter.emit('address.created', userExists.id);
 
     return address;
   }

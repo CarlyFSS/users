@@ -19,6 +19,7 @@ import RedisConfig from '../../config/RedisConfig';
 import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
 import AddressesCacheVerifierService from './services/AddressesCacheVerifierService';
 import AddressesCacheProvider from './providers/implementations/AddressesCacheProvider';
+import AddressesEventController from './infra/events/controllers/AddressesEventController';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import AddressesCacheProvider from './providers/implementations/AddressesCachePr
     AMQPProviderModule,
     UsersModule,
   ],
-  controllers: [AddressesController],
+  controllers: [AddressesController, AddressesEventController],
   providers: [
     CreateAddressService,
     ListAddressService,

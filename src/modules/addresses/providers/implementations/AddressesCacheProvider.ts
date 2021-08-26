@@ -33,30 +33,46 @@ export default class AddressesCacheProvider
         `user-${key}-addresses`,
       );
 
+      if (!cachedAddresses) {
+        return undefined;
+      }
+
       return cachedAddresses;
     }
 
     const cachedAddress = await this.redisCache.get(`${key}-address`);
+
+    if (!cachedAddress) {
+      return undefined;
+    }
 
     return cachedAddress;
   }
 
   /**
    * @param key *address_id* | *user_id*
-   * @param all if *true*, pass the key as the user_id to return all user addresses
+   * @param all if *true*, pass the key as the user_id to delete all user addresses
    */
   async delete(key: string, all?: boolean): Promise<Address | Address[]> {
     if (all) {
       const cachedAddresses = this.redisCache.get(`user-${key}-address`);
 
-      this.redisCache.delete(`user-${key}-addresses`);
+      if (!cachedAddresses) {
+        return undefined;
+      }
+
+      await this.redisCache.delete(`user-${key}-addresses`);
 
       return cachedAddresses;
     }
 
     const cachedAddress = this.redisCache.get(`${key}-address`);
 
-    this.redisCache.delete(`${key}-address`);
+    if (!cachedAddress) {
+      return undefined;
+    }
+
+    await this.redisCache.delete(`${key}-address`);
 
     return cachedAddress;
   }

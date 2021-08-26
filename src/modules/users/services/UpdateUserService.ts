@@ -14,7 +14,6 @@ import UsersCacheProvider from '../providers/CacheProvider/implementations/Users
 export default class UpdateUserService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly usersCache: UsersCacheProvider,
     private readonly hashProvider: BcryptHashProvider,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -56,8 +55,6 @@ export default class UpdateUserService {
     userExists.main_address_id = main_address_id;
 
     const updatedUser = await this.usersRepository.update(userExists);
-
-    this.usersCache.delete(updatedUser.id);
 
     this.eventEmitter.emit('user.updated', updatedUser);
 

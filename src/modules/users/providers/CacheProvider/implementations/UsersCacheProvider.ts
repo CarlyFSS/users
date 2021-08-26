@@ -30,6 +30,10 @@ export default class UsersCacheProvider implements ICustomCacheProvider<User> {
   async delete(key: string): Promise<User> {
     const cachedUser = await this.redisCache.get(`${key}-user`);
 
+    if (!cachedUser) {
+      return undefined;
+    }
+
     this.redisCache.delete(`${key}-user`);
 
     return cachedUser;
