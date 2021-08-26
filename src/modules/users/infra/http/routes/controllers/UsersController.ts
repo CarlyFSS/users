@@ -39,17 +39,17 @@ export default class UsersController {
     return this.createUser.execute(data);
   }
 
-  @Patch(':id')
+  @Patch(':user_id')
   async update(
-    @Param('id')
-    id: string,
+    @Param('user_id')
+    user_id: string,
     @Body() data: UpdateUserDTO,
   ): Promise<User> {
-    return this.updateUser.execute(id, data);
+    return this.updateUser.execute(user_id, data);
   }
 
-  @Get(':id')
-  async show(@Param('id') id: string): Promise<User> {
-    return this.userCacheVerifier.execute(id);
+  @Get(':user_id')
+  async show(@Param('user_id') user_id: string): Promise<User> {
+    return this.userCacheVerifier.execute(user_id);
   }
 }

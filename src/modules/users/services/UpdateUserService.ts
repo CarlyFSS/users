@@ -8,7 +8,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import UpdateUserDTO from '../dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
-import UsersCacheProvider from '../../../shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
+import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Injectable()
 export default class UpdateUserService {
@@ -57,7 +57,7 @@ export default class UpdateUserService {
 
     const updatedUser = await this.usersRepository.update(userExists);
 
-    this.usersCache.delete<User>(updatedUser.id);
+    this.usersCache.delete(updatedUser.id);
 
     this.eventEmitter.emit('user.updated', updatedUser);
 

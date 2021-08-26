@@ -14,6 +14,8 @@ export default class ListUserService {
     }
 
     delete user.role_id;
+    delete user.password;
+    delete user.document_number;
 
     return user;
   }

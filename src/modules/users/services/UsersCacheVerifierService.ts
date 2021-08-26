@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@fireheet/entities';
-import UsersCacheProvider from '../../../shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 import ListUserService from './ListUserService';
+import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Injectable()
 export default class UserCacheVerifierService {

@@ -9,8 +9,8 @@ import CreateUserDTO from '../../users/dtos/CreateUserDTO';
 import ListAllAddressesService from './ListAllAddressesService';
 import AddressesCacheVerifierService from './AddressesCacheVerifierService';
 import ListAddressService from './ListAddressService';
-import AddressesCacheProvider from '../../../shared/providers/CacheProvider/implementations/addresses/AddressesCacheProvider';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
+import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';
 
 const addressModel: CreateAddressDTO = {
   state: 'test',

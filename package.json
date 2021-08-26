@@ -62,7 +62,7 @@
     }
   },
   "dependencies": {
-    "@fireheet/entities": "^1.4.8",
+    "@fireheet/entities": "^1.5.0",
     "@grpc/grpc-js": "^1.3.7",
     "@grpc/proto-loader": "^0.6.4",
     "@nestjs/common": "^8.0.6",
@@ -84,6 +84,7 @@
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "date-fns": "^2.23.0",
     "dotenv": "^10.0.0",
     "elastic-apm-node": "^3.12.1",
     "fastify-swagger": "^4.8.2",

@@ -2,51 +2,21 @@ import { Role } from '@fireheet/entities';
 import { Controller, Param, UseFilters, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '../../../../../../shared/exceptions/ErrorException';
-import RolesCacheProvider from '../../../../../../shared/providers/CacheProvider/implementations/roles/RolesCacheProvider';
-import ListAllRolesService from '../../../../services/ListAllRolesService';
-import ListRoleService from '../../../../services/ListRoleService';
+import RolesCacheVerifierService from '../../../../services/RolesCacheVerifierService';
 
 @ApiTags('Roles Routes')
 @Controller('roles')
 @UseFilters(ErrorException)
 export default class RolesController {
-  constructor(
-    private readonly rolesCache: RolesCacheProvider,
-    private readonly listRole: ListRoleService,
-    private readonly listAllRoles: ListAllRolesService,
-  ) {}
+  constructor(private readonly rolesCacheVerifier: RolesCacheVerifierService) {}
 
   @Get()
-  async index(): Promise<Role[]> {
-    let roles: Role[];
-
-    const cachedRoles = this.rolesCache.get<Role[]>(`all-roles`);
-
-    if (!cachedRoles) {
-      roles = await this.listAllRoles.execute();
-
-      this.rolesCache.storeMany(roles);
-
-      return roles;
-    }
-
-    return cachedRoles;
+  async index(): Promise<Role | Role[]> {
+    return this.rolesCacheVerifier.execute();
   }
 
-  @Get(':id')
-  async show(@Param('id') id: string): Promise<Role> {
-    let role: Role;
-
-    const cachedRole = this.rolesCache.get<Role>(`${id}-role`);
-
-    if (!cachedRole) {
-      role = await this.listRole.execute(id);
-
-      this.rolesCache.store(id, role);
-
-      return role;
-    }
-
-    return cachedRole;
+  @Get(':role_id')
+  async show(@Param('role_id') role_id: string): Promise<Role | Role[]> {
+    return this.rolesCacheVerifier.execute(role_id);
   }
 }

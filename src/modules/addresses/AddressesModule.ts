@@ -1,13 +1,10 @@
 import {
   CacheModule,
-  MiddlewareConsumer,
   Module,
-  RequestMethod,
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Address } from '@fireheet/entities';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import RolesModule from '../roles/RolesModule';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import AddressesController from './infra/http/routes/controllers/AddressController';
@@ -21,6 +18,7 @@ import UsersModule from '../users/UsersModule';
 import RedisConfig from '../../config/RedisConfig';
 import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
 import AddressesCacheVerifierService from './services/AddressesCacheVerifierService';
+import AddressesCacheProvider from './providers/implementations/AddressesCacheProvider';
 
 @Module({
   imports: [
@@ -38,6 +36,7 @@ import AddressesCacheVerifierService from './services/AddressesCacheVerifierServ
     ListAllAddressesService,
     UpdateAddressService,
     DeleteAddressService,
+    AddressesCacheProvider,
     AddressesCacheVerifierService,
   ],
   exports: [TypeOrmModule],

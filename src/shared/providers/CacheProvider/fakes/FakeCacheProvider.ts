@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import ICacheProvider from '../model/ICacheProvider';
+import ICustomCacheProvider from '../model/ICustomCacheProvider';
 
-interface FakeCache {
+interface FakeCache<T> {
   key: string;
-  data: any;
+  data: T;
 }
 
 @Injectable()
-export default class FakeCacheProvider implements ICacheProvider {
-  dataArray: FakeCache[] = [];
+export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
+  dataArray: FakeCache<T>[] = [];
 
-  store<T>(key: string, data: T): T {
+  async store(key: string, data: T): Promise<T> {
     this.dataArray.push({
       key,
       data,
@@ -19,7 +20,7 @@ export default class FakeCacheProvider implements ICacheProvider {
     return data;
   }
 
-  storeMany<T>(data: T, key?: string): T {
+  async storeMany(key?: string, data?: T): Promise<T> {
     this.dataArray.push({
       key,
       data,
@@ -28,23 +29,23 @@ export default class FakeCacheProvider implements ICacheProvider {
     return data;
   }
 
-  async get<T>(key: string): Promise<T | any> {
+  async get(key: string): Promise<T> {
     const foundData = this.dataArray.find(data => data.key === key);
 
     if (foundData) {
       return foundData.data;
     }
 
-    return null;
+    return undefined;
   }
 
-  delete<T>(key: string): T {
+  async delete(key: string): Promise<T> {
     const foundData = this.dataArray.find(data => data.key === key);
 
     if (foundData) {
       return foundData.data;
     }
 
-    return null;
+    return undefined;
   }
 }

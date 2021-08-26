@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Address } from '@fireheet/entities';
 import ListAddressService from './ListAddressService';
 import ListAllAddressesService from './ListAllAddressesService';
-import AddressesCacheProvider from '../../../shared/providers/CacheProvider/implementations/addresses/AddressesCacheProvider';
+import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';
 
 @Injectable()
 export default class AddressesCacheVerifierService {
@@ -16,28 +16,28 @@ export default class AddressesCacheVerifierService {
     user_id: string,
     address_id: string,
   ): Promise<Address | Address[]> {
-    if (!address_id) {
-      let addresses: Address[] = [];
+    let addresses: Address | Address[];
 
-      addresses = await this.addressesCache.get<Address[]>(user_id, true);
+    if (!address_id) {
+      addresses = await this.addressesCache.get(user_id, true);
 
       if (!addresses) {
         addresses = await this.listAllAddresses.execute(user_id);
 
-        this.addressesCache.storeMany(addresses, user_id);
+        this.addressesCache.storeMany(user_id, addresses);
       }
 
       return addresses;
     }
 
-    let address: Address = await this.addressesCache.get<Address>(address_id);
+    addresses = await this.addressesCache.get(address_id);
 
-    if (!address) {
-      address = await this.listAddress.execute(user_id, address_id);
+    if (!addresses) {
+      addresses = await this.listAddress.execute(user_id, address_id);
 
-      await this.addressesCache.store(address.id, address);
+      await this.addressesCache.store(addresses.id, addresses);
     }
 
-    return address;
+    return addresses;
   }
 }

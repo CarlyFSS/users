@@ -16,6 +16,7 @@ import ListRoleByNameService from '../roles/services/ListRoleByNameService';
 import UsersGrpcController from './infra/grpc/routes/controllers/UsersGrpcController';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import UsersCacheVerifierService from './services/UsersCacheVerifierService';
+import UsersCacheProvider from './providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import UsersCacheVerifierService from './services/UsersCacheVerifierService';
     UpdateUserService,
     ListUserService,
     ListRoleByNameService,
+    UsersCacheProvider,
     UsersCacheVerifierService,
   ],
   exports: [TypeOrmModule],

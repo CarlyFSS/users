@@ -1,9 +1,9 @@
 import { User } from '@fireheet/entities';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
-import UsersCacheProvider from '../../../shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import ListUserService from './ListUserService';
 import UsersCacheVerifierService from './UsersCacheVerifierService';
@@ -22,7 +22,7 @@ let usersCacheProvider: UsersCacheProvider;
 let usersRepository: UsersRepository;
 let user: User;
 
-describe('AddressesCacheVerifierService', () => {
+describe('UsersCacheVerifierService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [

@@ -1,12 +1,10 @@
 import { CacheModule, Module } from '@nestjs/common';
 import RedisConfig from '../../../config/RedisConfig';
-import AddressesCacheProvider from './implementations/addresses/AddressesCacheProvider';
-import RolesCacheProvider from './implementations/roles/RolesCacheProvider';
-import UsersCacheProvider from './implementations/users/UsersCacheProvider';
+import RedisCacheProvider from './implementations/RedisCacheProvider';
 
 @Module({
   imports: [CacheModule.register(RedisConfig)],
-  providers: [UsersCacheProvider, RolesCacheProvider, AddressesCacheProvider],
-  exports: [UsersCacheProvider, RolesCacheProvider, AddressesCacheProvider],
+  providers: [RedisCacheProvider],
+  exports: [RedisCacheProvider],
 })
 export default class CacheProviderModule {}
