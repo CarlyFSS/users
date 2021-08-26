@@ -1,10 +1,13 @@
-import UsersModule from '@modules/users/UsersModule';
-import { CacheModule, Module } from '@nestjs/common';
+import {
+  CacheModule,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Address, User } from '@fireheet/entities';
-import RedisConfig from '@config/RedisConfig';
-import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
+import { Address } from '@fireheet/entities';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import RolesModule from '../roles/RolesModule';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import AddressesController from './infra/http/routes/controllers/AddressController';
@@ -14,6 +17,10 @@ import UpdateAddressService from './services/UpdateAddressService';
 import ListAddressService from './services/ListAddressService';
 import CreateAddressService from './services/CreateAddressService';
 import DeleteAddressService from './services/DeleteAddressService';
+import UsersModule from '../users/UsersModule';
+import RedisConfig from '../../config/RedisConfig';
+import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
+import AddressesCacheVerifierService from './services/AddressesCacheVerifierService';
 
 @Module({
   imports: [
@@ -31,6 +38,7 @@ import DeleteAddressService from './services/DeleteAddressService';
     ListAllAddressesService,
     UpdateAddressService,
     DeleteAddressService,
+    AddressesCacheVerifierService,
   ],
   exports: [TypeOrmModule],
 })

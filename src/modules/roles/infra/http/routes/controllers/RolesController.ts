@@ -1,8 +1,8 @@
 import { Role } from '@fireheet/entities';
 import { Controller, Param, UseFilters, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import ErrorException from '@shared/exceptions/ErrorException';
-import RolesCacheProvider from '@shared/providers/CacheProvider/implementations/roles/RolesCacheProvider';
+import ErrorException from '../../../../../../shared/exceptions/ErrorException';
+import RolesCacheProvider from '../../../../../../shared/providers/CacheProvider/implementations/roles/RolesCacheProvider';
 import ListAllRolesService from '../../../../services/ListAllRolesService';
 import ListRoleService from '../../../../services/ListRoleService';
 

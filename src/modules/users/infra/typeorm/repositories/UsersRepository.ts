@@ -17,6 +17,8 @@ export default class UsersRepository
   }
 
   public async update(user: User): Promise<User> {
+    user.updated_at = new Date();
+
     await this.ormRepository.save(user);
 
     return this.findByID(user.id);

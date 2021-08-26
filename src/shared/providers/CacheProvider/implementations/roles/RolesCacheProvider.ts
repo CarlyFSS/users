@@ -23,7 +23,7 @@ export default class RolesCacheProvider implements ICacheProvider {
   async get<T>(key: string): Promise<T | any> {
     const cachedRole = this.cacheManager.get<T>(`${key}-role`);
 
-    if (cachedRole) {
+    if (!cachedRole) {
       return null;
     }
 

@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
+import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
@@ -14,7 +15,7 @@ import ListUserService from './ListUserService';
 let listUser: ListUserService;
 let createUser: CreateUserService;
 
-const userModel = {
+const userModel: CreateUserDTO = {
   name: 'jon',
   email: 'email@email.com',
   password: '123',

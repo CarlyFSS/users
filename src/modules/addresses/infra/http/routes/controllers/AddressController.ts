@@ -8,7 +8,9 @@ import {
   Get,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
 import { Address } from '@fireheet/entities';
@@ -18,9 +20,8 @@ import CreateAddressDTO from '@modules/addresses/dtos/CreateAddressDTO';
 import UpdateAddressDTO from '@modules/addresses/dtos/UpdateAddressDTO';
 import { Delete, Query } from '@nestjs/common/decorators/http';
 import UpdateAddressService from '../../../../services/UpdateAddressService';
-import ListAddressService from '../../../../services/ListAddressService';
-import ListAllAddressesService from '../../../../services/ListAllAddressesService';
 import DeleteAddressService from '../../../../services/DeleteAddressService';
+import AddressesCacheVerifierService from '../../../../services/AddressesCacheVerifierService';
 
 @ApiTags('Addresses Routes')
 @Controller()
@@ -30,9 +31,8 @@ export default class AddressesController {
   constructor(
     private readonly createAddress: CreateAddressService,
     private readonly updateAddress: UpdateAddressService,
-    private readonly listAddress: ListAddressService,
-    private readonly listAllAddresses: ListAllAddressesService,
     private readonly deleteAddress: DeleteAddressService,
+    private readonly addressesCacheVerifier: AddressesCacheVerifierService,
   ) {}
 
   @Post(':user_id')
@@ -58,10 +58,7 @@ export default class AddressesController {
     @Param('user_id') user_id: string,
     @Query('address_id') address_id: string,
   ): Promise<Address | Address[]> {
-    if (!address_id) {
-      return this.listAllAddresses.execute(user_id);
-    }
-    return this.listAddress.execute(user_id, address_id);
+    return this.addressesCacheVerifier.execute(user_id, address_id);
   }
 
   @Delete(':user_id')

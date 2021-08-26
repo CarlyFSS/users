@@ -23,6 +23,8 @@ export default class AddressesRepository
   }
 
   public async update(address: Address): Promise<Address> {
+    address.updated_at = new Date();
+
     await this.ormRepository.save(address);
 
     return this.findByID(address.id);

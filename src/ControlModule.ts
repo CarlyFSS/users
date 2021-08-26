@@ -4,9 +4,16 @@ import AddressesModule from './modules/addresses/AddressesModule';
 import HealthController from './modules/health/HealthController';
 import RolesModule from './modules/roles/RolesModule';
 import UsersModule from './modules/users/UsersModule';
+import CacheProviderModule from './shared/providers/CacheProvider/CacheProviderModule';
 
 @Module({
-  imports: [TerminusModule, RolesModule, UsersModule, AddressesModule],
+  imports: [
+    TerminusModule,
+    RolesModule,
+    UsersModule,
+    AddressesModule,
+    CacheProviderModule,
+  ],
   providers: [],
   controllers: [HealthController],
 })

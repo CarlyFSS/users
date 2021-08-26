@@ -1,6 +1,7 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User, Role } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
@@ -50,20 +51,12 @@ export default class CreateUserService {
       );
     }
 
-    const splicedBirthdate = birthdate.toString().split('/');
-
-    const day = +splicedBirthdate[0];
-    const month = +splicedBirthdate[1] - 1;
-    const year = +splicedBirthdate[2];
-
-    const userBirthDate = new Date(year, month, day);
-
     const user: UserTemplate = {
       name,
       password,
       email,
       document_number,
-      birthdate: userBirthDate,
+      birthdate,
     };
 
     let role: Role;

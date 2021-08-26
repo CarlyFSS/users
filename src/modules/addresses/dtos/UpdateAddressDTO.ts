@@ -19,34 +19,34 @@ export default class UpdateAddressDTO {
 
   @IsString()
   @IsOptional()
-  readonly country: string;
+  readonly country?: string;
 
   @IsString()
   @IsOptional()
-  readonly state: string;
+  readonly state?: string;
 
   @IsString()
   @IsOptional()
-  readonly city: string;
+  readonly city?: string;
 
   @IsString()
   @IsOptional()
-  readonly street: string;
+  readonly street?: string;
 
   @IsNumber()
   @IsOptional()
-  readonly number: number;
+  readonly number?: number;
 
   @IsString()
   @IsOptional()
-  readonly district: string;
+  readonly district?: string;
 
   @IsString()
   @IsOptional()
-  readonly complement: string;
+  readonly complement?: string;
 
   @IsNumberString()
   @Length(4, 12)
   @IsOptional()
-  readonly postal_code: string;
+  readonly postal_code?: string;
 }

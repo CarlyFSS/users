@@ -57,7 +57,7 @@ export default class UpdateUserService {
 
     const updatedUser = await this.usersRepository.update(userExists);
 
-    await this.usersCache.delete<User>(updatedUser.id);
+    this.usersCache.delete<User>(updatedUser.id);
 
     this.eventEmitter.emit('user.updated', updatedUser);
 
