@@ -7,19 +7,16 @@ import AddressesCacheProvider from '../../../providers/implementations/Addresses
 @Controller('addresses-event-controller')
 @UseFilters(ErrorException)
 export default class AddressesEventController {
-  constructor(
-    private readonly addressesCache: AddressesCacheProvider) {}
+  constructor(private readonly addressesCache: AddressesCacheProvider) {}
 
   @OnEvent('address.created', { async: true })
-  async handleAddressCreatedEvent(user_id: string) : Promise<void> {
-    await this.addressesCache.delete(user_id)
+  async handleAddressCreatedEvent(user_id: string): Promise<void> {
+    await this.addressesCache.delete(user_id);
   }
 
   @OnEvent('address.updated', { async: true })
-  async handleAddressUpdatedEvent(address: Address) : Promise<void> {
-    console.log(address.id)
-    await this.addressesCache.delete(address.id)
-    await this.addressesCache.delete(address.user_id, true)
+  async handleAddressUpdatedEvent(address: Address): Promise<void> {
+    await this.addressesCache.delete(address.id);
+    await this.addressesCache.delete(address.user_id, true);
   }
-
 }

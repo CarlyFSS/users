@@ -19,6 +19,8 @@ export default class CreateUserDTO {
   @IsString()
   readonly document_number: string;
 
-  @IsString()
+  @IsString({
+    message: 'birthdate must be a string in the format DD/MM/YYYY',
+  })
   readonly birthdate: Date;
 }

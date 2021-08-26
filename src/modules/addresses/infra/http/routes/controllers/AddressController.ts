@@ -22,11 +22,13 @@ import { Delete, Query } from '@nestjs/common/decorators/http';
 import UpdateAddressService from '../../../../services/UpdateAddressService';
 import DeleteAddressService from '../../../../services/DeleteAddressService';
 import AddressesCacheVerifierService from '../../../../services/AddressesCacheVerifierService';
+import UUIDValidationInterceptor from '../../../../../../shared/infra/http/pipes/UUIDValidationInterceptor';
+import AddressValidatorInterceptor from '../../interceptors/AddressValidatorInterceptor';
 
 @ApiTags('Addresses Routes')
 @Controller()
 @UseFilters(ErrorException, ValidationException)
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor, UUIDValidationInterceptor)
 export default class AddressesController {
   constructor(
     private readonly createAddress: CreateAddressService,
@@ -36,6 +38,7 @@ export default class AddressesController {
   ) {}
 
   @Post(':user_id')
+  @UseInterceptors(AddressValidatorInterceptor)
   async create(
     @Param('user_id')
     user_id: string,
@@ -45,6 +48,7 @@ export default class AddressesController {
   }
 
   @Patch(':user_id')
+  @UseInterceptors(AddressValidatorInterceptor)
   async update(
     @Param('user_id')
     user_id: string,

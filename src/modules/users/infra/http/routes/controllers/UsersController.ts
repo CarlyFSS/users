@@ -21,11 +21,12 @@ import UpdateUserDTO from '../../../../dtos/UpdateUserDTO';
 import DocumentValidationPipe from '../../pipes/DocumentValidationPipe';
 import BirthdateValidationPipe from '../../pipes/BirthdateValidationPipe';
 import UserCacheVerifierService from '../../../../services/UsersCacheVerifierService';
+import UUIDValidationInterceptor from '../../../../../../shared/infra/http/pipes/UUIDValidationInterceptor';
 
 @ApiTags('Users Routes')
 @Controller()
 @UseFilters(ErrorException, ValidationException)
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor, UUIDValidationInterceptor)
 export default class UsersController {
   constructor(
     private readonly createUser: CreateUserService,

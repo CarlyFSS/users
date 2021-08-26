@@ -1,7 +1,4 @@
-import {
-  CacheModule,
-  Module,
-} from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Address } from '@fireheet/entities';
