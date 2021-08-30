@@ -17,6 +17,7 @@ import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProvider
 import AddressesCacheVerifierService from './services/AddressesCacheVerifierService';
 import AddressesCacheProvider from './providers/implementations/AddressesCacheProvider';
 import AddressesEventController from './infra/events/controllers/AddressesEventController';
+import UsersCacheProvider from '../users/providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import AddressesEventController from './infra/events/controllers/AddressesEventC
     UpdateAddressService,
     DeleteAddressService,
     AddressesCacheProvider,
+    UsersCacheProvider,
     AddressesCacheVerifierService,
   ],
   exports: [TypeOrmModule],

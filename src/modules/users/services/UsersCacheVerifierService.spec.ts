@@ -1,6 +1,8 @@
 import { User } from '@fireheet/entities';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
+import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
+import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddressesRepository';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
@@ -31,6 +33,10 @@ describe('UsersCacheVerifierService', () => {
           useValue: new FakeUsersRepository(),
         },
         {
+          provide: AddressesRepository,
+          useValue: new FakeAddressesRepository(),
+        },
+        {
           provide: UsersCacheProvider,
           useValue: new FakeCacheProvider(),
         },
@@ -57,6 +63,8 @@ describe('UsersCacheVerifierService', () => {
     await usersCacheVerifier.execute(user.id);
 
     expect(cacheStore).toHaveBeenCalledTimes(1);
+
+    cacheGet.mockResolvedValue(user);
 
     await usersCacheVerifier.execute(user.id);
 

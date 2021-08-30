@@ -8,7 +8,6 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import UpdateUserDTO from '../dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
-import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Injectable()
 export default class UpdateUserService {

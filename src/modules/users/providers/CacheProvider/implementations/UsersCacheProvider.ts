@@ -23,6 +23,8 @@ export default class UsersCacheProvider implements ICustomCacheProvider<User> {
     delete cachedUser.role_id;
     delete cachedUser.password;
     delete cachedUser.document_number;
+    delete cachedUser.main_address_id;
+    delete cachedUser.main_phone_id;
 
     return cachedUser;
   }

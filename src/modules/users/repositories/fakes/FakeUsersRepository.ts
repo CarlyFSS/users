@@ -1,4 +1,4 @@
-import { Address, User } from '@fireheet/entities';
+import { User } from '@fireheet/entities';
 import faker from 'faker';
 import IUsersRepository from '../IUsersRepository';
 import CreateUserDTO from '../../dtos/CreateUserDTO';
@@ -26,6 +26,7 @@ export default class FakeUsersRepository implements IUsersRepository {
       updated_at: new Date(),
       deleted_at: null,
       main_address_id: null,
+      main_phone_id: null,
     };
 
     this.users.push(user);

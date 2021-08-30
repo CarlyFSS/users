@@ -8,9 +8,7 @@ import {
   Get,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
 import { Address } from '@fireheet/entities';

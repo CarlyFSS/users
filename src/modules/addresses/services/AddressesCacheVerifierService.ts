@@ -24,7 +24,7 @@ export default class AddressesCacheVerifierService {
       if (!addresses) {
         addresses = await this.listAllAddresses.execute(user_id);
 
-        this.addressesCache.storeMany(user_id, addresses);
+        this.addressesCache.storeMany(addresses, user_id);
       }
 
       return addresses;

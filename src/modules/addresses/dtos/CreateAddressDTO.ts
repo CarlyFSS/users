@@ -47,6 +47,3 @@ export default class CreateAddressDTO {
   @Length(4, 12)
   readonly postal_code: string;
 }
-function IsUUid() {
-  throw new Error('Function not implemented.');
-}

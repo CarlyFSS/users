@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import ICacheProvider from '../model/ICacheProvider';
 import ICustomCacheProvider from '../model/ICustomCacheProvider';
 
 interface FakeCache<T> {
@@ -20,7 +19,7 @@ export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
     return data;
   }
 
-  async storeMany(key?: string, data?: T): Promise<T> {
+  async storeMany(data?: T, key?: string): Promise<T> {
     this.dataArray.push({
       key,
       data,

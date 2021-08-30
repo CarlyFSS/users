@@ -3,6 +3,6 @@ export default interface ICustomCacheProvider<T> {
   get(key: string): Promise<T>;
   delete(key: string): Promise<T>;
 
-  storeMany?(key?: string, data?: T | T[]): Promise<T>;
+  storeMany?(data?: T | T[], key?: string): Promise<T>;
   getAll?(key: string): Promise<T>;
 }

@@ -1,9 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Address } from '@fireheet/entities';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
-import UpdateAddressDTO from '../dtos/UpdateAddressDTO';
 
 @Injectable()
 export default class ListAllAddressesService {

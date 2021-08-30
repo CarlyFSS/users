@@ -17,7 +17,7 @@ export default class AddressesCacheProvider
     return data;
   }
 
-  async storeMany(key?: string, data?: Address[]): Promise<Address[]> {
+  async storeMany(data?: Address[], key?: string): Promise<Address[]> {
     await this.redisCache.store(`user-${key}-addresses`, data);
 
     return data;
@@ -55,7 +55,7 @@ export default class AddressesCacheProvider
    */
   async delete(key: string, all?: boolean): Promise<Address | Address[]> {
     if (all) {
-      const cachedAddresses = this.redisCache.get(`user-${key}-address`);
+      const cachedAddresses = this.redisCache.get(`user-${key}-addresses`);
 
       if (!cachedAddresses) {
         return undefined;

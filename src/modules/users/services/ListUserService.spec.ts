@@ -1,6 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
+import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
+import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddressesRepository';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
@@ -36,6 +38,10 @@ describe('ListUserService', () => {
         {
           provide: UsersRepository,
           useValue: new FakeUsersRepository(),
+        },
+        {
+          provide: AddressesRepository,
+          useValue: new FakeAddressesRepository(),
         },
         CreateUserService,
         ListUserService,

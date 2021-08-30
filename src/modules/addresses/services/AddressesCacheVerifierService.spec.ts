@@ -83,6 +83,8 @@ describe('AddressesCacheVerifierService', () => {
 
     expect(cacheStore).toHaveBeenCalledTimes(1);
 
+    cacheGet.mockResolvedValue(address);
+
     await addressesCacheVerifier.execute(user.id, address.id);
 
     expect(cacheGet).toHaveBeenCalledTimes(2);

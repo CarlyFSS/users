@@ -1,6 +1,7 @@
 import { Routes } from 'nest-router';
 import UsersModule from '@modules/users/UsersModule';
 import AddressesModule from '@modules/addresses/AddressesModule';
+import PhonesModule from '../../modules/phones/PhonesModule';
 
 const AppRoutes: Routes = [
   {
@@ -10,6 +11,10 @@ const AppRoutes: Routes = [
       {
         path: '/addresses',
         module: AddressesModule,
+      },
+      {
+        path: '/phones',
+        module: PhonesModule,
       },
     ],
   },

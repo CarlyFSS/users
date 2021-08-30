@@ -24,7 +24,7 @@ export default class RolesCacheVerifierService {
       if (!roles) {
         roles = await this.listAllRoles.execute();
 
-        this.rolesCache.storeMany(undefined, roles);
+        this.rolesCache.storeMany(roles);
 
         return roles;
       }

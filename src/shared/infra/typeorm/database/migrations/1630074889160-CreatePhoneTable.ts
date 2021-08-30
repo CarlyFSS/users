@@ -6,13 +6,13 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateAddressTable1629222319291
+export default class CreatePhoneTable1630074889160
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'addresses',
+        name: 'phones',
         columns: [
           {
             name: 'id',
@@ -28,37 +28,19 @@ export default class CreateAddressTable1629222319291
           },
           {
             name: 'country',
-            type: 'varchar',
-          },
-          {
-            name: 'state',
-            type: 'varchar',
-          },
-          {
-            name: 'city',
-            type: 'varchar',
-          },
-          {
-            name: 'street',
-            type: 'varchar',
-          },
-          {
-            name: 'number',
             type: 'smallint',
           },
           {
-            name: 'district',
+            name: 'prefix',
+            type: 'smallint',
+          },
+          {
+            name: 'number',
             type: 'varchar',
           },
           {
-            name: 'complement',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'postal_code',
-            type: 'varchar',
-            length: '12',
+            name: 'verified',
+            type: 'boolean',
           },
           {
             name: 'created_at',
@@ -79,9 +61,9 @@ export default class CreateAddressTable1629222319291
       }),
     );
 
-    await queryRunner.createForeignKeys('addresses', [
+    await queryRunner.createForeignKeys('phones', [
       new TableForeignKey({
-        name: 'AddressUser',
+        name: 'PhoneUser',
         columnNames: ['user_id'],
         referencedTableName: 'users',
         referencedColumnNames: ['id'],
@@ -93,7 +75,7 @@ export default class CreateAddressTable1629222319291
     await queryRunner.addColumn(
       'users',
       new TableColumn({
-        name: 'main_address_id',
+        name: 'main_phone_id',
         type: 'uuid',
         isNullable: true,
       }),
@@ -101,9 +83,9 @@ export default class CreateAddressTable1629222319291
 
     await queryRunner.createForeignKeys('users', [
       new TableForeignKey({
-        name: 'UserAddress',
-        columnNames: ['main_address_id'],
-        referencedTableName: 'addresses',
+        name: 'UserPhone',
+        columnNames: ['main_phone_id'],
+        referencedTableName: 'phones',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -112,12 +94,12 @@ export default class CreateAddressTable1629222319291
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('users', 'UserAddress');
+    await queryRunner.dropForeignKey('phones', 'UserPhone');
 
-    await queryRunner.dropColumn('users', 'main_address_id');
+    await queryRunner.dropColumn('users', 'main_phone_id');
 
-    await queryRunner.dropForeignKey('addresses', 'AddressUser');
+    await queryRunner.dropForeignKey('phones', 'PhoneUser');
 
-    await queryRunner.dropTable('addresses');
+    await queryRunner.dropTable('phones');
   }
 }

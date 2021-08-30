@@ -1,5 +1,4 @@
 import { Address } from '@fireheet/entities';
-import { string } from 'joi';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import CreateAddressDTO from '../../../dtos/CreateAddressDTO';
 import IAddressesRepository from '../../../repositories/IAddressesRepository';

@@ -15,7 +15,7 @@ export default class RolesCacheProvider
     return data;
   }
 
-  async storeMany(key?: string, data?: Role[]): Promise<Role[]> {
+  async storeMany(data?: Role[]): Promise<Role[]> {
     await this.redisCache.store(`all-roles`, data);
 
     return data;

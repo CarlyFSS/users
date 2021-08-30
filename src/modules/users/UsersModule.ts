@@ -17,13 +17,17 @@ import UsersGrpcController from './infra/grpc/routes/controllers/UsersGrpcContro
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import UsersCacheVerifierService from './services/UsersCacheVerifierService';
 import UsersCacheProvider from './providers/CacheProvider/implementations/UsersCacheProvider';
+import AddressesRepository from '../addresses/infra/typeorm/repositories/AddressesRepository';
+import DeleteUserService from './services/DeleteUserService';
+import ActivateUserService from './services/ActivateUserService';
+import AddressesCacheProvider from '../addresses/providers/implementations/AddressesCacheProvider';
 
 @Module({
   imports: [
     RolesModule,
     CacheModule.register(RedisConfig),
     CacheProviderModule,
-    TypeOrmModule.forFeature([User, UsersRepository]),
+    TypeOrmModule.forFeature([User, UsersRepository, AddressesRepository]),
     AMQPProviderModule,
     HashProviderModule,
   ],
@@ -33,7 +37,10 @@ import UsersCacheProvider from './providers/CacheProvider/implementations/UsersC
     UpdateUserService,
     ListUserService,
     ListRoleByNameService,
+    ActivateUserService,
+    DeleteUserService,
     UsersCacheProvider,
+    AddressesCacheProvider,
     UsersCacheVerifierService,
   ],
   exports: [TypeOrmModule],

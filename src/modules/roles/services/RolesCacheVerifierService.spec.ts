@@ -1,4 +1,4 @@
-import { Role, User } from '@fireheet/entities';
+import { Role } from '@fireheet/entities';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
@@ -13,7 +13,7 @@ let rolesCacheProvider: RolesCacheProvider;
 let rolesRepository: RolesRepository;
 let roles: Role;
 
-describe('UsersCacheVerifierService', () => {
+describe('RolesCacheVerifierService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -49,6 +49,8 @@ describe('UsersCacheVerifierService', () => {
     await rolesCacheVerifier.execute(roles.id);
 
     expect(cacheStore).toHaveBeenCalledTimes(1);
+
+    cacheGet.mockResolvedValue(roles);
 
     await rolesCacheVerifier.execute(roles.id);
 
