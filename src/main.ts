@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { SwaggerModule } from '@nestjs/swagger';
-import openApiDoc from '@shared/docs/create-swagger-docs';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
   FastifyAdapter,
@@ -35,7 +34,16 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('api', app, openApiDoc(app));
+  const config = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build();
+
+  const swagger = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('docs', app, swagger);
 
   app.connectMicroservice<MicroserviceOptions>(GrpcConfig);
 

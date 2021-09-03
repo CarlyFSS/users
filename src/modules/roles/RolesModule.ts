@@ -9,11 +9,11 @@ import RolesGrpcController from './infra/grpc/routes/controllers/RolesGrpcContro
 import ListAllRolesService from './services/ListAllRolesService';
 import ListRoleService from './services/ListRoleService';
 import ListRoleByNameService from './services/ListRoleByNameService';
-import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import RedisConfig from '../../config/RedisConfig';
 import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
 import RolesCacheVerifierService from './services/RolesCacheVerifierService';
 import RolesCacheProvider from './providers/CacheProvider/implementations/RolesCacheProvider';
+import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 
 @Module({
   imports: [

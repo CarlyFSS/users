@@ -13,8 +13,4 @@ export default class UpdateUserDTO {
   @IsOptional()
   @IsString()
   readonly password?: string;
-
-  @IsOptional()
-  @IsString()
-  readonly main_address_id?: string;
 }

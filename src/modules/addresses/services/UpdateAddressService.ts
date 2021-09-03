@@ -15,8 +15,8 @@ export default class UpdateAddressService {
 
   public async execute(
     user_id: string,
+    address_id: string,
     {
-      address_id,
       city,
       complement,
       country,

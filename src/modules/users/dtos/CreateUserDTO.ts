@@ -1,11 +1,6 @@
-import { IsString, IsEmail, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsEmail } from 'class-validator';
 
 export default class CreateUserDTO {
-  @IsOptional()
-  @IsUUID()
-  @IsString()
-  readonly role_id?: string;
-
   @IsString()
   readonly name: string;
 

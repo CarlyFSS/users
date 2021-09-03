@@ -50,9 +50,10 @@ export default class AddressesController {
   async update(
     @Param('user_id')
     user_id: string,
+    @Query('address_id') address_id: string,
     @Body() data: UpdateAddressDTO,
   ): Promise<Address> {
-    return this.updateAddress.execute(user_id, data);
+    return this.updateAddress.execute(user_id, address_id, data);
   }
 
   @Get(':user_id')

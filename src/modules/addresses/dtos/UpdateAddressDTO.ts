@@ -14,8 +14,9 @@ export default class UpdateAddressDTO {
   readonly user_id?: string;
 
   @IsUUID()
+  @IsOptional()
   @IsString()
-  readonly address_id: string;
+  readonly address_id?: string;
 
   @IsString()
   @IsOptional()
