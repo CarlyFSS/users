@@ -25,14 +25,10 @@ export default class CreateUserService {
     private readonly hashProvider: BcryptHashProvider,
   ) {}
 
-  public async execute({
-    document_number,
-    role_id,
-    email,
-    password,
-    name,
-    birthdate,
-  }: CreateUserDTO): Promise<User> {
+  public async execute(
+    { document_number, email, password, name, birthdate }: CreateUserDTO,
+    role_id?: string,
+  ): Promise<User> {
     const userDocumentExists = await this.usersRepository.findByDocument(
       document_number,
     );

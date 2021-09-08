@@ -19,7 +19,7 @@ export default class UpdateUserService {
 
   public async execute(
     id: string,
-    { email, password, name, main_address_id }: UpdateUserDTO,
+    { email, password, name }: UpdateUserDTO,
   ): Promise<User> {
     const userExists = await this.usersRepository.findByID(id);
 
@@ -51,7 +51,7 @@ export default class UpdateUserService {
       this.eventEmitter.emit('user.email.updated', email);
     }
 
-    userExists.main_address_id = main_address_id;
+    // userExists.main_address_id = main_address_id;
 
     const updatedUser = await this.usersRepository.update(userExists);
 

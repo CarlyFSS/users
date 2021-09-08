@@ -21,41 +21,55 @@ export default class CreatePhoneTable1630074889160
             isGenerated: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
+            comment:
+              'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
           },
           {
             name: 'user_id',
             type: 'uuid',
+            comment:
+              'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
           },
           {
-            name: 'country',
-            type: 'smallint',
+            name: 'country_code',
+            type: 'varchar',
+            length: '8',
           },
           {
             name: 'prefix',
-            type: 'smallint',
+            type: 'varchar',
+            length: '4',
           },
           {
             name: 'number',
             type: 'varchar',
+            length: '10',
           },
           {
             name: 'verified',
             type: 'boolean',
+            comment: 'Controls if the phone number has been verified or not',
           },
           {
             name: 'created_at',
             type: 'timestamptz',
             default: 'now()',
+            length: '24',
+            comment: 'When the entity was created',
           },
           {
             name: 'updated_at',
             type: 'timestamptz',
             default: 'now()',
+            length: '24',
+            comment: 'When the entity was updated',
           },
           {
             name: 'deleted_at',
             type: 'timestamptz',
             isNullable: true,
+            length: '24',
+            comment: 'When the entity was deleted',
           },
         ],
       }),
@@ -78,6 +92,8 @@ export default class CreatePhoneTable1630074889160
         name: 'main_phone_id',
         type: 'uuid',
         isNullable: true,
+        comment:
+          'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
       }),
     );
 
@@ -94,7 +110,7 @@ export default class CreatePhoneTable1630074889160
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('phones', 'UserPhone');
+    await queryRunner.dropForeignKey('users', 'UserPhone');
 
     await queryRunner.dropColumn('users', 'main_phone_id');
 

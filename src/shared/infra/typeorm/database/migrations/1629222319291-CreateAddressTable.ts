@@ -21,26 +21,34 @@ export default class CreateAddressTable1629222319291
             isGenerated: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
+            comment:
+              'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
           },
           {
             name: 'user_id',
             type: 'uuid',
+            comment:
+              'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
           },
           {
             name: 'country',
             type: 'varchar',
+            length: '30',
           },
           {
             name: 'state',
             type: 'varchar',
+            length: '30',
           },
           {
             name: 'city',
             type: 'varchar',
+            length: '30',
           },
           {
             name: 'street',
             type: 'varchar',
+            length: '50',
           },
           {
             name: 'number',
@@ -49,11 +57,13 @@ export default class CreateAddressTable1629222319291
           {
             name: 'district',
             type: 'varchar',
+            length: '30',
           },
           {
             name: 'complement',
             type: 'varchar',
             isNullable: true,
+            length: '30',
           },
           {
             name: 'postal_code',
@@ -61,19 +71,31 @@ export default class CreateAddressTable1629222319291
             length: '12',
           },
           {
+            name: 'description',
+            type: 'varchar',
+            isNullable: true,
+            length: '25',
+          },
+          {
             name: 'created_at',
             type: 'timestamptz',
             default: 'now()',
+            length: '24',
+            comment: 'When the entity was created',
           },
           {
             name: 'updated_at',
             type: 'timestamptz',
             default: 'now()',
+            length: '24',
+            comment: 'When the entity was updated',
           },
           {
             name: 'deleted_at',
             type: 'timestamptz',
             isNullable: true,
+            length: '24',
+            comment: 'When the entity was deleted',
           },
         ],
       }),

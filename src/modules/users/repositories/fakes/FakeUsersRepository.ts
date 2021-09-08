@@ -6,13 +6,10 @@ import CreateUserDTO from '../../dtos/CreateUserDTO';
 export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
-  public async create({
-    name,
-    email,
-    password,
-    role_id,
-    document_number,
-  }: CreateUserDTO): Promise<User> {
+  public async create(
+    { name, email, password, document_number }: CreateUserDTO,
+    role_id?: string,
+  ): Promise<User> {
     const user: User = {
       name,
       email,
