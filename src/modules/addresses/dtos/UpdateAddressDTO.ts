@@ -7,6 +7,9 @@ import {
   Length,
 } from 'class-validator';
 
+const POSTAL_CODE_MAX_LENGTH = 12;
+const POSTAL_CODE_MIN_LENGTH = 4;
+
 export default class UpdateAddressDTO {
   @IsString()
   @IsOptional()
@@ -47,7 +50,7 @@ export default class UpdateAddressDTO {
   readonly complement?: string;
 
   @IsNumberString()
-  @Length(4, 12)
+  @Length(POSTAL_CODE_MIN_LENGTH, POSTAL_CODE_MAX_LENGTH)
   @IsOptional()
   readonly postal_code?: string;
 }

@@ -5,7 +5,7 @@ import { BadRequestException } from '@nestjs/common/exceptions';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
 @Injectable()
-export default class CreateUserService {
+export default class DeleteUserService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly usersRepository: UsersRepository,

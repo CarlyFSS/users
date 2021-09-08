@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Address } from '@fireheet/entities';
 import RolesModule from '../roles/RolesModule';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
-import AddressesController from './infra/http/routes/controllers/AddressController';
+import AddressesController from './infra/http/routes/controllers/AddressesController';
 import AddressesRepository from './infra/typeorm/repositories/AddressesRepository';
 import ListAllAddressesService from './services/ListAllAddressesService';
 import UpdateAddressService from './services/UpdateAddressService';

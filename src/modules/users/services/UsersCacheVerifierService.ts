@@ -4,7 +4,7 @@ import ListUserService from './ListUserService';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 
 @Injectable()
-export default class UserCacheVerifierService {
+export default class UsersCacheVerifierService {
   constructor(
     private readonly userCache: UsersCacheProvider,
     private readonly listUser: ListUserService,

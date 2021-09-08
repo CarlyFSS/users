@@ -1,17 +1,18 @@
+import { User } from '@fireheet/entities';
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export default class DocumentValidationPipe implements PipeTransform {
-  transform(value: any) {
-    if (typeof value.document_number === 'string') {
-      let finalString = String(value.document_number);
+  transform(user: User) {
+    if (typeof user.document_number === 'string') {
+      let finalString = String(user.document_number);
 
       finalString = finalString.replace('.', '');
       finalString = finalString.replace('.', '');
       finalString = finalString.replace('-', '');
       finalString = finalString.replace('/', '');
 
-      value.document_number = finalString;
+      user.document_number = finalString;
 
       if (+finalString > 0) {
         throw new BadRequestException(
@@ -20,6 +21,6 @@ export default class DocumentValidationPipe implements PipeTransform {
       }
     }
 
-    return value;
+    return user;
   }
 }

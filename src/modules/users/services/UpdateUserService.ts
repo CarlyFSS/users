@@ -51,8 +51,6 @@ export default class UpdateUserService {
       this.eventEmitter.emit('user.email.updated', email);
     }
 
-    // userExists.main_address_id = main_address_id;
-
     const updatedUser = await this.usersRepository.update(userExists);
 
     this.eventEmitter.emit('user.updated', updatedUser);

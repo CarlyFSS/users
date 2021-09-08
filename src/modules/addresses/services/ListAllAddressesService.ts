@@ -19,10 +19,6 @@ export default class ListAllAddressesService {
       );
     }
 
-    const userAddresses = await this.addressesRepository.findUserAddresses(
-      user_id,
-    );
-
-    return userAddresses;
+    return this.addressesRepository.findUserAddresses(user_id);
   }
 }

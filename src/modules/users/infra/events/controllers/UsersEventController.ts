@@ -25,14 +25,15 @@ export default class UsersEventController {
     await this.usersCache.store(user.id, user);
   }
 
-  @OnEvent('user.email.updated', { async: true })
-  async handleUserEmailUpdatedEvent(user: User): Promise<void> {
-    await this.usersCache.delete(user.id);
+  // Reactivate after implementing the mail provider
+  // @OnEvent('user.email.updated', { async: true })
+  // async handleUserEmailUpdatedEvent(user: User): Promise<void> {
+  //   await this.usersCache.delete(user.id);
 
-    await this.usersCache.store(user.id, user);
+  //   await this.usersCache.store(user.id, user);
 
-    // Send email confirmation
-  }
+  //   // Send email confirmation
+  // }
 
   @OnEvent('user.password.updated', { async: true })
   async handleUserPasswordUpdatedEvent(user: User): Promise<void> {

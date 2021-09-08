@@ -8,6 +8,9 @@ import {
   Length,
 } from 'class-validator';
 
+const POSTAL_CODE_MAX_LENGTH = 12;
+const POSTAL_CODE_MIN_LENGTH = 4;
+
 export default class CreateAddressDTO {
   @IsString()
   @IsOptional()
@@ -44,6 +47,6 @@ export default class CreateAddressDTO {
 
   @IsNumberString()
   @IsNotEmpty()
-  @Length(4, 12)
+  @Length(POSTAL_CODE_MIN_LENGTH, POSTAL_CODE_MAX_LENGTH)
   readonly postal_code: string;
 }
