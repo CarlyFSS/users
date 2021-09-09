@@ -27,7 +27,7 @@ export default class AddressesCacheProvider
    * @param key *address_id* | *user_id*
    * @param all if *true*, pass the key as the user_id to return all user addresses
    */
-  async get(key: string, all: boolean = false): Promise<Address | Address[]> {
+  async get(key: string, all = false): Promise<Address | Address[]> {
     if (all) {
       const cachedAddresses = await this.redisCache.get(
         `user-${key}-addresses`,
@@ -53,10 +53,7 @@ export default class AddressesCacheProvider
    * @param key *address_id* | *user_id*
    * @param all if *true*, pass the key as the user_id to delete all user addresses
    */
-  async delete(
-    key: string,
-    all: boolean = false,
-  ): Promise<Address | Address[]> {
+  async delete(key: string, all = false): Promise<Address | Address[]> {
     if (all) {
       const cachedAddresses = this.redisCache.get(`user-${key}-addresses`);
 

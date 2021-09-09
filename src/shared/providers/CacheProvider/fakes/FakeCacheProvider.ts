@@ -39,10 +39,14 @@ export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
   }
 
   async delete(key: string): Promise<T> {
-    const foundData = this.dataArray.find(data => data.key === key);
+    const foundIndex = this.dataArray.findIndex(data => data.key === key);
 
-    if (foundData) {
-      return foundData.data;
+    if (foundIndex) {
+      const data = { ...this.dataArray[foundIndex].data };
+
+      this.dataArray[foundIndex] = null;
+
+      return data;
     }
 
     return undefined;

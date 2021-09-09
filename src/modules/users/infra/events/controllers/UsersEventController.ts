@@ -13,10 +13,9 @@ export default class UsersEventController {
     private readonly addressCache: AddressesCacheProvider,
   ) {}
 
+  // Send email confirmation
   @OnEvent('user.created', { async: true })
-  async handleUserCreatedEvent(): Promise<void> {
-    // Send email confirmation
-  }
+  async handleUserCreatedEvent(): Promise<void> {}
 
   @OnEvent('user.updated', { async: true })
   async handleUserUpdatedEvent(user: User): Promise<void> {
@@ -25,21 +24,14 @@ export default class UsersEventController {
     await this.usersCache.store(user.id, user);
   }
 
-  // Reactivate after implementing the mail provider
-  // @OnEvent('user.email.updated', { async: true })
-  // async handleUserEmailUpdatedEvent(user: User): Promise<void> {
-  //   await this.usersCache.delete(user.id);
+  // Reactivate after implementing the mail provider ( Receives an user )
+  @OnEvent('user.email.updated', { async: true })
+  async handleUserEmailUpdatedEvent(): Promise<void> {}
 
-  //   await this.usersCache.store(user.id, user);
-
-  //   // Send email confirmation
-  // }
-
+  // Send email to notify password change
   @OnEvent('user.password.updated', { async: true })
   async handleUserPasswordUpdatedEvent(user: User): Promise<void> {
     await this.usersCache.delete(user.id);
-
-    // Send email to notify password change
   }
 
   @OnEvent('user.deleted', { async: true })
@@ -52,8 +44,7 @@ export default class UsersEventController {
     await this.addressCache.delete(main_address_id);
   }
 
+  // Send email to notify activation of the user and email confirmation
   @OnEvent('user.activated', { async: true })
-  async handleUserActivatedEvent(): Promise<void> {
-    // Send email to notify activation of the user and email confirmation
-  }
+  async handleUserActivatedEvent(): Promise<void> {}
 }

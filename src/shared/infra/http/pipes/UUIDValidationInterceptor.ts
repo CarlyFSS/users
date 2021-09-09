@@ -8,9 +8,15 @@ import {
 import { Observable } from 'rxjs';
 import { validate } from 'uuid';
 
+interface IDParam {
+  user_id?: string;
+  phone_id?: string;
+  address_id?: string;
+}
+
 @Injectable()
 export default class UUIDValidationInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
     const { params, query } = context.switchToHttp().getRequest();
 
     this.validateParams(params);
@@ -20,7 +26,7 @@ export default class UUIDValidationInterceptor implements NestInterceptor {
     return next.handle();
   }
 
-  validateParams(params: any): void {
+  validateParams(params: IDParam): void {
     const userParam = params.user_id;
     const phoneParam = params.phone_id;
     const addressParam = params.address_id;
@@ -44,7 +50,7 @@ export default class UUIDValidationInterceptor implements NestInterceptor {
     }
   }
 
-  validateQuery(query: any): void {
+  validateQuery(query: IDParam): void {
     const userQuery = query.user_id;
     const phoneQuery = query.phone_id;
     const addressQuery = query.address_id;
