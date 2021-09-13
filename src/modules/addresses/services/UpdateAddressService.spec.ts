@@ -27,7 +27,6 @@ const userModel: CreateUserDTO = {
   email: 'email1',
   password: '123',
   document_number: '123',
-  role_id: '123',
   birthdate: new Date(),
 };
 
@@ -63,11 +62,14 @@ describe('UpdateAddressService', () => {
     const address = await addressesRepository.create(user.id, addressModel);
 
     const updateModel: UpdateAddressDTO = {
-      address_id: address.id,
       city: 'test2',
     };
 
-    const updatedAddress = await updateAddress.execute(user.id, updateModel);
+    const updatedAddress = await updateAddress.execute(
+      user.id,
+      address.id,
+      updateModel,
+    );
 
     expect(updatedAddress.city).toBe(updateModel.city);
   });
@@ -76,23 +78,23 @@ describe('UpdateAddressService', () => {
     const address = await addressesRepository.create(user.id, addressModel);
 
     const updateModel: UpdateAddressDTO = {
-      address_id: address.id,
       city: 'test2',
     };
 
     await expect(
-      updateAddress.execute('123', updateModel),
+      updateAddress.execute('123', address.id, updateModel),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('should not be able to update a address with invalid address_id', async () => {
+    const address_id = '123';
+
     const updateModel: UpdateAddressDTO = {
-      address_id: '123',
       city: 'test2',
     };
 
     await expect(
-      updateAddress.execute(user.id, updateModel),
+      updateAddress.execute(user.id, address_id, updateModel),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
 });

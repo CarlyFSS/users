@@ -18,7 +18,6 @@ const userModel: CreateUserDTO = {
   email: 'email1',
   password: '123',
   document_number: '123',
-  role_id: '123',
   birthdate: new Date(),
 };
 
@@ -80,7 +79,7 @@ describe('CreateUserService', () => {
   it('should be able to create a user without informing the role', async () => {
     const userModel2 = { ...userModel };
 
-    delete userModel2.role_id;
+    // delete userModel2.role_id;
 
     const user = await createUser.execute(userModel2);
 

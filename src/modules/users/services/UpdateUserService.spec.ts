@@ -22,7 +22,6 @@ const userModel: CreateUserDTO = {
   email: 'email1',
   password: '123',
   document_number: '123',
-  role_id: '123',
   birthdate: new Date(),
 };
 
@@ -31,7 +30,6 @@ const userModel2: CreateUserDTO = {
   email: 'email2',
   password: '123',
   document_number: '321',
-  role_id: '123',
   birthdate: new Date(),
 };
 
