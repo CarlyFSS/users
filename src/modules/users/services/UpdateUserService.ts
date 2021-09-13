@@ -31,6 +31,8 @@ export default class UpdateUserService {
       const encryptedPassword = await this.hashProvider.encrypt(password);
 
       userExists.password = encryptedPassword;
+
+      this.eventEmitter.emit('user.password.updated', userExists.email);
     }
 
     userExists.name = name;

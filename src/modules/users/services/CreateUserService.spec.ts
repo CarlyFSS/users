@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
+import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
@@ -12,21 +13,11 @@ import CreateUserService from './CreateUserService';
 
 let createUser: CreateUserService;
 
-const userModel = {
+const userModel: CreateUserDTO = {
   name: 'jon',
   email: 'email1',
   password: '123',
   document_number: '123',
-  role_id: '123',
-  birthdate: new Date(),
-};
-
-const userModel2 = {
-  name: 'jon',
-  email: 'email2',
-  password: '123',
-  document_number: '321',
-  role_id: '123',
   birthdate: new Date(),
 };
 
@@ -55,36 +46,42 @@ describe('CreateUserService', () => {
     createUser = module.get<CreateUserService>(CreateUserService);
   });
 
-  it('should be able create a user with a valid credentials', async () => {
+  it('should be able to create a user with a valid credentials', async () => {
     const user = await createUser.execute(userModel);
 
     expect(user).toHaveProperty('id');
   });
 
-  it('should not be able create a user with same email', async () => {
+  it('should not be able to create a user with same email', async () => {
     await createUser.execute(userModel);
 
-    userModel2.email = userModel.email;
+    const userModel2 = { ...userModel };
+
+    userModel2.document_number = '321';
 
     await expect(createUser.execute(userModel2)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
 
-  it('should not be able create a user with same document number', async () => {
+  it('should not be able to create a user with same document number', async () => {
     await createUser.execute(userModel);
 
-    userModel.email = '123';
+    const userModel2 = { ...userModel };
 
-    await expect(createUser.execute(userModel)).rejects.toBeInstanceOf(
+    userModel2.email = '123';
+
+    await expect(createUser.execute(userModel2)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
 
-  it('should be able create a user without informing the role', async () => {
-    delete userModel.role_id;
+  it('should be able to create a user without informing the role', async () => {
+    const userModel2 = { ...userModel };
 
-    const user = await createUser.execute(userModel);
+    // delete userModel2.role_id;
+
+    const user = await createUser.execute(userModel2);
 
     expect(user).toHaveProperty('id');
   });

@@ -4,7 +4,6 @@ import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
 import ListAllRolesService from './ListAllRolesService';
 
 let listAllRolesService: ListAllRolesService;
-let rolesRepository: RolesRepository;
 
 describe('ListAllRolesService', () => {
   beforeEach(async () => {
@@ -19,7 +18,6 @@ describe('ListAllRolesService', () => {
     }).compile();
 
     listAllRolesService = module.get<ListAllRolesService>(ListAllRolesService);
-    rolesRepository = module.get<RolesRepository>(RolesRepository);
   });
 
   it('should be able to list all roles', async () => {

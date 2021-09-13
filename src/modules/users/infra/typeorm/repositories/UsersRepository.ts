@@ -17,7 +17,11 @@ export default class UsersRepository
   }
 
   public async update(user: User): Promise<User> {
-    return this.ormRepository.save(user);
+    user.updated_at = new Date();
+
+    await this.ormRepository.save(user);
+
+    return this.findByID(user.id);
   }
 
   public async activate(user_id: string): Promise<User> {

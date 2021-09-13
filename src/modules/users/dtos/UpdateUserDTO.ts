@@ -1,5 +1,4 @@
 import { IsString, IsEmail, IsOptional } from 'class-validator';
-import { Exclude } from 'class-transformer';
 
 export default class UpdateUserDTO {
   @IsOptional()
@@ -13,6 +12,5 @@ export default class UpdateUserDTO {
 
   @IsOptional()
   @IsString()
-  @Exclude()
   readonly password?: string;
 }

@@ -1,9 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
+import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
+import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddressesRepository';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
+import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
@@ -14,12 +17,11 @@ import ListUserService from './ListUserService';
 let listUser: ListUserService;
 let createUser: CreateUserService;
 
-const userModel = {
+const userModel: CreateUserDTO = {
   name: 'jon',
   email: 'email@email.com',
   password: '123',
   document_number: '123',
-  role_id: '123',
   birthdate: new Date(),
 };
 
@@ -35,6 +37,10 @@ describe('ListUserService', () => {
         {
           provide: UsersRepository,
           useValue: new FakeUsersRepository(),
+        },
+        {
+          provide: AddressesRepository,
+          useValue: new FakeAddressesRepository(),
         },
         CreateUserService,
         ListUserService,

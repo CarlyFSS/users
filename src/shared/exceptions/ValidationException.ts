@@ -5,7 +5,7 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { logError } from '@shared/utils/AppLogger';
+import { logError } from '../utils/AppLogger';
 
 @Catch(NotAcceptableException)
 export default class ValidationException implements ExceptionFilter {

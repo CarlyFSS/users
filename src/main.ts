@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { SwaggerModule } from '@nestjs/swagger';
-import openApiDoc from '@shared/docs/create-swagger-docs';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { ValidationPipe } from '@nestjs/common';
 import AppModule from './AppModule';
 import GrpcConfig from './config/GrpcConfig';
 
@@ -16,13 +15,13 @@ async function bootstrap() {
 
   const PORT = +process.env.PORT || defaultPort;
 
-  const app: INestApplication =
-    await NestFactory.create<NestFastifyApplication>(
-      AppModule,
-      new FastifyAdapter(),
-    );
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
   app.setGlobalPrefix('v1');
+
   app.useGlobalPipes(
     new ValidationPipe({
       always: true,
@@ -35,12 +34,21 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('api', app, openApiDoc(app));
+  const config = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build();
+
+  const swagger = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('docs', app, swagger);
 
   app.connectMicroservice<MicroserviceOptions>(GrpcConfig);
 
   await app.listen(PORT);
-  await app.startAllMicroservicesAsync();
+  await app.startAllMicroservices();
 }
 
 bootstrap();
