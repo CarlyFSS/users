@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Address } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
+import CreateAddressDTO from '../models/dtos/CreateAddressDTO';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 

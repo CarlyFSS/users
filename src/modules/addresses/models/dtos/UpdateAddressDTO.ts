@@ -7,8 +7,8 @@ import {
   Length,
 } from 'class-validator';
 
-const POSTAL_CODE_MAX_LENGTH = 12;
-const POSTAL_CODE_MIN_LENGTH = 4;
+const ZIP_CODE_MAX_LENGTH = 12;
+const ZIP_CODE_MIN_LENGTH = 4;
 
 export default class UpdateAddressDTO {
   @IsString()
@@ -43,14 +43,14 @@ export default class UpdateAddressDTO {
 
   @IsString()
   @IsOptional()
-  readonly district?: string;
+  readonly neighborhood?: string;
 
   @IsString()
   @IsOptional()
   readonly complement?: string;
 
   @IsNumberString()
-  @Length(POSTAL_CODE_MIN_LENGTH, POSTAL_CODE_MAX_LENGTH)
+  @Length(ZIP_CODE_MIN_LENGTH, ZIP_CODE_MAX_LENGTH)
   @IsOptional()
-  readonly postal_code?: string;
+  readonly zip_code?: string;
 }

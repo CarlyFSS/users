@@ -1,5 +1,5 @@
 import { Address } from '@fireheet/entities';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
+import CreateAddressDTO from '../models/dtos/CreateAddressDTO';
 
 export default interface IAddressesRepository {
   create(user_id: string, data: CreateAddressDTO): Promise<Address>;

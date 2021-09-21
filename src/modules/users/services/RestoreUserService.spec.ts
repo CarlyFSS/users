@@ -1,27 +1,19 @@
-import { User } from '@fireheet/entities';
 import { BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
-import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersMockFactory from '../models/mocks/UsersMockFactory';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import ActivateUserService from './ActivateUserService';
+import RestoreUserService from './RestoreUserService';
 
-let activateUser: ActivateUserService;
+const mockFactory = UsersMockFactory();
+
+let restoreUser: RestoreUserService;
 let usersRepository: UsersRepository;
-let user: User;
 
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
-
-describe('CreateUserService', () => {
+describe('RestoreUserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -34,34 +26,36 @@ describe('CreateUserService', () => {
           provide: UsersRepository,
           useValue: new FakeUsersRepository(),
         },
-        ActivateUserService,
+        RestoreUserService,
       ],
     }).compile();
 
-    activateUser = module.get<ActivateUserService>(ActivateUserService);
+    restoreUser = module.get<RestoreUserService>(RestoreUserService);
     usersRepository = module.get<UsersRepository>(UsersRepository);
-
-    user = await usersRepository.create(userModel);
   });
 
-  it('should be able to activate an already deactivated user', async () => {
-    await usersRepository.deactivate(user.id);
+  it('should be able to restore an already deleted user', async () => {
+    const user = await usersRepository.create(mockFactory.createUserDTO());
+
+    await usersRepository.delete(user.id);
 
     expect(user.deleted_at).not.toBe(null);
 
-    const activatedUser = await activateUser.execute(user.id);
+    const activatedUser = await restoreUser.execute(user.id);
 
     expect(activatedUser.deleted_at).toBe(null);
   });
 
-  it('should not be able to activate a non existing user', async () => {
-    await expect(activateUser.execute('123')).rejects.toBeInstanceOf(
+  it('should not be able to restore a non existing user', async () => {
+    await expect(restoreUser.execute('123')).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });
 
-  it('should not be able to activate a already activated user', async () => {
-    await expect(activateUser.execute(user.id)).rejects.toBeInstanceOf(
+  it('should not be able to restore a already active user', async () => {
+    const user = await usersRepository.create(mockFactory.createUserDTO());
+
+    await expect(restoreUser.execute(user.id)).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });

@@ -13,8 +13,8 @@ export default class UsersGrpcController {
   ) {}
 
   @GrpcMethod()
-  async list(id: string): Promise<User> {
-    let user: User;
+  async list(id: string): Promise<Partial<User>> {
+    let user: Partial<User>;
     const cachedUser = await this.cacheManager.get<User>(`${id}-user`);
 
     if (!cachedUser) {

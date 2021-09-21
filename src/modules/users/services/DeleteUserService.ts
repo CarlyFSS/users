@@ -18,13 +18,13 @@ export default class DeleteUserService {
       throw new BadRequestException(`User with id "${user_id}" doesn't exist!`);
     }
 
-    if (userExists.deleted_at) {
+    if (userExists.deleted_at !== null) {
       throw new BadRequestException(
         `User with id "${user_id}" is already deleted!`,
       );
     }
 
-    const deletedUser = this.usersRepository.deactivate(userExists.id);
+    const deletedUser = this.usersRepository.delete(userExists.id);
 
     this.eventEmitter.emit('user.deleted', userExists);
 

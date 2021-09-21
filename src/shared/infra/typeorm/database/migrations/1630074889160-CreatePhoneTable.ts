@@ -89,7 +89,7 @@ export default class CreatePhoneTable1630074889160
     await queryRunner.addColumn(
       'users',
       new TableColumn({
-        name: 'main_phone_id',
+        name: 'phone_id',
         type: 'uuid',
         isNullable: true,
         comment:
@@ -100,7 +100,7 @@ export default class CreatePhoneTable1630074889160
     await queryRunner.createForeignKeys('users', [
       new TableForeignKey({
         name: 'UserPhone',
-        columnNames: ['main_phone_id'],
+        columnNames: ['phone_id'],
         referencedTableName: 'phones',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
@@ -112,7 +112,7 @@ export default class CreatePhoneTable1630074889160
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('users', 'UserPhone');
 
-    await queryRunner.dropColumn('users', 'main_phone_id');
+    await queryRunner.dropColumn('users', 'phone_id');
 
     await queryRunner.dropForeignKey('phones', 'PhoneUser');
 

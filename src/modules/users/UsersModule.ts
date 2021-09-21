@@ -19,7 +19,7 @@ import UsersCacheVerifierService from './services/UsersCacheVerifierService';
 import UsersCacheProvider from './providers/CacheProvider/implementations/UsersCacheProvider';
 import AddressesRepository from '../addresses/infra/typeorm/repositories/AddressesRepository';
 import DeleteUserService from './services/DeleteUserService';
-import ActivateUserService from './services/ActivateUserService';
+import RestoreUserService from './services/RestoreUserService';
 import AddressesCacheProvider from '../addresses/providers/implementations/AddressesCacheProvider';
 
 @Module({
@@ -37,7 +37,7 @@ import AddressesCacheProvider from '../addresses/providers/implementations/Addre
     UpdateUserService,
     ListUserService,
     ListRoleByNameService,
-    ActivateUserService,
+    RestoreUserService,
     DeleteUserService,
     UsersCacheProvider,
     AddressesCacheProvider,

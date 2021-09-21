@@ -1,6 +1,6 @@
 import { Address } from '@fireheet/entities';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import CreateAddressDTO from '../../../dtos/CreateAddressDTO';
+import CreateAddressDTO from '../../../models/dtos/CreateAddressDTO';
 import IAddressesRepository from '../../../repositories/IAddressesRepository';
 
 @EntityRepository(Address)
@@ -14,9 +14,9 @@ export default class AddressesRepository
     user_id: string,
     data: CreateAddressDTO,
   ): Promise<Address> {
-    data.user_id = user_id;
+    const mergedData = { ...data, user_id };
 
-    const address = this.ormRepository.create(data);
+    const address = this.ormRepository.create(mergedData);
 
     return this.ormRepository.save(address);
   }
@@ -50,7 +50,7 @@ export default class AddressesRepository
         user_id,
         street,
         number,
-        postal_code,
+        zip_code: postal_code,
       },
     });
   }

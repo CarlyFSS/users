@@ -55,7 +55,7 @@ export default class CreateAddressTable1629222319291
             type: 'smallint',
           },
           {
-            name: 'district',
+            name: 'neighborhood',
             type: 'varchar',
             length: '30',
           },
@@ -66,7 +66,7 @@ export default class CreateAddressTable1629222319291
             length: '30',
           },
           {
-            name: 'postal_code',
+            name: 'zip_code',
             type: 'varchar',
             length: '12',
           },

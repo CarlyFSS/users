@@ -1,30 +1,15 @@
 import { User } from '@fireheet/entities';
-import faker from 'faker';
 import IUsersRepository from '../IUsersRepository';
-import CreateUserDTO from '../../dtos/CreateUserDTO';
+import CreateUserDTO from '../../models/dtos/CreateUserDTO';
+import UsersMockFactory from '../../models/mocks/UsersMockFactory';
 
 export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
-  public async create(
-    { name, email, password, document_number }: CreateUserDTO,
-    role_id?: string,
-  ): Promise<User> {
-    const user: User = {
-      name,
-      email,
-      password,
-      role_id,
-      document_number,
-      id: faker.datatype.uuid(),
-      sex: null,
-      birthdate: new Date(),
-      created_at: new Date(),
-      updated_at: new Date(),
-      deleted_at: null,
-      main_address_id: null,
-      main_phone_id: null,
-    };
+  private mockFactory = UsersMockFactory;
+
+  public async create(data: CreateUserDTO, role_id?: string): Promise<User> {
+    const user: User = this.mockFactory().createUser({ ...data, role_id });
 
     this.users.push(user);
 
@@ -39,7 +24,7 @@ export default class FakeUsersRepository implements IUsersRepository {
     return this.users[userIdx];
   }
 
-  public async deactivate(user_id: string): Promise<User | undefined> {
+  public async delete(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
     const userIdx = this.users.indexOf(foundUser);

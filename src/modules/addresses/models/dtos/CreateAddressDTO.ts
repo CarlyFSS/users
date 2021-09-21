@@ -4,19 +4,13 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
-  IsUUID,
   Length,
 } from 'class-validator';
 
-const POSTAL_CODE_MAX_LENGTH = 12;
-const POSTAL_CODE_MIN_LENGTH = 4;
+const ZIP_CODE_MAX_LENGTH = 12;
+const ZIP_CODE_MIN_LENGTH = 4;
 
 export default class CreateAddressDTO {
-  @IsString()
-  @IsOptional()
-  @IsUUID()
-  user_id?: string;
-
   @IsString()
   @IsNotEmpty()
   readonly country: string;
@@ -39,7 +33,7 @@ export default class CreateAddressDTO {
 
   @IsString()
   @IsNotEmpty()
-  readonly district: string;
+  readonly neighborhood: string;
 
   @IsString()
   @IsOptional()
@@ -47,6 +41,8 @@ export default class CreateAddressDTO {
 
   @IsNumberString()
   @IsNotEmpty()
-  @Length(POSTAL_CODE_MIN_LENGTH, POSTAL_CODE_MAX_LENGTH)
-  readonly postal_code: string;
+  @Length(ZIP_CODE_MIN_LENGTH, ZIP_CODE_MAX_LENGTH)
+  readonly zip_code: string;
+
+  readonly description: string;
 }

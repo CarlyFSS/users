@@ -1,27 +1,19 @@
-import { User } from '@fireheet/entities';
 import { BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
-import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersMockFactory from '../models/mocks/UsersMockFactory';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import DeleteUserService from './DeleteUserService';
 
+const mockFactory = UsersMockFactory();
+
 let deleteUser: DeleteUserService;
 let usersRepository: UsersRepository;
-let user: User;
 
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
-
-describe('CreateUserService', () => {
+describe('DeleteUserService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -40,11 +32,11 @@ describe('CreateUserService', () => {
 
     deleteUser = module.get<DeleteUserService>(DeleteUserService);
     usersRepository = module.get<UsersRepository>(UsersRepository);
-
-    user = await usersRepository.create(userModel);
   });
 
   it('should be able to delete an already activated user', async () => {
+    const user = await usersRepository.create(mockFactory.createUserDTO());
+
     const deletedUser = await deleteUser.execute(user.id);
 
     expect(deletedUser.deleted_at).not.toBe(null);
@@ -57,6 +49,8 @@ describe('CreateUserService', () => {
   });
 
   it('should not be able to delete a already deleted user', async () => {
+    const user = await usersRepository.create(mockFactory.createUserDTO());
+
     await deleteUser.execute(user.id);
 
     await expect(deleteUser.execute(user.id)).rejects.toBeInstanceOf(

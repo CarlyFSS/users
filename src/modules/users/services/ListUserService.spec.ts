@@ -6,8 +6,8 @@ import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddr
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
-import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersMockFactory from '../models/mocks/UsersMockFactory';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -16,14 +16,6 @@ import ListUserService from './ListUserService';
 
 let listUser: ListUserService;
 let createUser: CreateUserService;
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email@email.com',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
 
 describe('ListUserService', () => {
   beforeEach(async () => {
@@ -57,11 +49,13 @@ describe('ListUserService', () => {
   });
 
   it('should be able to list a user with a valid id', async () => {
-    const user = await createUser.execute(userModel);
+    const createdUser = await createUser.execute(
+      UsersMockFactory().createUserDTO(),
+    );
 
-    const userID = await listUser.execute(user.id);
+    const listedUser = await listUser.execute(createdUser.id);
 
-    expect(userID).toHaveProperty('id');
+    expect(listedUser).toHaveProperty('id');
   });
 
   it('should not be able to list a user with a invalid id', async () => {

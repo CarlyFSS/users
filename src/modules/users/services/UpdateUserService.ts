@@ -6,21 +6,24 @@ import {
 import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UpdateUserDTO from '../dtos/UpdateUserDTO';
+import UpdateUserDTO from '../models/dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 
 @Injectable()
 export default class UpdateUserService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly addressesRepository: AddressesRepository,
     private readonly hashProvider: BcryptHashProvider,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute(
     id: string,
-    { email, password, name }: UpdateUserDTO,
-  ): Promise<User> {
+    { email, password, name, main_address_id }: UpdateUserDTO,
+    role_id?: string,
+  ): Promise<Partial<User>> {
     const userExists = await this.usersRepository.findByID(id);
 
     if (!userExists) {
@@ -35,8 +38,6 @@ export default class UpdateUserService {
       this.eventEmitter.emit('user.password.updated', userExists.email);
     }
 
-    userExists.name = name;
-
     if (email) {
       const emailExists = await this.usersRepository.findByEmail(email);
 
@@ -46,19 +47,24 @@ export default class UpdateUserService {
         );
       }
 
-      userExists.email = email;
-
       this.eventEmitter.emit('user.email.updated', email);
     }
 
+    const addressExists = await this.addressesRepository.findByID(
+      main_address_id,
+    );
+
+    userExists.main_address_id =
+      addressExists?.id || userExists.main_address_id;
+
+    userExists.role_id = role_id || userExists.role_id;
+    userExists.name = name;
+    userExists.email = email;
+
     const updatedUser = await this.usersRepository.update(userExists);
 
-    this.eventEmitter.emit('user.updated', updatedUser);
+    this.eventEmitter.emit('user.updated', updatedUser.information);
 
-    delete updatedUser.role_id;
-    delete updatedUser.password;
-    delete updatedUser.document_number;
-
-    return updatedUser;
+    return updatedUser.information;
   }
 }

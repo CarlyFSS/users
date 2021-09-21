@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { User, Role } from '@fireheet/entities';
+import { Role, User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ForbiddenException } from '@nestjs/common/exceptions';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import CreateUserDTO from '../models/dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
@@ -28,7 +28,7 @@ export default class CreateUserService {
   public async execute(
     { document_number, email, password, name, birthdate }: CreateUserDTO,
     role_id?: string,
-  ): Promise<User> {
+  ): Promise<Partial<User>> {
     const userDocumentExists = await this.usersRepository.findByDocument(
       document_number,
     );
@@ -73,9 +73,6 @@ export default class CreateUserService {
 
     this.eventEmitter.emit('user.created', createdUser);
 
-    delete createdUser.role_id;
-    delete createdUser.password;
-
-    return createdUser;
+    return createdUser.information;
   }
 }

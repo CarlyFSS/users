@@ -1,6 +1,6 @@
 import { User } from '@fireheet/entities';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import CreateUserDTO from '../../../dtos/CreateUserDTO';
+import CreateUserDTO from '../../../models/dtos/CreateUserDTO';
 import IUsersRepository from '../../../repositories/IUsersRepository';
 
 @EntityRepository(User)
@@ -32,7 +32,7 @@ export default class UsersRepository
     return this.ormRepository.save(user);
   }
 
-  public async deactivate(user_id: string): Promise<User> {
+  public async delete(user_id: string): Promise<User> {
     const user = await this.findByID(user_id);
 
     user.deleted_at = new Date();
@@ -40,8 +40,8 @@ export default class UsersRepository
     return this.ormRepository.save(user);
   }
 
-  public async findByID(id: string): Promise<User | undefined> {
-    return this.ormRepository.findOne({ where: { id } });
+  public async findByID(user_id: string): Promise<User | undefined> {
+    return this.ormRepository.findOne({ where: { id: user_id } });
   }
 
   public async findByDocument(

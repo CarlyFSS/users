@@ -1,19 +1,29 @@
-import { IsString, IsEmail, Matches, Length } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  Matches,
+  Length,
+  IsUUID,
+} from 'class-validator';
 
-export default class CreateUserDTO {
+export default class UpdateUserDTO {
+  @IsOptional()
   @IsString()
   @Length(0, 100)
   @Matches("^[#.0-9a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$", 'gi')
-  readonly name: string;
+  readonly name?: string;
 
+  @IsOptional()
   @IsString()
   @IsEmail()
   @Length(0, 50)
   @Matches(
     '^(([^<>()[\\]\\.,;:\\s@"]+(\\.[^<>()[\\]\\.,;:\\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\\]\\.,;:\\s@\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\"]{2,})$',
   )
-  readonly email: string;
+  readonly email?: string;
 
+  @IsOptional()
   @IsString()
   @Length(6, 250)
   @Matches(
@@ -24,21 +34,13 @@ export default class CreateUserDTO {
         'Must have at least: 6 characters, 1 Uppercase letter, 1 number and 1 of the following symbols "!@#$%^&*(){}-__+.)"',
     },
   )
-  readonly password: string;
+  readonly password?: string;
 
-  @IsString()
-  @Length(11, 11)
-  @Matches('^([1-9]{11})$', 'g', {
-    message: 'Document number must be a "String" with only numbers',
-  })
-  readonly document_number: string;
+  @IsOptional()
+  @IsUUID('4')
+  readonly main_address_id?: string;
 
-  @IsString({
-    message: 'Birthdate must be a "String" in the format DD/MM/YYYY',
-  })
-  @Length(0)
-  @Matches('^([1-9]{2}/[1-9]{2}/[1-9]{4})$', 'g', {
-    message: 'birthdate must be in the format DD/MM/YYYY',
-  })
-  readonly birthdate: Date;
+  @IsOptional()
+  @IsUUID('4')
+  readonly phone_id?: string;
 }

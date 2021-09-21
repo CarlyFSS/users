@@ -1,6 +1,6 @@
 import { Address } from '@fireheet/entities';
-import faker from 'faker';
-import CreateAddressDTO from '../../dtos/CreateAddressDTO';
+import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
+import AddressesMockFactory from '../../models/mocks/AddressesMockFactory';
 import IAddressesRepository from '../IAddressesRepository';
 
 export default class FakeAddressesRepository implements IAddressesRepository {
@@ -8,32 +8,9 @@ export default class FakeAddressesRepository implements IAddressesRepository {
 
   public async create(
     user_id: string,
-    {
-      city,
-      complement,
-      country,
-      district,
-      number,
-      postal_code,
-      state,
-      street,
-    }: CreateAddressDTO,
+    data: CreateAddressDTO,
   ): Promise<Address> {
-    const address: Address = {
-      user_id,
-      city,
-      complement,
-      country,
-      district,
-      number,
-      postal_code,
-      state,
-      street,
-      id: faker.datatype.uuid(),
-      created_at: new Date(),
-      updated_at: new Date(),
-      deleted_at: null,
-    };
+    const address = AddressesMockFactory().createAddress({ ...data, user_id });
 
     this.addresses.push(address);
 
@@ -73,7 +50,7 @@ export default class FakeAddressesRepository implements IAddressesRepository {
         address.user_id === user_id &&
         address.street === street &&
         address.number === number &&
-        address.postal_code === postal_code,
+        address.zip_code === postal_code,
     );
   }
 

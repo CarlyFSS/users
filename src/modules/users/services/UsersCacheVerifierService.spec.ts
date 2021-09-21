@@ -3,20 +3,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddressesRepository';
-import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersMockFactory from '../models/mocks/UsersMockFactory';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import ListUserService from './ListUserService';
 import UsersCacheVerifierService from './UsersCacheVerifierService';
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
 
 let usersCacheVerifier: UsersCacheVerifierService;
 let usersCacheProvider: UsersCacheProvider;
@@ -52,7 +44,7 @@ describe('UsersCacheVerifierService', () => {
 
     usersCacheProvider = module.get<UsersCacheProvider>(UsersCacheProvider);
 
-    user = await usersRepository.create(userModel);
+    user = await usersRepository.create(UsersMockFactory().createUserDTO());
   });
 
   it('should be able to list a cached user', async () => {

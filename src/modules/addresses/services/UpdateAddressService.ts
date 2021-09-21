@@ -3,7 +3,7 @@ import { Address } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
-import UpdateAddressDTO from '../dtos/UpdateAddressDTO';
+import UpdateAddressDTO from '../models/dtos/UpdateAddressDTO';
 
 @Injectable()
 export default class UpdateAddressService {
@@ -20,9 +20,9 @@ export default class UpdateAddressService {
       city,
       complement,
       country,
-      district,
+      neighborhood,
       number,
-      postal_code,
+      zip_code,
       state,
       street,
     }: UpdateAddressDTO,
@@ -46,9 +46,9 @@ export default class UpdateAddressService {
     addressExists.city = city;
     addressExists.complement = complement;
     addressExists.country = country;
-    addressExists.district = district;
+    addressExists.neighborhood = neighborhood;
     addressExists.number = number;
-    addressExists.postal_code = postal_code;
+    addressExists.zip_code = zip_code;
     addressExists.state = state;
     addressExists.street = street;
 

@@ -8,18 +8,21 @@ export default class FakeRolesRepository implements IRolesRepository {
       name: 'SYSADMIN',
       created_at: new Date(),
       updated_at: new Date(),
+      information: undefined,
     },
     {
       id: '2',
       name: 'ADMIN',
       created_at: new Date(),
       updated_at: new Date(),
+      information: undefined,
     },
     {
       id: '3',
       name: 'CLIENT',
       created_at: new Date(),
       updated_at: new Date(),
+      information: undefined,
     },
   ];
 
