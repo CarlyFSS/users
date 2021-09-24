@@ -1,7 +1,7 @@
+import { Cache } from 'cache-manager';
 import { Controller, CACHE_MANAGER, Inject } from '@nestjs/common';
-import { Cache } from 'cache-manager-redis-store';
 import { GrpcMethod } from '@nestjs/microservices';
-import { User } from '@fireheet/entities';
+import User from '@fireheet/entities/typeorm/users/User';
 import ListUserService from '../../../../services/ListUserService';
 
 @Controller()
@@ -15,6 +15,7 @@ export default class UsersGrpcController {
   @GrpcMethod()
   async list(id: string): Promise<Partial<User>> {
     let user: Partial<User>;
+
     const cachedUser = await this.cacheManager.get<User>(`${id}-user`);
 
     if (!cachedUser) {

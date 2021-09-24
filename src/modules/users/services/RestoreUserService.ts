@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
 @Injectable()
@@ -11,23 +11,25 @@ export default class RestoreUserService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async execute(user_id: string): Promise<User> {
+  public async execute(user_id: string): Promise<User | undefined> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
       throw new BadRequestException(`User with id "${user_id}" doesn't exist!`);
     }
 
-    if (userExists.deleted_at === null) {
+    if (userExists.deleted_at === undefined) {
       throw new BadRequestException(
         `User with id "${user_id}" is not deactivated!`,
       );
     }
 
-    const deletedUser = this.usersRepository.activate(userExists.id);
+    const restoredUser = await this.usersRepository.activate(userExists.id);
 
-    this.eventEmitter.emit('user.activated', userExists);
+    if (restoredUser) {
+      this.eventEmitter.emit('user.activated', userExists);
+    }
 
-    return deletedUser;
+    return restoredUser;
   }
 }

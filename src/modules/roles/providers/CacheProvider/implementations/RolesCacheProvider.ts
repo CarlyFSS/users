@@ -1,4 +1,4 @@
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
@@ -15,8 +15,10 @@ export default class RolesCacheProvider
     return data;
   }
 
-  async storeMany(data?: Role[]): Promise<Role[]> {
-    await this.redisCache.store(`all-roles`, data);
+  async storeMany(data: Role[], key?: string): Promise<Role[]> {
+    const searchKey = key || 'all-roles-offset1-limit5';
+
+    await this.redisCache.store(searchKey, data);
 
     return data;
   }

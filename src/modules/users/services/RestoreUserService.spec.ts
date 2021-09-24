@@ -39,11 +39,11 @@ describe('RestoreUserService', () => {
 
     await usersRepository.delete(user.id);
 
-    expect(user.deleted_at).not.toBe(null);
+    expect(user.deleted_at).not.toBe(undefined);
 
     const activatedUser = await restoreUser.execute(user.id);
 
-    expect(activatedUser.deleted_at).toBe(null);
+    expect(activatedUser?.deleted_at).toBe(undefined);
   });
 
   it('should not be able to restore a non existing user', async () => {

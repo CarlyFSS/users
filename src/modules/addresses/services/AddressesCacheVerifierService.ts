@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import ListAddressService from './ListAddressService';
 import ListAllAddressesService from './ListAllAddressesService';
 import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';

@@ -14,18 +14,18 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { User } from '@fireheet/entities';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ValidationException from '@shared/exceptions/ValidationException';
+import { User } from '@fireheet/entities/typeorm/users';
 import CreateUserDTO from '../../../../models/dtos/CreateUserDTO';
 import UpdateUserService from '../../../../services/UpdateUserService';
 import UpdateUserDTO from '../../../../models/dtos/UpdateUserDTO';
 import DocumentValidationPipe from '../../pipes/DocumentValidationPipe';
 import BirthdateValidationPipe from '../../pipes/BirthdateValidationPipe';
 import UserCacheVerifierService from '../../../../services/UsersCacheVerifierService';
-import UUIDValidationInterceptor from '../../../../../../shared/infra/http/pipes/UUIDValidationInterceptor';
 import DeleteUserService from '../../../../services/DeleteUserService';
 import RestoreUserService from '../../../../services/RestoreUserService';
+import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 
 @ApiTags('Users Routes')
 @Controller()

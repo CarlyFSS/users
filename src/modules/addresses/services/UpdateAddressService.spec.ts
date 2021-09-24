@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
-import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';

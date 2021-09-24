@@ -1,5 +1,5 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import IRolesRepository from '../../../repositories/IRolesRepository';
 
 @EntityRepository(Role)
@@ -9,8 +9,11 @@ export default class RolesRepository
 {
   private readonly ormRepository = getRepository(Role);
 
-  public async listAll(): Promise<Role[]> {
-    return this.ormRepository.find();
+  public async listAll(offset = 0, limit = 5): Promise<Role[]> {
+    return this.ormRepository.find({
+      skip: offset,
+      take: limit,
+    });
   }
 
   public async findByID(id: string): Promise<Role | undefined> {

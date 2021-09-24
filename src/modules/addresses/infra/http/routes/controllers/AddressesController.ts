@@ -11,17 +11,17 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { Address } from '@fireheet/entities';
 import ValidationException from '@shared/exceptions/ValidationException';
 import CreateAddressService from '@modules/addresses/services/CreateAddressService';
 import CreateAddressDTO from '@modules/addresses/models/dtos/CreateAddressDTO';
 import UpdateAddressDTO from '@modules/addresses/models/dtos/UpdateAddressDTO';
 import { Delete, Query } from '@nestjs/common/decorators/http';
+import { Address } from '@fireheet/entities/typeorm/users';
 import UpdateAddressService from '../../../../services/UpdateAddressService';
 import DeleteAddressService from '../../../../services/DeleteAddressService';
 import AddressesCacheVerifierService from '../../../../services/AddressesCacheVerifierService';
-import UUIDValidationInterceptor from '../../../../../../shared/infra/http/pipes/UUIDValidationInterceptor';
 import AddressValidatorInterceptor from '../../interceptors/AddressValidatorInterceptor';
+import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 
 @ApiTags('Addresses Routes')
 @Controller()

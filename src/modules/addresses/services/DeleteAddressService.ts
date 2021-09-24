@@ -1,7 +1,7 @@
+import { Address } from '@fireheet/entities/typeorm/users';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
-import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
+import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 
 @Injectable()
 export default class DeleteAddressService {

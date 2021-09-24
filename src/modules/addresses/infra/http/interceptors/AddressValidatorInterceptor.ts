@@ -1,4 +1,4 @@
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import {
   Injectable,
   NestInterceptor,

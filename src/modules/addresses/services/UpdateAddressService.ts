@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Address } from '@fireheet/entities/typeorm/users';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import UpdateAddressDTO from '../models/dtos/UpdateAddressDTO';
@@ -43,14 +43,14 @@ export default class UpdateAddressService {
       );
     }
 
-    addressExists.city = city;
-    addressExists.complement = complement;
-    addressExists.country = country;
-    addressExists.neighborhood = neighborhood;
-    addressExists.number = number;
-    addressExists.zip_code = zip_code;
-    addressExists.state = state;
-    addressExists.street = street;
+    addressExists.city = city || addressExists.city;
+    addressExists.complement = complement || addressExists.complement;
+    addressExists.country = country || addressExists.country;
+    addressExists.neighborhood = neighborhood || addressExists.neighborhood;
+    addressExists.number = number || addressExists.number;
+    addressExists.zip_code = zip_code || addressExists.zip_code;
+    addressExists.state = state || addressExists.state;
+    addressExists.street = street || addressExists.street;
 
     const address = await this.addressesRepository.update(addressExists);
 

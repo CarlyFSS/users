@@ -1,4 +1,4 @@
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import CreateAddressDTO from '../models/dtos/CreateAddressDTO';
 
 export default interface IAddressesRepository {
@@ -12,5 +12,5 @@ export default interface IAddressesRepository {
     number: number,
     postal_code: string,
   ): Promise<Address | undefined>;
-  findUserAddresses(user_id: string): Promise<Address[] | undefined>;
+  findUserAddresses(user_id: string): Promise<Address[]>;
 }

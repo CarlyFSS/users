@@ -59,13 +59,15 @@ describe('UpdateUserService', () => {
   it('should be able update a user with a valid id', async () => {
     const user = await createUser.execute(mockFactory.createUserDTO());
 
-    const updatedUser = await updateUser.execute(user.id, {
-      email: 'test',
-      name: 'jon',
-    });
+    if (user.id) {
+      const updatedUser = await updateUser.execute(user.id, {
+        email: 'test',
+        name: 'jon',
+      });
 
-    expect(updatedUser.email).toEqual('test');
-    expect(updatedUser.name).toEqual('jon');
+      expect(updatedUser.email).toEqual('test');
+      expect(updatedUser.name).toEqual('jon');
+    }
   });
 
   it('should not be able update a user with a invalid id', async () => {
@@ -82,10 +84,12 @@ describe('UpdateUserService', () => {
 
     await createUser.execute(mockFactory.createUserDTO({ email: 'test' }));
 
-    await expect(
-      updateUser.execute(user.id, {
-        email: 'test',
-      }),
-    ).rejects.toBeInstanceOf(ForbiddenException);
+    if (user.id) {
+      await expect(
+        updateUser.execute(user.id, {
+          email: 'test',
+        }),
+      ).rejects.toBeInstanceOf(ForbiddenException);
+    }
   });
 });

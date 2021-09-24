@@ -1,5 +1,5 @@
+import { User } from '@fireheet/entities/typeorm/users';
 import faker from 'faker';
-import { User } from '@fireheet/entities';
 import CreateUserDTO from '../dtos/CreateUserDTO';
 
 interface FactoryOptions {
@@ -25,13 +25,12 @@ export default function UsersMockFactory() {
       document_number:
         options?.document_number || `${faker.datatype.number(999999)}`,
       sex: 'male',
-      phone_id: options?.phone_id || null,
-      main_address_id: options?.main_address_id || null,
+      phone_id: options?.phone_id || '',
+      main_address_id: options?.main_address_id || '',
       created_at: new Date(),
       updated_at: new Date(),
-      deleted_at: null,
 
-      get information(): Partial<User> {
+      get info(): Partial<User> {
         return {
           id: this.id,
           name: this.name,

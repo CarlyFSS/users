@@ -13,7 +13,7 @@ import GrpcConfig from './config/GrpcConfig';
 async function bootstrap() {
   const defaultPort = 3333;
 
-  const PORT = +process.env.PORT || defaultPort;
+  const PORT = process.env.PORT || defaultPort;
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

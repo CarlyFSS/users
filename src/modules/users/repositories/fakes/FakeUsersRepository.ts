@@ -1,4 +1,4 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import IUsersRepository from '../IUsersRepository';
 import CreateUserDTO from '../../models/dtos/CreateUserDTO';
 import UsersMockFactory from '../../models/mocks/UsersMockFactory';
@@ -27,21 +27,29 @@ export default class FakeUsersRepository implements IUsersRepository {
   public async delete(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
-    const userIdx = this.users.indexOf(foundUser);
+    if (foundUser) {
+      const userIdx = this.users.indexOf(foundUser);
 
-    this.users[userIdx].deleted_at = new Date();
+      this.users[userIdx].deleted_at = new Date();
 
-    return this.users[userIdx];
+      return this.users[userIdx];
+    }
+
+    return undefined;
   }
 
   public async activate(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
-    const userIdx = this.users.indexOf(foundUser);
+    if (foundUser) {
+      const userIdx = this.users.indexOf(foundUser);
 
-    this.users[userIdx].deleted_at = null;
+      this.users[userIdx].deleted_at = undefined;
 
-    return this.users[userIdx];
+      return this.users[userIdx];
+    }
+
+    return undefined;
   }
 
   public async findByID(id: string): Promise<User | undefined> {

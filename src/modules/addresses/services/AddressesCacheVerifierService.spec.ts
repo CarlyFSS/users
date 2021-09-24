@@ -1,5 +1,5 @@
-import { Address, User } from '@fireheet/entities';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Address, User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
@@ -82,11 +82,11 @@ describe('AddressesCacheVerifierService', () => {
     const cacheGet = jest.spyOn(addressesCacheProvider, 'get');
     const cacheStore = jest.spyOn(addressesCacheProvider, 'storeMany');
 
-    await addressesCacheVerifier.execute(user.id, null);
+    await addressesCacheVerifier.execute(user.id, '');
 
     expect(cacheStore).toHaveBeenCalledTimes(1);
 
-    addressesCacheVerifier.execute(user.id, null);
+    addressesCacheVerifier.execute(user.id, '');
 
     expect(cacheGet).toHaveBeenCalledTimes(2);
   });

@@ -1,4 +1,4 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
@@ -15,7 +15,7 @@ export default class UsersCacheProvider
     return data;
   }
 
-  async get(key: string): Promise<Partial<User>> {
+  async get(key: string): Promise<Partial<User> | undefined> {
     const cachedUser = await this.redisCache.get(`${key}-user`);
 
     if (!cachedUser) {
@@ -25,7 +25,7 @@ export default class UsersCacheProvider
     return cachedUser;
   }
 
-  async delete(key: string): Promise<Partial<User>> {
+  async delete(key: string): Promise<Partial<User> | undefined> {
     const cachedUser = await this.redisCache.get(`${key}-user`);
 
     if (!cachedUser) {

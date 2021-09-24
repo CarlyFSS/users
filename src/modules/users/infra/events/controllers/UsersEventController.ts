@@ -1,7 +1,7 @@
 import { Controller, UseFilters } from '@nestjs/common';
 import ErrorException from '@shared/exceptions/ErrorException';
 import { OnEvent } from '@nestjs/event-emitter';
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersCacheProvider from '../../../providers/CacheProvider/implementations/UsersCacheProvider';
 import AddressesCacheProvider from '../../../../addresses/providers/implementations/AddressesCacheProvider';
 

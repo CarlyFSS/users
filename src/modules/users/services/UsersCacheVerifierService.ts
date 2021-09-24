@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import ListUserService from './ListUserService';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 

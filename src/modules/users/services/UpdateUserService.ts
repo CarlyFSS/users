@@ -3,8 +3,8 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import UpdateUserDTO from '../models/dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
@@ -50,9 +50,9 @@ export default class UpdateUserService {
       this.eventEmitter.emit('user.email.updated', email);
     }
 
-    const addressExists = await this.addressesRepository.findByID(
-      main_address_id,
-    );
+    const addressID = main_address_id || '';
+
+    const addressExists = await this.addressesRepository.findByID(addressID);
 
     userExists.main_address_id =
       addressExists?.id || userExists.main_address_id;
@@ -63,8 +63,8 @@ export default class UpdateUserService {
 
     const updatedUser = await this.usersRepository.update(userExists);
 
-    this.eventEmitter.emit('user.updated', updatedUser.information);
+    this.eventEmitter.emit('user.updated', updatedUser.info);
 
-    return updatedUser.information;
+    return updatedUser.info;
   }
 }

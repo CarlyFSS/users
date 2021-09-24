@@ -1,4 +1,4 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';

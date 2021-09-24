@@ -49,13 +49,17 @@ describe('ListUserService', () => {
   });
 
   it('should be able to list a user with a valid id', async () => {
-    const createdUser = await createUser.execute(
-      UsersMockFactory().createUserDTO(),
-    );
+    const userDTO = UsersMockFactory().createUserDTO();
 
-    const listedUser = await listUser.execute(createdUser.id);
+    const createdUser = await createUser.execute(userDTO);
 
-    expect(listedUser).toHaveProperty('id');
+    let listedUser;
+
+    if (createdUser?.id) {
+      listedUser = await listUser.execute(createdUser.id);
+    }
+
+    expect(listedUser).toHaveProperty('name');
   });
 
   it('should not be able to list a user with a invalid id', async () => {

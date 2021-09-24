@@ -1,4 +1,4 @@
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
 import AddressesMockFactory from '../../models/mocks/AddressesMockFactory';
 import IAddressesRepository from '../IAddressesRepository';
@@ -25,7 +25,7 @@ export default class FakeAddressesRepository implements IAddressesRepository {
     return this.addresses[addressIdx];
   }
 
-  public async delete(address: Address): Promise<Address | undefined> {
+  public async delete(address: Address): Promise<Address> {
     const addressIdx = this.addresses.indexOf(address);
 
     address.deleted_at = new Date();
@@ -54,9 +54,7 @@ export default class FakeAddressesRepository implements IAddressesRepository {
     );
   }
 
-  public async findUserAddresses(
-    user_id: string,
-  ): Promise<Address[] | undefined> {
+  public async findUserAddresses(user_id: string): Promise<Address[]> {
     return this.addresses.filter(address => address.user_id === user_id);
   }
 }

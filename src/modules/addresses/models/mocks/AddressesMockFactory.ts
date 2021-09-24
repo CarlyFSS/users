@@ -1,5 +1,5 @@
+import { Address } from '@fireheet/entities/typeorm/users';
 import faker from 'faker';
-import { Address } from '@fireheet/entities';
 import CreateAddressDTO from '../dtos/CreateAddressDTO';
 
 interface FactoryOptions {
@@ -31,9 +31,8 @@ export default function AddressesMockFactory() {
       description: options?.description || faker.address.streetSuffix(),
       created_at: new Date(),
       updated_at: new Date(),
-      deleted_at: null,
 
-      get information(): Partial<Address> {
+      get info(): Partial<Address> {
         return {
           id: this.id,
           city: this.city,

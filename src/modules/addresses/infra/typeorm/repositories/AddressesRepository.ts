@@ -1,4 +1,4 @@
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import CreateAddressDTO from '../../../models/dtos/CreateAddressDTO';
 import IAddressesRepository from '../../../repositories/IAddressesRepository';
@@ -24,9 +24,7 @@ export default class AddressesRepository
   public async update(address: Address): Promise<Address> {
     address.updated_at = new Date();
 
-    await this.ormRepository.save(address);
-
-    return this.findByID(address.id);
+    return this.ormRepository.save(address);
   }
 
   public async delete(address: Address): Promise<Address> {
@@ -55,7 +53,7 @@ export default class AddressesRepository
     });
   }
 
-  findUserAddresses(user_id: string): Promise<Address[] | undefined> {
+  findUserAddresses(user_id: string): Promise<Address[]> {
     return this.ormRepository.find({ where: { user_id } });
   }
 }

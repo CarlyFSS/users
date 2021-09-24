@@ -1,4 +1,4 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
@@ -24,8 +24,8 @@ export default class ListUserService {
     );
 
     const returnedUser: Partial<User> = {
-      ...user.information,
-      address: address?.information,
+      ...user.info,
+      address: address?.info || undefined,
       phone: undefined,
     };
 

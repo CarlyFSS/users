@@ -39,7 +39,7 @@ describe('DeleteUserService', () => {
 
     const deletedUser = await deleteUser.execute(user.id);
 
-    expect(deletedUser.deleted_at).not.toBe(null);
+    expect(deletedUser?.deleted_at).not.toBe(undefined);
   });
 
   it('should not be able to delete a non existing user', async () => {

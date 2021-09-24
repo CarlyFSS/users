@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
@@ -50,7 +50,7 @@ describe('DeleteAddressService', () => {
 
     expect(deletedAddress).toHaveProperty('id');
 
-    expect(foundAddress.deleted_at).toBe(deletedAddress.deleted_at);
+    expect(foundAddress?.deleted_at).toBe(deletedAddress.deleted_at);
   });
 
   it('should not be able to delete a address with invalid user_id', async () => {
