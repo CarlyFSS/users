@@ -58,8 +58,8 @@ export default class UpdateUserService {
       addressExists?.id || userExists.main_address_id;
 
     userExists.role_id = role_id || userExists.role_id;
-    userExists.name = name;
-    userExists.email = email;
+    userExists.name = name || userExists.name;
+    userExists.email = email || userExists.email;
 
     const updatedUser = await this.usersRepository.update(userExists);
 

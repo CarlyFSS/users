@@ -6,8 +6,8 @@ import AddressesRepository from '../infra/typeorm/repositories/AddressesReposito
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
 import FakeUsersRepository from '../../users/repositories/fakes/FakeUsersRepository';
 import ListAddressService from './ListAddressService';
-import AddressesMockFactory from '../models/mocks/AddressesMockFactory';
-import UsersMockFactory from '../../users/models/mocks/UsersMockFactory';
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
 
 const mockFactory = AddressesMockFactory();
 

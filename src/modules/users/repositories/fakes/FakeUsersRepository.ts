@@ -1,7 +1,7 @@
 import { User } from '@fireheet/entities/typeorm/users';
 import IUsersRepository from '../IUsersRepository';
 import CreateUserDTO from '../../models/dtos/CreateUserDTO';
-import UsersMockFactory from '../../models/mocks/UsersMockFactory';
+import UsersMockFactory from '../../factories/mocks/UsersMockFactory';
 
 export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];

@@ -9,7 +9,6 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
 import ValidationException from '@shared/exceptions/ValidationException';
 import CreateAddressService from '@modules/addresses/services/CreateAddressService';
@@ -23,7 +22,6 @@ import AddressesCacheVerifierService from '../../../../services/AddressesCacheVe
 import AddressValidatorInterceptor from '../../interceptors/AddressValidatorInterceptor';
 import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 
-@ApiTags('Addresses Routes')
 @Controller()
 @UseFilters(ErrorException, ValidationException)
 @UseInterceptors(ClassSerializerInterceptor, UUIDValidationInterceptor)
@@ -60,7 +58,7 @@ export default class AddressesController {
   async show(
     @Param('user_id') user_id: string,
     @Query('address_id') address_id: string,
-  ): Promise<Address | Address[]> {
+  ): Promise<Address | Address[] | undefined> {
     return this.addressesCacheVerifier.execute(user_id, address_id);
   }
 

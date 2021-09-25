@@ -12,7 +12,6 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ValidationException from '@shared/exceptions/ValidationException';
@@ -27,7 +26,6 @@ import DeleteUserService from '../../../../services/DeleteUserService';
 import RestoreUserService from '../../../../services/RestoreUserService';
 import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 
-@ApiTags('Users Routes')
 @Controller()
 @UseFilters(ErrorException, ValidationException)
 @UseInterceptors(ClassSerializerInterceptor, UUIDValidationInterceptor)
@@ -57,17 +55,23 @@ export default class UsersController {
   }
 
   @Get(':user_id')
-  async show(@Param('user_id') user_id: string): Promise<Partial<User>> {
+  async show(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
     return this.userCacheVerifier.execute(user_id);
   }
 
   @Delete(':user_id')
-  async delete(@Param('user_id') user_id: string): Promise<Partial<User>> {
+  async delete(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
     return this.deleteUser.execute(user_id);
   }
 
   @Patch(':user_id/restore')
-  async activate(@Param('user_id') user_id: string): Promise<Partial<User>> {
+  async activate(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
     return this.restoreUser.execute(user_id);
   }
 }

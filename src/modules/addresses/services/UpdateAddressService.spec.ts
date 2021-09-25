@@ -7,8 +7,8 @@ import AddressesRepository from '../infra/typeorm/repositories/AddressesReposito
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
 import FakeUsersRepository from '../../users/repositories/fakes/FakeUsersRepository';
 import UpdateAddressService from './UpdateAddressService';
-import UsersMockFactory from '../../users/models/mocks/UsersMockFactory';
-import AddressesMockFactory from '../models/mocks/AddressesMockFactory';
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
 
 let updateAddress: UpdateAddressService;
 let addressesRepository: AddressesRepository;

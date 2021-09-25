@@ -1,5 +1,5 @@
 import { User } from '@fireheet/entities/typeorm/users';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
@@ -14,9 +14,7 @@ export default class ListUserService {
     const user = await this.usersRepository.findByID(user_id);
 
     if (!user) {
-      throw new BadRequestException(
-        `User with id "${user_id}" does not exists!`,
-      );
+      throw new NotFoundException(`User with id "${user_id}" does not exist!`);
     }
 
     const address = await this.addressesRepository.findByID(

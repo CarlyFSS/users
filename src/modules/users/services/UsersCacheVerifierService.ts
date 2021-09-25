@@ -10,8 +10,8 @@ export default class UsersCacheVerifierService {
     private readonly listUser: ListUserService,
   ) {}
 
-  public async execute(id: string): Promise<Partial<User>> {
-    let user: Partial<User>;
+  public async execute(id: string): Promise<Partial<User> | undefined> {
+    let user: Partial<User | undefined>;
 
     user = await this.userCache.get(id);
 

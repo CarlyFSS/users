@@ -1,6 +1,6 @@
 import { Address } from '@fireheet/entities/typeorm/users';
 import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
-import AddressesMockFactory from '../../models/mocks/AddressesMockFactory';
+import AddressesMockFactory from '../../factories/mocks/AddressesMockFactory';
 import IAddressesRepository from '../IAddressesRepository';
 
 export default class FakeAddressesRepository implements IAddressesRepository {

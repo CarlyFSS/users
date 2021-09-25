@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import RolesModule from '../roles/RolesModule';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
 import AddressesController from './infra/http/routes/controllers/AddressesController';
@@ -11,8 +11,8 @@ import UpdateAddressService from './services/UpdateAddressService';
 import ListAddressService from './services/ListAddressService';
 import CreateAddressService from './services/CreateAddressService';
 import DeleteAddressService from './services/DeleteAddressService';
-import UsersModule from '../users/UsersModule';
 import RedisConfig from '../../config/RedisConfig';
+import UsersModule from '../users/UsersModule';
 import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
 import AddressesCacheVerifierService from './services/AddressesCacheVerifierService';
 import AddressesCacheProvider from './providers/implementations/AddressesCacheProvider';

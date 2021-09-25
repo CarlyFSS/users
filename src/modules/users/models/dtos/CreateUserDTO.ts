@@ -6,52 +6,64 @@ import {
   IsUUID,
   IsOptional,
 } from 'class-validator';
+import ValidationFactory from '../../../../shared/factories/ValidationFactory/ValidationFactory';
+import UserProperties from '../enums/UserPropertiesEnum';
+
+const { REGEX_MODIFIER, UUID_VERSION, usersValidationMap } =
+  ValidationFactory();
+const VALIDATION = usersValidationMap;
+const P = UserProperties;
 
 export default class CreateUserDTO {
   @IsOptional()
-  @IsUUID('4')
+  @IsUUID(UUID_VERSION)
   readonly role_id?: string;
 
   @IsString()
-  @Length(0, 100)
-  @Matches("^[#.0-9a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$", 'gi')
-  readonly name: string;
+  @Length(VALIDATION(P.NAME).min, VALIDATION(P.NAME).max)
+  @Matches(VALIDATION(P.NAME).regex, REGEX_MODIFIER)
+  readonly name!: string;
 
   @IsString()
   @IsEmail()
-  @Length(0, 50)
-  @Matches(
-    '^(([^<>()[\\]\\.,;:\\s@"]+(\\.[^<>()[\\]\\.,;:\\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\\]\\.,;:\\s@\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\"]{2,})$',
-  )
-  readonly email: string;
+  @Length(VALIDATION(P.EMAIL).min, VALIDATION(P.EMAIL).max)
+  @Matches(VALIDATION(P.EMAIL).regex, REGEX_MODIFIER)
+  readonly email!: string;
 
   @IsString()
-  @Length(6, 250)
+  @Length(VALIDATION(P.PASSWORD).min, VALIDATION(P.PASSWORD).max)
   @Matches(
-    '^(?=(.*[a-z]){1,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*(){}\\-__+.]){1,}).{6,250}$',
-    'gi',
-    {
-      message:
-        'Must have at least: 6 characters, 1 Uppercase letter, 1 number and 1 of the following symbols "!@#$%^&*(){}-__+.)"',
-    },
+    VALIDATION(P.PASSWORD).regex,
+    REGEX_MODIFIER,
+    VALIDATION(P.PASSWORD).regex_message,
   )
-  readonly password: string;
+  readonly password!: string;
 
   @IsString()
-  @Length(11, 11, {
-    message: 'Document number must be 11 characters long',
-  })
-  @Matches('^([0-9]{11})$', 'g', {
-    message: 'Document number must be a "String" with only numbers',
-  })
-  readonly document_number: string;
+  @Length(
+    VALIDATION(P.DOCUMENT).min,
+    VALIDATION(P.DOCUMENT).max,
+    VALIDATION(P.DOCUMENT).length_message,
+  )
+  @Matches(
+    VALIDATION(P.DOCUMENT).regex,
+    REGEX_MODIFIER,
+    VALIDATION(P.DOCUMENT).regex_message,
+  )
+  readonly document_number!: string;
 
   @IsString({
-    message: 'Birthdate must be a "String" in the format DD/MM/YYYY',
+    message: VALIDATION(P.BIRTHDATE).regex,
   })
-  @Length(0)
-  @Matches('^([0-9]{2}/[0-9]{2}/[0-9]{4})$', 'g', {
-    message: 'birthdate must be in the format DD/MM/YYYY',
-  })
-  readonly birthdate: Date;
+  @Length(
+    VALIDATION(P.BIRTHDATE).min,
+    VALIDATION(P.BIRTHDATE).max,
+    VALIDATION(P.BIRTHDATE).length_message,
+  )
+  @Matches(
+    VALIDATION(P.BIRTHDATE).regex,
+    REGEX_MODIFIER,
+    VALIDATION(P.BIRTHDATE).regex_message,
+  )
+  readonly birthdate!: Date;
 }

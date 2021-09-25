@@ -6,7 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import uuid from 'uuid';
+import * as uuid from 'uuid';
 
 interface IDParam {
   user_id?: string;

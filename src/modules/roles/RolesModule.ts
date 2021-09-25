@@ -2,14 +2,14 @@ import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import RolesRepository from './infra/typeorm/repositories/RolesRepository';
 import RolesController from './infra/http/routes/controllers/RolesController';
 import RolesGrpcController from './infra/grpc/routes/controllers/RolesGrpcController';
 import ListAllRolesService from './services/ListAllRolesService';
 import ListRoleService from './services/ListRoleService';
-import ListRoleByNameService from './services/ListRoleByNameService';
 import RedisConfig from '../../config/RedisConfig';
+import ListRoleByNameService from './services/ListRoleByNameService';
 import AMQPProviderModule from '../../shared/providers/AMQPProvider/AMQPProviderModule';
 import RolesCacheVerifierService from './services/RolesCacheVerifierService';
 import RolesCacheProvider from './providers/CacheProvider/implementations/RolesCacheProvider';

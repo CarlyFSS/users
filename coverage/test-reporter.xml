@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/CreateAddressService.spec.ts">
-        <testCase name="CreateAddressService should be able to create a address with a valid credentials" duration="27"/>
-        <testCase name="CreateAddressService should change the main_address_id of the user to the new address" duration="8"/>
-        <testCase name="CreateAddressService should not be able to create a address with a invalid user id" duration="8"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/UpdateAddressService.spec.ts">
-        <testCase name="UpdateAddressService should be able to update a valid address" duration="27"/>
-        <testCase name="UpdateAddressService should not be able to update a address with invalid user_id" duration="7"/>
-        <testCase name="UpdateAddressService should not be able to update a address with invalid address_id" duration="7"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/DeleteAddressService.spec.ts">
-        <testCase name="DeleteAddressService should be able to delete a valid address" duration="23"/>
-        <testCase name="DeleteAddressService should not be able to delete a address with invalid user_id" duration="6"/>
-        <testCase name="DeleteAddressService should not be able to delete a address with invalid address_id" duration="6"/>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/DeleteUserService.spec.ts">
+        <testCase name="DeleteUserService should be able to delete an already activated user" duration="25"/>
+        <testCase name="DeleteUserService should not be able to delete a non existing user" duration="8"/>
+        <testCase name="DeleteUserService should not be able to delete a already deleted user" duration="8"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListRoleService.spec.ts">
-        <testCase name="ListRoleService should be able to list a role with a valid id" duration="21"/>
-        <testCase name="ListRoleService should not be able to list a role with a invalid id" duration="6"/>
+        <testCase name="ListRoleService should be able to list a role with a valid id" duration="22"/>
+        <testCase name="ListRoleService should not be able to list a role with a invalid id" duration="19"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/RestoreUserService.spec.ts">
-        <testCase name="RestoreUserService should be able to restore an already deleted user" duration="36"/>
+        <testCase name="RestoreUserService should be able to restore an already deleted user" duration="26"/>
         <testCase name="RestoreUserService should not be able to restore a non existing user" duration="8"/>
-        <testCase name="RestoreUserService should not be able to restore a already active user" duration="8"/>
+        <testCase name="RestoreUserService should not be able to restore a already active user" duration="9"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/ListAllAddressesService.spec.ts">
-        <testCase name="ListAllAddressesService should be able to list all addresses of a valid user_id" duration="21"/>
-        <testCase name="ListAllAddressesService should not be able to list all addresses of a invalid user_id" duration="5"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/UsersCacheVerifierService.spec.ts">
-        <testCase name="UsersCacheVerifierService should be able to list a cached user" duration="24"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/RolesCacheVerifierService.spec.ts">
-        <testCase name="RolesCacheVerifierService should be able to list a cached role" duration="23"/>
-        <testCase name="RolesCacheVerifierService should be able to list all cached roles" duration="7"/>
+        <testCase name="ListAllAddressesService should be able to list all addresses of a valid user_id" duration="32"/>
+        <testCase name="ListAllAddressesService should not be able to list all addresses of a invalid user_id" duration="6"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListAllRolesService.spec.ts">
-        <testCase name="ListAllRolesService should be able to list all roles" duration="12"/>
-        <testCase name="ListAllRolesService should be able to list paginated roles" duration="4"/>
+        <testCase name="ListAllRolesService should be able to list all roles" duration="20"/>
+        <testCase name="ListAllRolesService should be able to list paginated roles" duration="5"/>
     </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/CreateUserService.spec.ts">
-        <testCase name="CreateUserService should be able to create a user with a valid credentials" duration="19"/>
-        <testCase name="CreateUserService should not be able to create a user with same email" duration="6"/>
-        <testCase name="CreateUserService should not be able to create a user with same document number" duration="5"/>
-        <testCase name="CreateUserService should be able to create a user without informing the role" duration="5"/>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/UsersCacheVerifierService.spec.ts">
+        <testCase name="UsersCacheVerifierService should be able to list a cached user" duration="20"/>
     </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/ListAddressService.spec.ts">
-        <testCase name="ListAddressService should be able to list a valid address" duration="22"/>
-        <testCase name="ListAddressService should not be able to delete a address with invalid user_id" duration="6"/>
-        <testCase name="ListAddressService should not be able to delete a address with invalid address_id" duration="5"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/AddressesCacheVerifierService.spec.ts">
-        <testCase name="AddressesCacheVerifierService should be able to list a cached address" duration="19"/>
-        <testCase name="AddressesCacheVerifierService should be able to list many cached address" duration="5"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/DeleteUserService.spec.ts">
-        <testCase name="DeleteUserService should be able to delete an already activated user" duration="18"/>
-        <testCase name="DeleteUserService should not be able to delete a non existing user" duration="4"/>
-        <testCase name="DeleteUserService should not be able to delete a already deleted user" duration="5"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/ListUserService.spec.ts">
-        <testCase name="ListUserService should be able to list a user with a valid id" duration="23"/>
-        <testCase name="ListUserService should not be able to list a user with a invalid id" duration="5"/>
-    </file>
-    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/UpdateUserService.spec.ts">
-        <testCase name="UpdateUserService should be able update a user with a valid id" duration="17"/>
-        <testCase name="UpdateUserService should not be able update a user with a invalid id" duration="10"/>
-        <testCase name="UpdateUserService should not be able update a user email to a already existing one" duration="6"/>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/RolesCacheVerifierService.spec.ts">
+        <testCase name="RolesCacheVerifierService should be able to list a cached role" duration="24"/>
+        <testCase name="RolesCacheVerifierService should be able to list all cached roles" duration="7"/>
     </file>
     <file path="/home/carly/Fireheet/Services/users/src/modules/roles/services/ListRoleByNameService.spec.ts">
-        <testCase name="ListRolesByNameService should be able to list a role with a valid name" duration="5"/>
-        <testCase name="ListRolesByNameService should not be able to list a role with a invalid name" duration="3"/>
+        <testCase name="ListRolesByNameService should be able to list a role with a valid name" duration="20"/>
+        <testCase name="ListRolesByNameService should not be able to list a role with a invalid name" duration="6"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/AddressesCacheVerifierService.spec.ts">
+        <testCase name="AddressesCacheVerifierService should be able to list a cached address" duration="27"/>
+        <testCase name="AddressesCacheVerifierService should be able to list many cached address" duration="8"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/CreateUserService.spec.ts">
+        <testCase name="CreateUserService should be able to create a user with a valid credentials" duration="21"/>
+        <testCase name="CreateUserService should not be able to create a user with same email" duration="6"/>
+        <testCase name="CreateUserService should not be able to create a user with same document number" duration="6"/>
+        <testCase name="CreateUserService should be able to create a user without informing the role" duration="6"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/UpdateUserService.spec.ts">
+        <testCase name="UpdateUserService should be able update a user with a valid id" duration="35"/>
+        <testCase name="UpdateUserService should not be able update a user with a invalid id" duration="8"/>
+        <testCase name="UpdateUserService should not be able update a user email to a already existing one" duration="10"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/UpdateAddressService.spec.ts">
+        <testCase name="UpdateAddressService should be able to update a valid address" duration="16"/>
+        <testCase name="UpdateAddressService should not be able to update a address with invalid user_id" duration="5"/>
+        <testCase name="UpdateAddressService should not be able to update a address with invalid address_id" duration="5"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/CreateAddressService.spec.ts">
+        <testCase name="CreateAddressService should be able to create a address with a valid credentials" duration="15"/>
+        <testCase name="CreateAddressService should change the main_address_id of the user to the new address" duration="4"/>
+        <testCase name="CreateAddressService should not be able to create a address with a invalid user id" duration="5"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/ListAddressService.spec.ts">
+        <testCase name="ListAddressService should be able to list a valid address" duration="16"/>
+        <testCase name="ListAddressService should not be able to delete a address with invalid user_id" duration="4"/>
+        <testCase name="ListAddressService should not be able to delete a address with invalid address_id" duration="3"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/addresses/services/DeleteAddressService.spec.ts">
+        <testCase name="DeleteAddressService should be able to delete a valid address" duration="14"/>
+        <testCase name="DeleteAddressService should not be able to delete a address with invalid user_id" duration="3"/>
+        <testCase name="DeleteAddressService should not be able to delete a address with invalid address_id" duration="3"/>
+    </file>
+    <file path="/home/carly/Fireheet/Services/users/src/modules/users/services/ListUserService.spec.ts">
+        <testCase name="ListUserService should be able to list a user with a valid id" duration="7"/>
+        <testCase name="ListUserService should not be able to list a user with a invalid id" duration="5"/>
     </file>
 </testExecutions>

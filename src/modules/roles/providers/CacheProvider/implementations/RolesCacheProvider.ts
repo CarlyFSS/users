@@ -23,8 +23,8 @@ export default class RolesCacheProvider
     return data;
   }
 
-  async get(key: string): Promise<Role | Role[]> {
-    let cachedRoles: Role | Role[];
+  async get(key: string): Promise<Role | Role[] | undefined> {
+    let cachedRoles: Role | Role[] | undefined;
 
     if (!key) {
       cachedRoles = await this.redisCache.get(`all-roles`);
@@ -37,7 +37,7 @@ export default class RolesCacheProvider
     return cachedRoles;
   }
 
-  async delete(key: string): Promise<Role | Role[]> {
+  async delete(key: string): Promise<Role | Role[] | undefined> {
     const cachedRoles = await this.redisCache.get(`${key}-role`);
 
     this.redisCache.delete(`${key}-role`);

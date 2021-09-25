@@ -8,7 +8,7 @@ import RolesRepository from '../../roles/infra/typeorm/repositories/RolesReposit
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UsersMockFactory from '../models/mocks/UsersMockFactory';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';

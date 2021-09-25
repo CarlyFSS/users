@@ -1,6 +1,6 @@
 import { User } from '@fireheet/entities/typeorm/users';
 import faker from 'faker';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import CreateUserDTO from '../../models/dtos/CreateUserDTO';
 
 interface FactoryOptions {
   name?: string;

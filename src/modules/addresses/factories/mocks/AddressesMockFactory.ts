@@ -1,6 +1,6 @@
 import { Address } from '@fireheet/entities/typeorm/users';
 import faker from 'faker';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
+import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
 
 interface FactoryOptions {
   user_id?: string;

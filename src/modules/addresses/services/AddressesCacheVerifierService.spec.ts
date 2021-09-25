@@ -9,8 +9,8 @@ import AddressesCacheVerifierService from './AddressesCacheVerifierService';
 import ListAddressService from './ListAddressService';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
 import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';
-import UsersMockFactory from '../../users/models/mocks/UsersMockFactory';
-import AddressesMockFactory from '../models/mocks/AddressesMockFactory';
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
 
 let addressesCacheVerifier: AddressesCacheVerifierService;
 let addressesCacheProvider: AddressesCacheProvider;

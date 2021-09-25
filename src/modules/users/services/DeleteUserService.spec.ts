@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UsersMockFactory from '../models/mocks/UsersMockFactory';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import DeleteUserService from './DeleteUserService';
 

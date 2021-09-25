@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
@@ -7,7 +7,7 @@ import RolesRepository from '../../roles/infra/typeorm/repositories/RolesReposit
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UsersMockFactory from '../models/mocks/UsersMockFactory';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -64,7 +64,7 @@ describe('ListUserService', () => {
 
   it('should not be able to list a user with a invalid id', async () => {
     await expect(listUser.execute('invalid')).rejects.toBeInstanceOf(
-      BadRequestException,
+      NotFoundException,
     );
   });
 });

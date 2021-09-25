@@ -6,41 +6,43 @@ import {
   Length,
   IsUUID,
 } from 'class-validator';
+import ValidationFactory from '../../../../shared/factories/ValidationFactory/ValidationFactory';
+import UserProperties from '../enums/UserPropertiesEnum';
+
+const { REGEX_MODIFIER, UUID_VERSION, usersValidationMap } =
+  ValidationFactory();
+const VALIDATION = usersValidationMap;
+const P = UserProperties;
 
 export default class UpdateUserDTO {
   @IsOptional()
   @IsString()
-  @Length(0, 100)
-  @Matches("^[#.0-9a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$", 'gi')
+  @Length(VALIDATION(P.NAME).min, VALIDATION(P.NAME).max)
+  @Matches(VALIDATION(P.NAME).regex, REGEX_MODIFIER)
   readonly name?: string;
 
   @IsOptional()
   @IsString()
   @IsEmail()
-  @Length(0, 50)
-  @Matches(
-    '^(([^<>()[\\]\\.,;:\\s@"]+(\\.[^<>()[\\]\\.,;:\\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\\]\\.,;:\\s@\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\"]{2,})$',
-  )
+  @Length(VALIDATION(P.EMAIL).min, VALIDATION(P.EMAIL).max)
+  @Matches(VALIDATION(P.EMAIL).regex, REGEX_MODIFIER)
   readonly email?: string;
 
   @IsOptional()
   @IsString()
-  @Length(6, 250)
+  @Length(VALIDATION(P.PASSWORD).min, VALIDATION(P.PASSWORD).max)
   @Matches(
-    '^(?=(.*[a-z]){1,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*(){}\\-__+.]){1,}).{6,250}$',
-    'gi',
-    {
-      message:
-        'Must have at least: 6 characters, 1 Uppercase letter, 1 number and 1 of the following symbols "!@#$%^&*(){}-__+.)"',
-    },
+    VALIDATION(P.PASSWORD).regex,
+    REGEX_MODIFIER,
+    VALIDATION(P.PASSWORD).regex_message,
   )
   readonly password?: string;
 
   @IsOptional()
-  @IsUUID('4')
+  @IsUUID(UUID_VERSION)
   readonly main_address_id?: string;
 
   @IsOptional()
-  @IsUUID('4')
+  @IsUUID(UUID_VERSION)
   readonly phone_id?: string;
 }

@@ -4,7 +4,7 @@ import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/Fak
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddressesRepository';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UsersMockFactory from '../models/mocks/UsersMockFactory';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import ListUserService from './ListUserService';

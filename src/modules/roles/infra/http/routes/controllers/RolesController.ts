@@ -7,13 +7,11 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '../../../../../../shared/exceptions/ErrorException';
 import PaginationInterceptor from '../../../../../../shared/infra/http/interceptor/PaginationInterceptor';
 import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 import RolesCacheVerifierService from '../../../../services/RolesCacheVerifierService';
 
-@ApiTags('Roles Routes')
 @Controller('roles')
 @UseFilters(ErrorException)
 export default class RolesController {

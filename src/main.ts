@@ -1,19 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
+import fastifyHelmet from 'fastify-helmet';
 import AppModule from './AppModule';
 import GrpcConfig from './config/GrpcConfig';
 
 async function bootstrap() {
-  const defaultPort = 3333;
+  const DEFAULT_PORT = 3333;
 
-  const PORT = process.env.PORT || defaultPort;
+  const PORT = process.env.PORT || DEFAULT_PORT;
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -34,16 +34,7 @@ async function bootstrap() {
     }),
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
-    .setVersion('1.0')
-    .addTag('cats')
-    .build();
-
-  const swagger = SwaggerModule.createDocument(app, config);
-
-  SwaggerModule.setup('docs', app, swagger);
+  await app.register(fastifyHelmet);
 
   app.connectMicroservice<MicroserviceOptions>(GrpcConfig);
 

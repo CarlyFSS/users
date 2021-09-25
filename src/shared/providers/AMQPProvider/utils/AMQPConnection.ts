@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class AMQPConnection {
-  public channel: Channel;
+  public channel!: Channel;
 
-  public connection: Connection;
+  public connection!: Connection;
 
   constructor() {
     this.connect().then(channel => {

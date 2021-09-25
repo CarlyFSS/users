@@ -15,8 +15,8 @@ export default class AddressesCacheVerifierService {
   public async execute(
     user_id: string,
     address_id: string,
-  ): Promise<Address | Address[]> {
-    let addresses: Address | Address[];
+  ): Promise<Address | Address[] | undefined> {
+    let addresses: Address | Address[] | undefined;
 
     if (!address_id) {
       addresses = await this.addressesCache.get(user_id, true);
