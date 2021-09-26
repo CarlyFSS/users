@@ -12,5 +12,9 @@ export default interface IAddressesRepository {
     number: number,
     postal_code: string,
   ): Promise<Address | undefined>;
-  findUserAddresses(user_id: string): Promise<Address[]>;
+  findUserAddresses(
+    user_id: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<Address[]>;
 }

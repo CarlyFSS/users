@@ -2,25 +2,33 @@ import { Address } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
+import AddressesCacheKeysFactory from '../../factories/utils/AddressesCacheKeysFactory';
+
+const { createKey } = AddressesCacheKeysFactory();
 
 @Injectable()
 export default class AddressesCacheProvider
-  implements ICustomCacheProvider<Address | Address[]>
+  implements ICustomCacheProvider<Partial<Address> | Partial<Address>[]>
 {
   constructor(
-    private readonly redisCache: RedisCacheProvider<Address | Address[]>,
+    private readonly redisCache: RedisCacheProvider<
+      Partial<Address> | Partial<Address>[]
+    >,
   ) {}
 
-  async store(key: string, data: Address): Promise<Address> {
-    await this.redisCache.store(`${key}-address`, data);
+  async store(key: string, data: Partial<Address>): Promise<Partial<Address>> {
+    await this.redisCache.store(createKey(key), data);
 
     return data;
   }
 
-  async storeMany(data: Address[], key?: string): Promise<Address[]> {
-    const searchKey = key || 'all-addresses-offset1-limit5';
-
-    await this.redisCache.store(searchKey, data);
+  async storeMany(
+    data: Partial<Address>[],
+    key: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<Partial<Address>[]> {
+    await this.redisCache.store(createKey(key, offset, limit), data);
 
     return data;
   }
@@ -32,26 +40,12 @@ export default class AddressesCacheProvider
   async get(
     key: string,
     all = false,
-  ): Promise<Address | Address[] | undefined> {
+  ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
     if (all) {
-      const cachedAddresses = await this.redisCache.get(
-        `user-${key}-addresses`,
-      );
-
-      if (!cachedAddresses) {
-        return undefined;
-      }
-
-      return cachedAddresses;
+      return this.redisCache.get(key) || undefined;
     }
 
-    const cachedAddress = await this.redisCache.get(`${key}-address`);
-
-    if (!cachedAddress) {
-      return undefined;
-    }
-
-    return cachedAddress;
+    return this.redisCache.get(createKey(key)) || undefined;
   }
 
   /**
@@ -60,28 +54,14 @@ export default class AddressesCacheProvider
    */
   async delete(
     key: string,
-    all = false,
-  ): Promise<Address | Address[] | undefined> {
-    if (all) {
-      const cachedAddresses = this.redisCache.get(`user-${key}-addresses`);
-
-      if (!cachedAddresses) {
-        return undefined;
-      }
-
-      await this.redisCache.delete(`user-${key}-addresses`);
-
-      return cachedAddresses;
+    offset?: number,
+    limit?: number,
+    all?: boolean,
+  ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
+    if (offset || limit || all) {
+      return this.redisCache.delete(createKey(key, offset, limit)) || undefined;
     }
 
-    const cachedAddress = this.redisCache.get(`${key}-address`);
-
-    if (!cachedAddress) {
-      return undefined;
-    }
-
-    await this.redisCache.delete(`${key}-address`);
-
-    return cachedAddress;
+    return this.redisCache.delete(createKey(key)) || undefined;
   }
 }

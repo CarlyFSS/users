@@ -34,17 +34,14 @@ export default class RolesCacheVerifierService {
       return cached;
     }
 
-    const cachedMany = await this.rolesCache.get(
-      `all-roles-offset${offset}-limit${limit}`,
-    );
+    const key = `all-roles-offset${offset}-limit${limit}`;
+
+    const cachedMany = await this.rolesCache.get(key);
 
     if (!cachedMany) {
       const roles = await this.listAllRoles.execute(offset, limit);
 
-      this.rolesCache.storeMany(
-        roles,
-        `all-roles-offset${offset}-limit${limit}`,
-      );
+      this.rolesCache.storeMany(roles, key);
 
       return roles;
     }

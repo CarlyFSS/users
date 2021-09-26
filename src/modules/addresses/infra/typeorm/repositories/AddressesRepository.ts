@@ -53,7 +53,15 @@ export default class AddressesRepository
     });
   }
 
-  findUserAddresses(user_id: string): Promise<Address[]> {
-    return this.ormRepository.find({ where: { user_id } });
+  findUserAddresses(
+    user_id: string,
+    offset = 0,
+    limit = 5,
+  ): Promise<Address[]> {
+    return this.ormRepository.find({
+      where: { user_id },
+      skip: offset,
+      take: limit,
+    });
   }
 }

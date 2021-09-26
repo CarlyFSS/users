@@ -16,7 +16,7 @@ export default class AddressesEventController {
   @OnEvent('address.created', { async: true })
   async handleAddressCreatedEvent(user_id: string): Promise<void> {
     await this.usersCache.delete(user_id);
-    await this.addressesCache.delete(user_id, true);
+    await this.addressesCache.delete(user_id);
   }
 
   @OnEvent('address.updated', { async: true })
@@ -27,6 +27,11 @@ export default class AddressesEventController {
 
     await this.addressesCache.store(address.id, address);
 
-    await this.addressesCache.delete(address.user_id, true);
+    await this.addressesCache.delete(
+      address.user_id,
+      undefined,
+      undefined,
+      true,
+    );
   }
 }

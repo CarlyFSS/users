@@ -11,7 +11,7 @@ export default class UsersCacheVerifierService {
   ) {}
 
   public async execute(id: string): Promise<Partial<User> | undefined> {
-    let user: Partial<User | undefined>;
+    let user: Partial<User> | undefined;
 
     user = await this.userCache.get(id);
 
@@ -20,6 +20,8 @@ export default class UsersCacheVerifierService {
 
       return this.userCache.store(id, user);
     }
+
+    user = await this.listUser.execute(id);
 
     return user;
   }

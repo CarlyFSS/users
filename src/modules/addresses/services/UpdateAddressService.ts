@@ -26,7 +26,7 @@ export default class UpdateAddressService {
       state,
       street,
     }: UpdateAddressDTO,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -43,6 +43,8 @@ export default class UpdateAddressService {
       );
     }
 
+    userExists.main_address_id = address_id;
+
     addressExists.city = city || addressExists.city;
     addressExists.complement = complement || addressExists.complement;
     addressExists.country = country || addressExists.country;
@@ -54,8 +56,10 @@ export default class UpdateAddressService {
 
     const address = await this.addressesRepository.update(addressExists);
 
+    await this.usersRepository.update(userExists);
+
     this.eventEmitter.emit('address.updated', address);
 
-    return address;
+    return address.info;
   }
 }

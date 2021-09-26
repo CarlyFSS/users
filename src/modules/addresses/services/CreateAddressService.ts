@@ -16,7 +16,7 @@ export default class CreateAddressService {
   public async execute(
     user_id: string,
     data: CreateAddressDTO,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -33,6 +33,6 @@ export default class CreateAddressService {
 
     this.eventEmitter.emit('address.created', userExists.id);
 
-    return address;
+    return address.info;
   }
 }

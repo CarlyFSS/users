@@ -19,8 +19,8 @@ import { Address } from '@fireheet/entities/typeorm/users';
 import UpdateAddressService from '../../../../services/UpdateAddressService';
 import DeleteAddressService from '../../../../services/DeleteAddressService';
 import AddressesCacheVerifierService from '../../../../services/AddressesCacheVerifierService';
-import AddressValidatorInterceptor from '../../interceptors/AddressValidatorInterceptor';
 import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
+import PaginationInterceptor from '../../../../../../shared/infra/http/interceptor/PaginationInterceptor';
 
 @Controller()
 @UseFilters(ErrorException, ValidationException)
@@ -34,39 +34,45 @@ export default class AddressesController {
   ) {}
 
   @Post(':user_id')
-  @UseInterceptors(AddressValidatorInterceptor)
   async create(
     @Param('user_id')
     user_id: string,
     @Body() data: CreateAddressDTO,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     return this.createAddress.execute(user_id, data);
   }
 
   @Patch(':user_id')
-  @UseInterceptors(AddressValidatorInterceptor)
   async update(
     @Param('user_id')
     user_id: string,
     @Query('address_id') address_id: string,
     @Body() data: UpdateAddressDTO,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     return this.updateAddress.execute(user_id, address_id, data);
   }
 
   @Get(':user_id')
+  @UseInterceptors(PaginationInterceptor)
   async show(
     @Param('user_id') user_id: string,
     @Query('address_id') address_id: string,
-  ): Promise<Address | Address[] | undefined> {
-    return this.addressesCacheVerifier.execute(user_id, address_id);
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
+    return this.addressesCacheVerifier.execute(
+      user_id,
+      address_id,
+      offset,
+      limit,
+    );
   }
 
   @Delete(':user_id')
   async delete(
     @Param('user_id') user_id: string,
     @Query('address_id') address_id: string,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     return this.deleteAddress.execute(user_id, address_id);
   }
 }

@@ -46,11 +46,11 @@ describe('DeleteAddressService', () => {
 
     const deletedAddress = await deleteAddress.execute(user.id, address.id);
 
-    const foundAddress = await addressesRepository.findByID(deletedAddress.id);
+    const foundAddress = await addressesRepository.findByID(address.id);
 
     expect(deletedAddress).toHaveProperty('id');
 
-    expect(foundAddress?.deleted_at).toBe(deletedAddress.deleted_at);
+    expect(foundAddress?.deleted_at).not.toBe(undefined);
   });
 
   it('should not be able to delete a address with invalid user_id', async () => {
