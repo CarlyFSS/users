@@ -1,7 +1,9 @@
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
+import RolesMockFactory from '../factories/mocks/RolesMockFactory';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
+import RolesEnum from '../models/enums/RolesEnum';
 import RolesCacheProvider from '../providers/CacheProvider/implementations/RolesCacheProvider';
 import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
 import ListAllRolesService from './ListAllRolesService';
@@ -39,7 +41,9 @@ describe('RolesCacheVerifierService', () => {
 
     rolesCacheProvider = module.get<RolesCacheProvider>(RolesCacheProvider);
 
-    roles = await rolesRepository.findByID('1');
+    roles =
+      (await rolesRepository.findByName(RolesEnum.CLIENT)) ||
+      RolesMockFactory();
   });
 
   it('should be able to list a cached role', async () => {

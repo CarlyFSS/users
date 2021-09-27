@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import ListUserService from './ListUserService';
 import UsersCacheProvider from '../providers/CacheProvider/implementations/UsersCacheProvider';
 
@@ -10,18 +10,18 @@ export default class UsersCacheVerifierService {
     private readonly listUser: ListUserService,
   ) {}
 
-  public async execute(id: string): Promise<User> {
-    let user: User;
+  public async execute(id: string): Promise<Partial<User> | undefined> {
+    let user: Partial<User> | undefined;
 
     user = await this.userCache.get(id);
 
     if (!user) {
       user = await this.listUser.execute(id);
 
-      this.userCache.store(id, user);
-
-      return user;
+      return this.userCache.store(id, user);
     }
+
+    user = await this.listUser.execute(id);
 
     return user;
   }

@@ -1,9 +1,27 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Address } from '@fireheet/entities/typeorm/users';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
-import UpdateAddressDTO from '../dtos/UpdateAddressDTO';
+import UpdateAddressDTO from '../models/dtos/UpdateAddressDTO';
+
+// function mix(...sources: Address[] | UpdateAddressDTO[]) {
+//   const result = {};
+
+//   sources.forEach(source => {
+//     const props = Object.keys(source);
+
+//     props.forEach(prop => {
+//       const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+
+//       if (descriptor?.value !== undefined) {
+//         Object.defineProperty(result, prop, descriptor);
+//       }
+//     });
+//   });
+
+//   return result;
+// }
 
 @Injectable()
 export default class UpdateAddressService {
@@ -16,17 +34,8 @@ export default class UpdateAddressService {
   public async execute(
     user_id: string,
     address_id: string,
-    {
-      city,
-      complement,
-      country,
-      district,
-      number,
-      postal_code,
-      state,
-      street,
-    }: UpdateAddressDTO,
-  ): Promise<Address> {
+    data: UpdateAddressDTO,
+  ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -43,19 +52,16 @@ export default class UpdateAddressService {
       );
     }
 
-    addressExists.city = city;
-    addressExists.complement = complement;
-    addressExists.country = country;
-    addressExists.district = district;
-    addressExists.number = number;
-    addressExists.postal_code = postal_code;
-    addressExists.state = state;
-    addressExists.street = street;
+    userExists.main_address_id = address_id;
 
-    const address = await this.addressesRepository.update(addressExists);
+    const updateAddress = Object.assign(addressExists, data);
+
+    const address = await this.addressesRepository.update(updateAddress);
+
+    await this.usersRepository.update(userExists);
 
     this.eventEmitter.emit('address.updated', address);
 
-    return address;
+    return address.info;
   }
 }

@@ -4,22 +4,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
-let createUser: CreateUserService;
+const mockFactory = UsersMockFactory();
 
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
+let createUser: CreateUserService;
+let usersRepository: UsersRepository;
 
 describe('CreateUserService', () => {
   beforeEach(async () => {
@@ -44,44 +39,51 @@ describe('CreateUserService', () => {
     }).compile();
 
     createUser = module.get<CreateUserService>(CreateUserService);
+    usersRepository = module.get<UsersRepository>(UsersRepository);
   });
 
   it('should be able to create a user with a valid credentials', async () => {
-    const user = await createUser.execute(userModel);
+    await createUser.execute(
+      mockFactory.createUserDTO({ document_number: '123', role_id: '123' }),
+    );
+
+    const user = await usersRepository.findByDocument('123');
 
     expect(user).toHaveProperty('id');
   });
 
   it('should not be able to create a user with same email', async () => {
-    await createUser.execute(userModel);
+    await createUser.execute(mockFactory.createUserDTO({ email: 'test' }));
 
-    const userModel2 = { ...userModel };
+    const user = {
+      ...mockFactory.createUserDTO({ email: 'test', document_number: '123' }),
+    };
 
-    userModel2.document_number = '321';
-
-    await expect(createUser.execute(userModel2)).rejects.toBeInstanceOf(
+    await expect(createUser.execute(user)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
 
   it('should not be able to create a user with same document number', async () => {
-    await createUser.execute(userModel);
+    await createUser.execute(
+      mockFactory.createUserDTO({ document_number: '123' }),
+    );
 
-    const userModel2 = { ...userModel };
+    const user = {
+      ...mockFactory.createUserDTO({ email: 'test', document_number: '123' }),
+    };
 
-    userModel2.email = '123';
-
-    await expect(createUser.execute(userModel2)).rejects.toBeInstanceOf(
+    await expect(createUser.execute(user)).rejects.toBeInstanceOf(
       ForbiddenException,
     );
   });
 
   it('should be able to create a user without informing the role', async () => {
-    const userModel2 = { ...userModel };
+    const model = mockFactory.createUserDTO({ document_number: '123' });
 
-    // delete userModel2.role_id;
+    await createUser.execute(model);
 
-    const user = await createUser.execute(userModel2);
+    const user = await usersRepository.findByDocument('123');
 
     expect(user).toHaveProperty('id');
   });

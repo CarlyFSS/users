@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import ListAddressService from './ListAddressService';
 import ListAllAddressesService from './ListAllAddressesService';
 import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';
@@ -15,14 +15,16 @@ export default class AddressesCacheVerifierService {
   public async execute(
     user_id: string,
     address_id: string,
-  ): Promise<Address | Address[]> {
-    let addresses: Address | Address[];
+    offset?: number,
+    limit?: number,
+  ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
+    let addresses: Partial<Address> | Partial<Address>[] | undefined;
 
     if (!address_id) {
       addresses = await this.addressesCache.get(user_id, true);
 
       if (!addresses) {
-        addresses = await this.listAllAddresses.execute(user_id);
+        addresses = await this.listAllAddresses.execute(user_id, offset, limit);
 
         this.addressesCache.storeMany(addresses, user_id);
       }
@@ -35,7 +37,7 @@ export default class AddressesCacheVerifierService {
     if (!addresses) {
       addresses = await this.listAddress.execute(user_id, address_id);
 
-      await this.addressesCache.store(addresses.id, addresses);
+      await this.addressesCache.store(address_id, addresses);
     }
 
     return addresses;

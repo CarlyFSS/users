@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { User, Role } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ForbiddenException } from '@nestjs/common/exceptions';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import { User } from '@fireheet/entities/typeorm/users';
+import CreateUserDTO from '../models/dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import RolesEnum from '../../roles/models/enums/RolesEnum';
 
 interface UserTemplate {
   role_id?: string;
@@ -28,7 +29,7 @@ export default class CreateUserService {
   public async execute(
     { document_number, email, password, name, birthdate }: CreateUserDTO,
     role_id?: string,
-  ): Promise<User> {
+  ): Promise<Partial<User>> {
     const userDocumentExists = await this.usersRepository.findByDocument(
       document_number,
     );
@@ -55,15 +56,9 @@ export default class CreateUserService {
       birthdate,
     };
 
-    let role: Role;
-
-    if (!role_id) {
-      role = await this.listRoleByName.execute('CLIENT');
-
-      user.role_id = role.id;
-    } else {
-      user.role_id = role_id;
-    }
+    user.role_id = !role_id
+      ? (await this.listRoleByName.execute(RolesEnum.CLIENT)).id
+      : role_id;
 
     const encryptedPassword = await this.hashProvider.encrypt(password);
 
@@ -73,9 +68,6 @@ export default class CreateUserService {
 
     this.eventEmitter.emit('user.created', createdUser);
 
-    delete createdUser.role_id;
-    delete createdUser.password;
-
-    return createdUser;
+    return createdUser.info;
   }
 }

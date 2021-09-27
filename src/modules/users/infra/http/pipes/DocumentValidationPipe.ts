@@ -1,4 +1,4 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 
 @Injectable()

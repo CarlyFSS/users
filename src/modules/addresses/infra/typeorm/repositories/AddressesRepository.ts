@@ -1,6 +1,10 @@
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import CreateAddressDTO from '../../../dtos/CreateAddressDTO';
+import {
+  PAGINATION_LIMIT,
+  PAGINATION_OFFSET,
+} from '../../../../../shared/config/DefaultValues';
+import CreateAddressDTO from '../../../models/dtos/CreateAddressDTO';
 import IAddressesRepository from '../../../repositories/IAddressesRepository';
 
 @EntityRepository(Address)
@@ -14,9 +18,9 @@ export default class AddressesRepository
     user_id: string,
     data: CreateAddressDTO,
   ): Promise<Address> {
-    data.user_id = user_id;
+    const mergedData = { ...data, user_id };
 
-    const address = this.ormRepository.create(data);
+    const address = this.ormRepository.create(mergedData);
 
     return this.ormRepository.save(address);
   }
@@ -24,9 +28,7 @@ export default class AddressesRepository
   public async update(address: Address): Promise<Address> {
     address.updated_at = new Date();
 
-    await this.ormRepository.save(address);
-
-    return this.findByID(address.id);
+    return this.ormRepository.save(address);
   }
 
   public async delete(address: Address): Promise<Address> {
@@ -50,12 +52,20 @@ export default class AddressesRepository
         user_id,
         street,
         number,
-        postal_code,
+        zip_code: postal_code,
       },
     });
   }
 
-  findUserAddresses(user_id: string): Promise<Address[] | undefined> {
-    return this.ormRepository.find({ where: { user_id } });
+  findUserAddresses(
+    user_id: string,
+    offset = PAGINATION_OFFSET,
+    limit = PAGINATION_LIMIT,
+  ): Promise<Address[]> {
+    return this.ormRepository.find({
+      where: { user_id },
+      skip: offset,
+      take: limit,
+    });
   }
 }

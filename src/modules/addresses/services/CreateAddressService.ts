@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
+import { Address } from '@fireheet/entities/typeorm/users';
+import CreateAddressDTO from '../models/dtos/CreateAddressDTO';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 
@@ -16,7 +16,7 @@ export default class CreateAddressService {
   public async execute(
     user_id: string,
     data: CreateAddressDTO,
-  ): Promise<Address> {
+  ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -33,6 +33,6 @@ export default class CreateAddressService {
 
     this.eventEmitter.emit('address.created', userExists.id);
 
-    return address;
+    return address.info;
   }
 }

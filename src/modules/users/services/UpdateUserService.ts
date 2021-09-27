@@ -1,64 +1,82 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
-import { User } from '@fireheet/entities';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import UpdateUserDTO from '../dtos/UpdateUserDTO';
+import UpdateUserDTO from '../models/dtos/UpdateUserDTO';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
+import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 
 @Injectable()
 export default class UpdateUserService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly addressesRepository: AddressesRepository,
+    private readonly rolesRepository: RolesRepository,
     private readonly hashProvider: BcryptHashProvider,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute(
-    id: string,
-    { email, password, name }: UpdateUserDTO,
-  ): Promise<User> {
-    const userExists = await this.usersRepository.findByID(id);
+    user_id: string,
+    data: UpdateUserDTO,
+    role_id?: string,
+  ): Promise<Partial<User>> {
+    const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
-      throw new BadRequestException(`User with id ${id} not found!`);
+      throw new NotFoundException(`User with id ${user_id} not found!`);
     }
 
-    if (password) {
-      const encryptedPassword = await this.hashProvider.encrypt(password);
+    if (role_id) {
+      const roleExists = await this.rolesRepository.findByID(role_id);
+
+      if (!roleExists) {
+        throw new NotFoundException(`Role with id ${role_id} not found!`);
+      }
+
+      userExists.role_id = role_id;
+    }
+
+    if (data.password) {
+      const encryptedPassword = await this.hashProvider.encrypt(data.password);
 
       userExists.password = encryptedPassword;
 
       this.eventEmitter.emit('user.password.updated', userExists.email);
     }
 
-    userExists.name = name;
-
-    if (email) {
-      const emailExists = await this.usersRepository.findByEmail(email);
+    if (data.email) {
+      const emailExists = await this.usersRepository.findByEmail(data.email);
 
       if (emailExists) {
         throw new ForbiddenException(
-          `User with email "${email}" already exists!`,
+          `User with email "${data.email}" already exists!`,
         );
       }
 
-      userExists.email = email;
-
-      this.eventEmitter.emit('user.email.updated', email);
+      this.eventEmitter.emit('user.email.updated', data.email);
     }
 
-    const updatedUser = await this.usersRepository.update(userExists);
+    const addressID = data.main_address_id;
 
-    this.eventEmitter.emit('user.updated', updatedUser);
+    const addressExists = addressID
+      ? await this.addressesRepository.findByID(addressID)
+      : undefined;
 
-    delete updatedUser.role_id;
-    delete updatedUser.password;
-    delete updatedUser.document_number;
+    userExists.main_address_id =
+      addressExists?.id || userExists.main_address_id;
 
-    return updatedUser;
+    const updateUser = Object.assign(userExists, data);
+
+    const updatedUser = await this.usersRepository.update(updateUser);
+
+    this.eventEmitter.emit('user.updated', updatedUser.info);
+
+    return updatedUser.info;
   }
 }

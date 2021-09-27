@@ -3,29 +3,10 @@ import { BadRequestException } from '@nestjs/common';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
 import FakeUsersRepository from '../../users/repositories/fakes/FakeUsersRepository';
-import CreateUserDTO from '../../users/dtos/CreateUserDTO';
 import ListAllAddressesService from './ListAllAddressesService';
-
-const addressModel: CreateAddressDTO = {
-  state: 'test',
-  city: 'test',
-  complement: 'test',
-  country: 'test',
-  district: 'test',
-  number: 0,
-  postal_code: '1234',
-  street: 'test',
-};
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
 
 let listAllAddresses: ListAllAddressesService;
 let addressesRepository: AddressesRepository;
@@ -55,9 +36,14 @@ describe('ListAllAddressesService', () => {
   });
 
   it('should be able to list all addresses of a valid user_id', async () => {
-    const user = await usersRepository.create(userModel);
+    const user = await usersRepository.create(
+      UsersMockFactory().createUserDTO(),
+    );
 
-    await addressesRepository.create(user.id, addressModel);
+    await addressesRepository.create(
+      user.id,
+      AddressesMockFactory().createAddressDTO(),
+    );
 
     const listedAddress = await listAllAddresses.execute(user.id);
 

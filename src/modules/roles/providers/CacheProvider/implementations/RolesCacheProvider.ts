@@ -1,7 +1,9 @@
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
+
+type CacheReturnType = Role | Role[] | undefined;
 
 @Injectable()
 export default class RolesCacheProvider
@@ -15,14 +17,16 @@ export default class RolesCacheProvider
     return data;
   }
 
-  async storeMany(data?: Role[]): Promise<Role[]> {
-    await this.redisCache.store(`all-roles`, data);
+  async storeMany(data: Role[], key?: string): Promise<Role[]> {
+    const searchKey = key || 'all-roles-offset1-limit5';
+
+    await this.redisCache.store(searchKey, data);
 
     return data;
   }
 
-  async get(key: string): Promise<Role | Role[]> {
-    let cachedRoles: Role | Role[];
+  async get(key: string): Promise<CacheReturnType> {
+    let cachedRoles: Role | Role[] | undefined;
 
     if (!key) {
       cachedRoles = await this.redisCache.get(`all-roles`);
@@ -35,7 +39,7 @@ export default class RolesCacheProvider
     return cachedRoles;
   }
 
-  async delete(key: string): Promise<Role | Role[]> {
+  async delete(key: string): Promise<CacheReturnType> {
     const cachedRoles = await this.redisCache.get(`${key}-role`);
 
     this.redisCache.delete(`${key}-role`);

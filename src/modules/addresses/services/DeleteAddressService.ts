@@ -1,7 +1,7 @@
+import { Address } from '@fireheet/entities/typeorm/users';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
-import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
+import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 
 @Injectable()
 export default class DeleteAddressService {
@@ -10,7 +10,10 @@ export default class DeleteAddressService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async execute(user_id: string, address_id: string): Promise<Address> {
+  public async execute(
+    user_id: string,
+    address_id: string,
+  ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -27,6 +30,6 @@ export default class DeleteAddressService {
       );
     }
 
-    return this.addressesRepository.delete(addressExists);
+    return (await this.addressesRepository.delete(addressExists)).info;
   }
 }

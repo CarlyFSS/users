@@ -3,12 +3,12 @@ import ICustomCacheProvider from '../model/ICustomCacheProvider';
 
 interface FakeCache<T> {
   key: string;
-  data: T;
+  data: T | undefined;
 }
 
 @Injectable()
 export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
-  dataArray: FakeCache<T>[] = [];
+  dataArray: FakeCache<T | undefined>[] = [];
 
   async store(key: string, data: T): Promise<T> {
     this.dataArray.push({
@@ -19,16 +19,16 @@ export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
     return data;
   }
 
-  async storeMany(data?: T, key?: string): Promise<T> {
+  async storeMany(data: T, key?: string): Promise<T> {
     this.dataArray.push({
-      key,
+      key: key || '',
       data,
     });
 
     return data;
   }
 
-  async get(key: string): Promise<T> {
+  async get(key: string): Promise<T | undefined> {
     const foundData = this.dataArray.find(data => data.key === key);
 
     if (foundData) {
@@ -38,13 +38,13 @@ export default class FakeCacheProvider<T> implements ICustomCacheProvider<T> {
     return undefined;
   }
 
-  async delete(key: string): Promise<T> {
+  async delete(key: string): Promise<T | undefined> {
     const foundIndex = this.dataArray.findIndex(data => data.key === key);
 
     if (foundIndex) {
-      const data = { ...this.dataArray[foundIndex].data };
+      const { data } = this.dataArray[foundIndex];
 
-      this.dataArray[foundIndex] = null;
+      this.dataArray[foundIndex] = { key: '', data: undefined };
 
       return data;
     }

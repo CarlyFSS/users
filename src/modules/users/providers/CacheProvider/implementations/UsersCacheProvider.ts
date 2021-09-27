@@ -1,35 +1,31 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
 
 @Injectable()
-export default class UsersCacheProvider implements ICustomCacheProvider<User> {
-  constructor(private readonly redisCache: RedisCacheProvider<User>) {}
+export default class UsersCacheProvider
+  implements ICustomCacheProvider<Partial<User>>
+{
+  constructor(private readonly redisCache: RedisCacheProvider<Partial<User>>) {}
 
-  async store(key: string, data: User): Promise<User> {
+  async store(key: string, data: Partial<User>): Promise<Partial<User>> {
     await this.redisCache.store(`${key}-user`, data);
 
     return data;
   }
 
-  async get(key: string): Promise<User> {
+  async get(key: string): Promise<Partial<User> | undefined> {
     const cachedUser = await this.redisCache.get(`${key}-user`);
 
     if (!cachedUser) {
       return undefined;
     }
 
-    delete cachedUser.role_id;
-    delete cachedUser.password;
-    delete cachedUser.document_number;
-    delete cachedUser.main_address_id;
-    delete cachedUser.main_phone_id;
-
     return cachedUser;
   }
 
-  async delete(key: string): Promise<User> {
+  async delete(key: string): Promise<Partial<User> | undefined> {
     const cachedUser = await this.redisCache.get(`${key}-user`);
 
     if (!cachedUser) {

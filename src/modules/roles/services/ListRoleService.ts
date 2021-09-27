@@ -1,4 +1,4 @@
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
 

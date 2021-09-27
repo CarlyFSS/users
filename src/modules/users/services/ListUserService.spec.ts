@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
@@ -6,8 +6,8 @@ import FakeAddressesRepository from '../../addresses/repositories/fakes/FakeAddr
 import RolesRepository from '../../roles/infra/typeorm/repositories/RolesRepository';
 import FakeRolesRepository from '../../roles/repositories/fakes/FakeRolesRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
-import CreateUserDTO from '../dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UsersMockFactory from '../factories/mocks/UsersMockFactory';
 import FakeBcryptHashProvider from '../providers/HashProvider/fakes/FakeBcryptHashProvider';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -16,14 +16,6 @@ import ListUserService from './ListUserService';
 
 let listUser: ListUserService;
 let createUser: CreateUserService;
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email@email.com',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
 
 describe('ListUserService', () => {
   beforeEach(async () => {
@@ -57,16 +49,22 @@ describe('ListUserService', () => {
   });
 
   it('should be able to list a user with a valid id', async () => {
-    const user = await createUser.execute(userModel);
+    const userDTO = UsersMockFactory().createUserDTO();
 
-    const userID = await listUser.execute(user.id);
+    const createdUser = await createUser.execute(userDTO);
 
-    expect(userID).toHaveProperty('id');
+    let listedUser;
+
+    if (createdUser?.id) {
+      listedUser = await listUser.execute(createdUser.id);
+    }
+
+    expect(listedUser).toHaveProperty('name');
   });
 
   it('should not be able to list a user with a invalid id', async () => {
     await expect(listUser.execute('invalid')).rejects.toBeInstanceOf(
-      BadRequestException,
+      NotFoundException,
     );
   });
 });

@@ -1,5 +1,5 @@
-import { User } from '@fireheet/entities';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { User } from '@fireheet/entities/typeorm/users';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import AddressesRepository from '../../addresses/infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
@@ -10,27 +10,23 @@ export default class ListUserService {
     private readonly addressesRepository: AddressesRepository,
   ) {}
 
-  public async execute(id: string): Promise<User> {
-    const user = await this.usersRepository.findByID(id);
+  public async execute(user_id: string): Promise<Partial<User>> {
+    const user = await this.usersRepository.findByID(user_id);
 
     if (!user) {
-      throw new BadRequestException(`User with id "${id}" does not exists!`);
+      throw new NotFoundException(`User with id "${user_id}" does not exist!`);
     }
-
-    delete user.role_id;
-    delete user.password;
-    delete user.document_number;
-    delete user.main_address_id;
-    delete user.main_phone_id;
 
     const address = await this.addressesRepository.findByID(
       user.main_address_id,
     );
 
-    if (address) {
-      user.address = address;
-    }
+    const returnedUser: Partial<User> = {
+      ...user.info,
+      address: address?.info || undefined,
+      phone: undefined,
+    };
 
-    return user;
+    return returnedUser;
   }
 }

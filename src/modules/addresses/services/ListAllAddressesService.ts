@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Address } from '@fireheet/entities';
+import { Address } from '@fireheet/entities/typeorm/users';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 
@@ -10,7 +10,11 @@ export default class ListAllAddressesService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async execute(user_id: string): Promise<Address[]> {
+  public async execute(
+    user_id: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<Partial<Address>[]> {
     const userExists = await this.usersRepository.findByID(user_id);
 
     if (!userExists) {
@@ -19,6 +23,6 @@ export default class ListAllAddressesService {
       );
     }
 
-    return this.addressesRepository.findUserAddresses(user_id);
+    return this.addressesRepository.findUserAddresses(user_id, offset, limit);
   }
 }

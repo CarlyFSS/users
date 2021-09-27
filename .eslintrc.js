@@ -43,17 +43,8 @@ module.exports = {
     "no-unused-vars": ["off", {
       "argsIgnorePattern": "_"
     }],
-    // "@typescript-eslint/naming-convention": [
-    //   "error",
-    //   {
-    //     "selector": "interface",
-    //     "format": ["PascalCase"],
-    //     "custom": {
-    //       "regex": "^I[A-Z]",
-    //       "match": true
-    //     }
-    //   }
-    // ],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
     "camelcase": "off",
     "import/extensions": [
       "error",

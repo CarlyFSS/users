@@ -1,32 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
 import FakeUsersRepository from '../../users/repositories/fakes/FakeUsersRepository';
-import CreateUserDTO from '../../users/dtos/CreateUserDTO';
 import DeleteAddressService from './DeleteAddressService';
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
 
-const addressModel: CreateAddressDTO = {
-  state: 'test',
-  city: 'test',
-  complement: 'test',
-  country: 'test',
-  district: 'test',
-  number: 0,
-  postal_code: '1234',
-  street: 'test',
-};
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
+const mockFactory = AddressesMockFactory();
 
 let deleteAddress: DeleteAddressService;
 let addressesRepository: AddressesRepository;
@@ -52,23 +35,29 @@ describe('DeleteAddressService', () => {
     deleteAddress = module.get<DeleteAddressService>(DeleteAddressService);
     usersRepository = module.get<UsersRepository>(UsersRepository);
     addressesRepository = module.get<AddressesRepository>(AddressesRepository);
-    user = await usersRepository.create(userModel);
+    user = await usersRepository.create(UsersMockFactory().createUserDTO());
   });
 
   it('should be able to delete a valid address', async () => {
-    const address = await addressesRepository.create(user.id, addressModel);
+    const address = await addressesRepository.create(
+      user.id,
+      mockFactory.createAddressDTO(),
+    );
 
     const deletedAddress = await deleteAddress.execute(user.id, address.id);
 
-    const foundAddress = await addressesRepository.findByID(deletedAddress.id);
+    const foundAddress = await addressesRepository.findByID(address.id);
 
     expect(deletedAddress).toHaveProperty('id');
 
-    expect(foundAddress.deleted_at).toBe(deletedAddress.deleted_at);
+    expect(foundAddress?.deleted_at).not.toBe(undefined);
   });
 
   it('should not be able to delete a address with invalid user_id', async () => {
-    const address = await addressesRepository.create(user.id, addressModel);
+    const address = await addressesRepository.create(
+      user.id,
+      mockFactory.createAddressDTO(),
+    );
 
     await expect(
       deleteAddress.execute('123', address.id),

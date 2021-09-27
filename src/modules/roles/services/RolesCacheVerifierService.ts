@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import RolesCacheProvider from '../providers/CacheProvider/implementations/RolesCacheProvider';
 import ListRoleService from './ListRoleService';
 import ListAllRolesService from './ListAllRolesService';
@@ -15,31 +15,37 @@ export default class RolesCacheVerifierService {
   /**
    * If *role_id* is *undefined*, it fetches all roles
    */
-  public async execute(role_id?: string): Promise<Role | Role[]> {
-    let roles: Role | Role[];
+  public async execute(
+    role_id?: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<Role | Role[]> {
+    if (role_id) {
+      const cached = await this.rolesCache.get(`${role_id}-role`);
 
-    if (!role_id) {
-      roles = await this.rolesCache.get('all-roles');
+      if (!cached) {
+        const role = await this.listRole.execute(role_id);
 
-      if (!roles) {
-        roles = await this.listAllRoles.execute();
+        this.rolesCache.store(role_id, role);
 
-        this.rolesCache.storeMany(roles);
-
-        return roles;
+        return role;
       }
+
+      return cached;
     }
 
-    roles = await this.rolesCache.get(`${role_id}-role`);
+    const key = `all-roles-offset${offset}-limit${limit}`;
 
-    if (!roles) {
-      roles = await this.listRole.execute(role_id);
+    const cachedMany = await this.rolesCache.get(key);
 
-      this.rolesCache.store(role_id, roles);
+    if (!cachedMany) {
+      const roles = await this.listAllRoles.execute(offset, limit);
+
+      this.rolesCache.storeMany(roles, key);
 
       return roles;
     }
 
-    return roles;
+    return cachedMany;
   }
 }

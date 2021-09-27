@@ -1,35 +1,16 @@
-import { Address, User } from '@fireheet/entities';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Address, User } from '@fireheet/entities/typeorm/users';
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import AddressesRepository from '../infra/typeorm/repositories/AddressesRepository';
 import FakeAddressesRepository from '../repositories/fakes/FakeAddressesRepository';
-import CreateAddressDTO from '../dtos/CreateAddressDTO';
 import FakeUsersRepository from '../../users/repositories/fakes/FakeUsersRepository';
-import CreateUserDTO from '../../users/dtos/CreateUserDTO';
 import ListAllAddressesService from './ListAllAddressesService';
 import AddressesCacheVerifierService from './AddressesCacheVerifierService';
 import ListAddressService from './ListAddressService';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
 import AddressesCacheProvider from '../providers/implementations/AddressesCacheProvider';
-
-const addressModel: CreateAddressDTO = {
-  state: 'test',
-  city: 'test',
-  complement: 'test',
-  country: 'test',
-  district: 'test',
-  number: 0,
-  postal_code: '1234',
-  street: 'test',
-};
-
-const userModel: CreateUserDTO = {
-  name: 'jon',
-  email: 'email1',
-  password: '123',
-  document_number: '123',
-  birthdate: new Date(),
-};
+import UsersMockFactory from '../../users/factories/mocks/UsersMockFactory';
+import AddressesMockFactory from '../factories/mocks/AddressesMockFactory';
 
 let addressesCacheVerifier: AddressesCacheVerifierService;
 let addressesCacheProvider: AddressesCacheProvider;
@@ -70,8 +51,11 @@ describe('AddressesCacheVerifierService', () => {
       AddressesCacheProvider,
     );
 
-    user = await usersRepository.create(userModel);
-    address = await addressesRepository.create(user.id, addressModel);
+    user = await usersRepository.create(UsersMockFactory().createUserDTO());
+    address = await addressesRepository.create(
+      user.id,
+      AddressesMockFactory().createAddressDTO(),
+    );
   });
 
   it('should be able to list a cached address', async () => {
@@ -90,16 +74,19 @@ describe('AddressesCacheVerifierService', () => {
   });
 
   it('should be able to list many cached address', async () => {
-    await addressesRepository.create(user.id, addressModel);
+    await addressesRepository.create(
+      user.id,
+      AddressesMockFactory().createAddressDTO(),
+    );
 
     const cacheGet = jest.spyOn(addressesCacheProvider, 'get');
     const cacheStore = jest.spyOn(addressesCacheProvider, 'storeMany');
 
-    await addressesCacheVerifier.execute(user.id, null);
+    await addressesCacheVerifier.execute(user.id, '');
 
     expect(cacheStore).toHaveBeenCalledTimes(1);
 
-    addressesCacheVerifier.execute(user.id, null);
+    addressesCacheVerifier.execute(user.id, '');
 
     expect(cacheGet).toHaveBeenCalledTimes(2);
   });
