@@ -15,8 +15,8 @@ export default class AddressesCacheVerifierService {
   public async execute(
     user_id: string,
     address_id: string,
-    offset: number,
-    limit: number,
+    offset?: number,
+    limit?: number,
   ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
     let addresses: Partial<Address> | Partial<Address>[] | undefined;
 

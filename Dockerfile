@@ -1,7 +1,5 @@
 FROM node:14 as builder
 
-ENV APM_SERVER_HOST apm-server:8080
-
 WORKDIR /app
 
 COPY package.json . 
