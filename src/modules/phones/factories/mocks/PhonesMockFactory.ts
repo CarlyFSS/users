@@ -15,9 +15,9 @@ export default function PhonesMockFactory() {
     const phone: Phone = {
       id: faker.datatype.uuid(),
       user_id: options?.user_id || faker.datatype.uuid(),
-      country_code: options?.country_code || `${faker.datatype.number(999)}`,
+      country_code: options?.country_code || `${faker.datatype.number()}`,
       number: options?.number || `999999999`,
-      prefix: options?.prefix || `${faker.datatype.number(99)}`,
+      prefix: options?.prefix || `${faker.datatype.number()}`,
       verified: options?.verified || true,
       created_at: new Date(),
       updated_at: new Date(),
@@ -34,9 +34,9 @@ export default function PhonesMockFactory() {
 
   function createPhoneDTO(options?: FactoryOptions): CreatePhoneDTO {
     return {
-      country_code: options?.country_code || `${faker.datatype.number(999)}`,
+      country_code: options?.country_code || `${faker.datatype.number()}`,
       number: options?.number || `999999999`,
-      prefix: options?.prefix || faker.datatype.number(99),
+      prefix: options?.prefix || faker.datatype.number(),
     };
   }
 

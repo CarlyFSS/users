@@ -6,6 +6,12 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import {
+  PAGINATION_LIMIT,
+  PAGINATION_LIMIT_MAX,
+  PAGINATION_OFFSET,
+  PAGINATION_OFFSET_MAX,
+} from '../../../config/DefaultValues';
 
 interface PaginationQuery {
   offset?: number;
@@ -23,20 +29,22 @@ export default class PaginationInterceptor implements NestInterceptor {
   }
 
   validateQuery(query: PaginationQuery): void {
-    const offset = query?.offset || 0;
-    const limit = query?.limit || 5;
+    const offset = query?.offset || PAGINATION_OFFSET;
+    const limit = query?.limit || PAGINATION_LIMIT;
 
     if (!Number.isInteger(offset) && !Number.isInteger(limit)) {
       throw new BadRequestException();
     }
 
-    if (+limit < 0 && +limit > 100) {
-      throw new BadRequestException('The limit must be between 1 and 100');
+    if (+limit < 0 && +limit > PAGINATION_LIMIT_MAX) {
+      throw new BadRequestException(
+        `The limit must be between 1 and ${PAGINATION_LIMIT_MAX}`,
+      );
     }
 
-    if (+offset < 0 && +offset > 2147483600) {
+    if (+offset < 0 && +offset > PAGINATION_OFFSET_MAX) {
       throw new BadRequestException(
-        'The offset must be between 0 and 2147483600',
+        `The offset must be between 0 and ${PAGINATION_OFFSET_MAX}`,
       );
     }
   }

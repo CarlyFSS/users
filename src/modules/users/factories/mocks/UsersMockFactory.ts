@@ -13,7 +13,7 @@ interface FactoryOptions {
   birthdate?: Date;
 }
 
-export default function UsersMockFactory() {
+export default function usersMockFactory() {
   function createUser(options?: FactoryOptions): User {
     const user: User = {
       id: faker.datatype.uuid(),
@@ -22,8 +22,7 @@ export default function UsersMockFactory() {
       email: options?.email || faker.random.word(),
       password: options?.password || faker.random.word(),
       birthdate: options?.birthdate || new Date(),
-      document_number:
-        options?.document_number || `${faker.datatype.number(999999)}`,
+      document_number: options?.document_number || `${faker.datatype.number()}`,
       sex: 'male',
       phone_id: options?.phone_id || '',
       main_address_id: options?.main_address_id || '',
@@ -52,8 +51,7 @@ export default function UsersMockFactory() {
       email: options?.email || faker.random.word(),
       password: options?.password || faker.random.word(),
       birthdate: options?.birthdate || new Date(),
-      document_number:
-        options?.document_number || `${faker.datatype.number(999999)}`,
+      document_number: options?.document_number || `${faker.datatype.number()}`,
     };
   }
 

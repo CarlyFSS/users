@@ -2,48 +2,43 @@ import { Address } from '@fireheet/entities/typeorm/users';
 import faker from 'faker';
 import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
 
-interface FactoryOptions {
-  user_id?: string;
-  city?: string;
-  country?: string;
-  neighborhood?: string;
-  complement?: string;
-  number?: number;
-  zip_code?: string;
-  state?: string;
-  street?: string;
-  description?: string;
+class FactoryObject {
+  city = faker.address.cityName();
+
+  country = faker.address.country();
+
+  neighborhood = faker.address.streetPrefix();
+
+  complement = faker.address.cardinalDirection();
+
+  number = faker.datatype.number();
+
+  zip_code = faker.address.zipCode();
+
+  state = faker.address.state();
+
+  street = faker.address.streetName();
+
+  description = faker.address.streetSuffix();
 }
 
-export default function AddressesMockFactory() {
-  function createAddress(options?: FactoryOptions): Address {
+export default function addressesMockFactory() {
+  function createAddress(user_id: string): Address {
+    const object = new FactoryObject();
+
+    const id = faker.datatype.uuid();
+
     const address: Address = {
-      id: faker.datatype.uuid(),
-      user_id: options?.user_id || faker.datatype.uuid(),
-      city: options?.city || faker.address.cityName(),
-      country: options?.country || faker.address.country(),
-      neighborhood: options?.neighborhood || faker.address.streetPrefix(),
-      complement: options?.complement || faker.address.cardinalDirection(),
-      number: options?.number || faker.datatype.number(9999),
-      zip_code: options?.zip_code || faker.address.zipCode(),
-      state: options?.state || faker.address.state(),
-      street: options?.street || faker.address.streetName(),
-      description: options?.description || faker.address.streetSuffix(),
+      id,
+      user_id,
+      ...object,
       created_at: new Date(),
       updated_at: new Date(),
 
       get info(): Partial<Address> {
         return {
-          id: this.id,
-          city: this.city,
-          country: this.country,
-          neighborhood: this.neighborhood,
-          complement: this.complement,
-          number: this.number,
-          zip_code: this.zip_code,
-          state: this.state,
-          street: this.street,
-          description: this.description,
+          id,
+          ...object,
         };
       },
     };
@@ -51,17 +46,11 @@ export default function AddressesMockFactory() {
     return address;
   }
 
-  function createAddressDTO(options?: FactoryOptions): CreateAddressDTO {
+  function createAddressDTO(): CreateAddressDTO {
+    const address = new FactoryObject();
+
     return {
-      city: options?.city || faker.address.cityName(),
-      country: options?.country || faker.address.country(),
-      neighborhood: options?.neighborhood || faker.address.streetPrefix(),
-      complement: options?.complement || faker.address.cardinalDirection(),
-      number: options?.number || faker.datatype.number(9999),
-      zip_code: options?.zip_code || faker.address.zipCode(),
-      state: options?.state || faker.address.state(),
-      street: options?.street || faker.address.streetName(),
-      description: options?.description || faker.address.streetSuffix(),
+      ...address,
     };
   }
 

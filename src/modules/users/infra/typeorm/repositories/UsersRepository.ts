@@ -22,11 +22,11 @@ export default class UsersRepository
     return this.ormRepository.save(user);
   }
 
-  public async activate(user_id: string): Promise<User | undefined> {
+  public async restore(user_id: string): Promise<User | undefined> {
     const user = await this.findByID(user_id);
 
     if (user) {
-      user.deleted_at = new Date();
+      user.deleted_at = undefined;
 
       return this.ormRepository.save(user);
     }

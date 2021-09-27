@@ -6,7 +6,7 @@ import UsersMockFactory from '../../factories/mocks/UsersMockFactory';
 export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
-  private mockFactory = UsersMockFactory;
+  private readonly mockFactory = UsersMockFactory;
 
   public async create(data: CreateUserDTO, role_id?: string): Promise<User> {
     const user: User = this.mockFactory().createUser({ ...data, role_id });
@@ -38,7 +38,7 @@ export default class FakeUsersRepository implements IUsersRepository {
     return undefined;
   }
 
-  public async activate(user_id: string): Promise<User | undefined> {
+  public async restore(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
     if (foundUser) {

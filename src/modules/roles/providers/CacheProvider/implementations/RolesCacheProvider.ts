@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import RedisCacheProvider from '../../../../../shared/providers/CacheProvider/implementations/RedisCacheProvider';
 import ICustomCacheProvider from '../../../../../shared/providers/CacheProvider/model/ICustomCacheProvider';
 
+type CacheReturnType = Role | Role[] | undefined;
+
 @Injectable()
 export default class RolesCacheProvider
   implements ICustomCacheProvider<Role | Role[]>
@@ -23,7 +25,7 @@ export default class RolesCacheProvider
     return data;
   }
 
-  async get(key: string): Promise<Role | Role[] | undefined> {
+  async get(key: string): Promise<CacheReturnType> {
     let cachedRoles: Role | Role[] | undefined;
 
     if (!key) {
@@ -37,7 +39,7 @@ export default class RolesCacheProvider
     return cachedRoles;
   }
 
-  async delete(key: string): Promise<Role | Role[] | undefined> {
+  async delete(key: string): Promise<CacheReturnType> {
     const cachedRoles = await this.redisCache.get(`${key}-role`);
 
     this.redisCache.delete(`${key}-role`);

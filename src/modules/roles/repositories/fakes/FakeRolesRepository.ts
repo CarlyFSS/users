@@ -1,5 +1,9 @@
 import { Role } from '@fireheet/entities/typeorm/users';
-import RolesMockFactory from '../../models/mocks/RolesMockFactory';
+import {
+  PAGINATION_LIMIT,
+  PAGINATION_OFFSET,
+} from '../../../../shared/config/DefaultValues';
+import RolesMockFactory from '../../factories/mocks/RolesMockFactory';
 import IRolesRepository from '../IRolesRepository';
 
 export default class FakeRolesRepository implements IRolesRepository {
@@ -21,7 +25,10 @@ export default class FakeRolesRepository implements IRolesRepository {
     return this.roles.find(role => role.name === name);
   }
 
-  public async listAll(offset = 0, limit = 5): Promise<Role[]> {
+  public async listAll(
+    offset = PAGINATION_OFFSET,
+    limit = PAGINATION_LIMIT,
+  ): Promise<Role[]> {
     const roles: Role[] = [];
 
     let count = offset;

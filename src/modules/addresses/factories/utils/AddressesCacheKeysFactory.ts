@@ -1,5 +1,12 @@
-export default function AddressesCacheKeysFactory() {
-  function createKey(key: string, offset = 0, limit = 5) {
+const DEFAULT_OFFSET = 0;
+const DEFAULT_LIMIT = 5;
+
+export default function addressesCacheKeysFactory() {
+  function createKey(
+    key: string,
+    offset = DEFAULT_OFFSET,
+    limit = DEFAULT_LIMIT,
+  ) {
     let base = '';
 
     if (offset || limit) {

@@ -1,8 +1,8 @@
 import ValidationObject from '../../../shared/factories/ValidationFactory/interfaces/IValidationObject';
 
-export default function PhonesValidationFactory() {
+export default function phonesValidationFactory() {
   function create() {
-    const map = new Map<String, ValidationObject>();
+    const map = new Map<string, ValidationObject>();
 
     map.set('country_code', {
       min: 1,

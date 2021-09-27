@@ -56,7 +56,7 @@ export default class AddressesCacheProvider
     key: string,
     offset?: number,
     limit?: number,
-    all?: boolean,
+    all = false,
   ): Promise<Partial<Address> | Partial<Address>[] | undefined> {
     if (offset || limit || all) {
       return this.redisCache.delete(createKey(key, offset, limit)) || undefined;

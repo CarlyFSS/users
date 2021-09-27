@@ -24,7 +24,7 @@ export default class RestoreUserService {
       );
     }
 
-    const restoredUser = await this.usersRepository.activate(userExists.id);
+    const restoredUser = await this.usersRepository.restore(userExists.id);
 
     if (restoredUser) {
       this.eventEmitter.emit('user.activated', userExists);

@@ -1,13 +1,14 @@
+import { PT_BR_WORD_REGEX } from '../../../shared/config/DefaultValues';
 import ValidationObject from '../../../shared/factories/ValidationFactory/interfaces/IValidationObject';
 
-export default function UsersValidationFactory() {
+export default function usersValidationFactory() {
   function create() {
-    const map = new Map<String, ValidationObject>();
+    const map = new Map<string, ValidationObject>();
 
     map.set('name', {
       min: 1,
       max: 100,
-      regex: "^[#.0-9a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\\s]+$",
+      regex: PT_BR_WORD_REGEX,
     });
 
     map.set('email', {

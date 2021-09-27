@@ -41,7 +41,7 @@ describe('UpdateAddressService', () => {
   it('should be able to update a valid address', async () => {
     const address = await addressesRepository.create(
       user.id,
-      AddressesMockFactory().createAddressDTO(),
+      AddressesMockFactory().createAddress(user.id),
     );
 
     const city = 'other';
@@ -50,7 +50,11 @@ describe('UpdateAddressService', () => {
       city,
     });
 
-    expect(updatedAddress.city).toBe(city);
+    const foundAddress = await addressesRepository.findByID(
+      updatedAddress.id || '',
+    );
+
+    expect(foundAddress?.city).toBe(city);
   });
 
   it('should not be able to update a address with invalid user_id', async () => {

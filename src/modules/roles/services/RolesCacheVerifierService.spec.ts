@@ -1,9 +1,9 @@
 import { Role } from '@fireheet/entities/typeorm/users';
 import { Test, TestingModule } from '@nestjs/testing';
 import FakeCacheProvider from '../../../shared/providers/CacheProvider/fakes/FakeCacheProvider';
+import RolesMockFactory from '../factories/mocks/RolesMockFactory';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
 import RolesEnum from '../models/enums/RolesEnum';
-import RolesMockFactory from '../models/mocks/RolesMockFactory';
 import RolesCacheProvider from '../providers/CacheProvider/implementations/RolesCacheProvider';
 import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
 import ListAllRolesService from './ListAllRolesService';

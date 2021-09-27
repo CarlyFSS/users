@@ -1,6 +1,10 @@
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
 import { Role } from '@fireheet/entities/typeorm/users';
 import IRolesRepository from '../../../repositories/IRolesRepository';
+import {
+  PAGINATION_LIMIT,
+  PAGINATION_OFFSET,
+} from '../../../../../shared/config/DefaultValues';
 
 @EntityRepository(Role)
 export default class RolesRepository
@@ -9,7 +13,10 @@ export default class RolesRepository
 {
   private readonly ormRepository = getRepository(Role);
 
-  public async listAll(offset = 0, limit = 5): Promise<Role[]> {
+  public async listAll(
+    offset = PAGINATION_OFFSET,
+    limit = PAGINATION_LIMIT,
+  ): Promise<Role[]> {
     return this.ormRepository.find({
       skip: offset,
       take: limit,

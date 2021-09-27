@@ -5,6 +5,24 @@ import AddressesRepository from '../infra/typeorm/repositories/AddressesReposito
 import UsersRepository from '../../users/infra/typeorm/repositories/UsersRepository';
 import UpdateAddressDTO from '../models/dtos/UpdateAddressDTO';
 
+// function mix(...sources: Address[] | UpdateAddressDTO[]) {
+//   const result = {};
+
+//   sources.forEach(source => {
+//     const props = Object.keys(source);
+
+//     props.forEach(prop => {
+//       const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+
+//       if (descriptor?.value !== undefined) {
+//         Object.defineProperty(result, prop, descriptor);
+//       }
+//     });
+//   });
+
+//   return result;
+// }
+
 @Injectable()
 export default class UpdateAddressService {
   constructor(
@@ -16,16 +34,7 @@ export default class UpdateAddressService {
   public async execute(
     user_id: string,
     address_id: string,
-    {
-      city,
-      complement,
-      country,
-      neighborhood,
-      number,
-      zip_code,
-      state,
-      street,
-    }: UpdateAddressDTO,
+    data: UpdateAddressDTO,
   ): Promise<Partial<Address>> {
     const userExists = await this.usersRepository.findByID(user_id);
 
@@ -45,16 +54,9 @@ export default class UpdateAddressService {
 
     userExists.main_address_id = address_id;
 
-    addressExists.city = city || addressExists.city;
-    addressExists.complement = complement || addressExists.complement;
-    addressExists.country = country || addressExists.country;
-    addressExists.neighborhood = neighborhood || addressExists.neighborhood;
-    addressExists.number = number || addressExists.number;
-    addressExists.zip_code = zip_code || addressExists.zip_code;
-    addressExists.state = state || addressExists.state;
-    addressExists.street = street || addressExists.street;
+    const updateAddress = Object.assign(addressExists, data);
 
-    const address = await this.addressesRepository.update(addressExists);
+    const address = await this.addressesRepository.update(updateAddress);
 
     await this.usersRepository.update(userExists);
 

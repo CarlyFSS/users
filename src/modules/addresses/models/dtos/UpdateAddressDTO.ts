@@ -3,25 +3,17 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
-  IsUUID,
   Length,
   Matches,
 } from 'class-validator';
 import ValidationFactory from '../../../../shared/factories/ValidationFactory/ValidationFactory';
 import AddressPropertiesEnum from '../enums/AddressPropertiesEnum';
 
-const { REGEX_MODIFIER, UUID_VERSION, addressesValidationMap } =
-  ValidationFactory();
+const { REGEX_MODIFIER, addressesValidationMap } = ValidationFactory();
 const VALIDATION = addressesValidationMap;
 const P = AddressPropertiesEnum;
 
 export default class UpdateAddressDTO {
-  @IsUUID(UUID_VERSION)
-  user_id?: string;
-
-  @IsUUID(UUID_VERSION)
-  address_id?: string;
-
   @IsString()
   @IsOptional()
   @Length(VALIDATION(P.COUNTRY).min, VALIDATION(P.COUNTRY).max)

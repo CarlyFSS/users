@@ -1,60 +1,33 @@
-import { Address } from '@fireheet/entities/typeorm/users';
-import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
-import AddressesMockFactory from '../../factories/mocks/AddressesMockFactory';
-import IAddressesRepository from '../IAddressesRepository';
+import { Phone } from '@fireheet/entities/typeorm/users';
+import CreatePhoneDTO from '../../models/dtos/CreatePhoneDTO';
+import IPhonesRepository from '../IPhonesRepository';
 
-export default class FakeAddressesRepository implements IAddressesRepository {
-  private addresses: Address[] = [];
+export default class FakePhonesRepository implements IPhonesRepository {
+  private phones: Phone[] = [];
 
-  public async create(
-    user_id: string,
-    data: CreateAddressDTO,
-  ): Promise<Address> {
-    const address = AddressesMockFactory().createAddress({ ...data, user_id });
-
-    this.addresses.push(address);
-
-    return address;
+  public async create(user_id: string, data: CreatePhoneDTO): Promise<Phone> {
+    return new Phone({ user_id, ...data });
   }
 
-  public async update(address: Address): Promise<Address> {
-    const addressIdx = this.addresses.indexOf(address);
+  public async update(phone: Phone): Promise<Phone> {
+    const phoneIdx = this.phones.indexOf(phone);
 
-    this.addresses[addressIdx] = address;
+    this.phones[phoneIdx] = phone;
 
-    return this.addresses[addressIdx];
+    return this.phones[phoneIdx];
   }
 
-  public async delete(address: Address): Promise<Address> {
-    const addressIdx = this.addresses.indexOf(address);
+  public async delete(phone: Phone): Promise<Phone> {
+    const phoneIdx = this.phones.indexOf(phone);
 
-    address.deleted_at = new Date();
+    phone.deleted_at = new Date();
 
-    this.addresses[addressIdx] = address;
+    this.phones[phoneIdx] = phone;
 
-    return this.addresses[addressIdx];
+    return this.phones[phoneIdx];
   }
 
-  public async findByID(id: string): Promise<Address | undefined> {
-    return this.addresses.find(user => user.id === id);
-  }
-
-  public async findByStreetAndPostalCode(
-    user_id: string,
-    street: string,
-    number: number,
-    postal_code: string,
-  ): Promise<Address | undefined> {
-    return this.addresses.find(
-      address =>
-        address.user_id === user_id &&
-        address.street === street &&
-        address.number === number &&
-        address.zip_code === postal_code,
-    );
-  }
-
-  public async findUserAddresses(user_id: string): Promise<Address[]> {
-    return this.addresses.filter(address => address.user_id === user_id);
+  public async findByID(id: string): Promise<Phone | undefined> {
+    return this.phones.find(phone => phone.id === id);
   }
 }

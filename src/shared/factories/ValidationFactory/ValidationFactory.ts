@@ -18,7 +18,7 @@ const DEFAULT_REGEX = "^[#.0-9a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈ
 /**
  * - @param options Overrides the default values
  */
-export default function ValidationFactory(options?: FactoryOptions) {
+export default function validationFactory(options?: FactoryOptions) {
   const MIN = options?.min || DEFAULT_MIN;
   const MAX = options?.max || DEFAULT_MAX;
   const REGEX = options?.regex || DEFAULT_REGEX;

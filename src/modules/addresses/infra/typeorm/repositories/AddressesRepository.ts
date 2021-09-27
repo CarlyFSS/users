@@ -1,5 +1,9 @@
 import { Address } from '@fireheet/entities/typeorm/users';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
+import {
+  PAGINATION_LIMIT,
+  PAGINATION_OFFSET,
+} from '../../../../../shared/config/DefaultValues';
 import CreateAddressDTO from '../../../models/dtos/CreateAddressDTO';
 import IAddressesRepository from '../../../repositories/IAddressesRepository';
 
@@ -55,8 +59,8 @@ export default class AddressesRepository
 
   findUserAddresses(
     user_id: string,
-    offset = 0,
-    limit = 5,
+    offset = PAGINATION_OFFSET,
+    limit = PAGINATION_LIMIT,
   ): Promise<Address[]> {
     return this.ormRepository.find({
       where: { user_id },

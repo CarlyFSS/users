@@ -30,12 +30,11 @@ export default class UUIDValidationInterceptor implements NestInterceptor {
     const allParams = [params?.user_id, params?.address_id, params?.user_id];
 
     allParams.forEach(param => {
-      if (param)
-        if (!uuid.validate(param)) {
-          throw new BadRequestException(
-            `string "${param}" on params is not a valid UUID`,
-          );
-        }
+      if (param && !uuid.validate(param)) {
+        throw new BadRequestException(
+          `string "${param}" on params is not a valid UUID`,
+        );
+      }
     });
   }
 
@@ -43,12 +42,11 @@ export default class UUIDValidationInterceptor implements NestInterceptor {
     const allQueries = [queries.user_id, queries.address_id, queries.user_id];
 
     allQueries.forEach(query => {
-      if (query)
-        if (!uuid.validate(query)) {
-          throw new BadRequestException(
-            `string "${query}" on query is not a valid UUID`,
-          );
-        }
+      if (query && !uuid.validate(query)) {
+        throw new BadRequestException(
+          `string "${query}" on query is not a valid UUID`,
+        );
+      }
     });
   }
 }

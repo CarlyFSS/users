@@ -1,16 +1,12 @@
 import { Address } from '@fireheet/entities/typeorm/users';
-import CreateAddressDTO from '../../models/dtos/CreateAddressDTO';
 import AddressesMockFactory from '../../factories/mocks/AddressesMockFactory';
 import IAddressesRepository from '../IAddressesRepository';
 
 export default class FakeAddressesRepository implements IAddressesRepository {
   private addresses: Address[] = [];
 
-  public async create(
-    user_id: string,
-    data: CreateAddressDTO,
-  ): Promise<Address> {
-    const address = AddressesMockFactory().createAddress({ ...data, user_id });
+  public async create(user_id: string): Promise<Address> {
+    const address = AddressesMockFactory().createAddress(user_id);
 
     this.addresses.push(address);
 
