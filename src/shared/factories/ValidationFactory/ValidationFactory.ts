@@ -1,6 +1,8 @@
 import { UUIDVersion } from 'class-validator';
 import AddressesValidationFactory from '../../../modules/addresses/factories/AddressesValidationFactory';
+import PhonesValidationFactory from '../../../modules/phones/factories/PhonesValidationFactory';
 import UsersValidationFactory from '../../../modules/users/factories/UsersValidationFactory';
+import Entity from '../../utils/enums/Entity';
 import ValidationObject from './interfaces/IValidationObject';
 
 interface FactoryOptions {
@@ -23,28 +25,39 @@ export default function validationFactory(options?: FactoryOptions) {
   const MAX = options?.max || DEFAULT_MAX;
   const REGEX = options?.regex || DEFAULT_REGEX;
 
-  function usersValidationMap(property: string): ValidationObject {
-    const map = UsersValidationFactory().create();
+  function getEntityMap(
+    entity: string,
+  ): (property: string) => ValidationObject {
+    let map: Map<string, ValidationObject>;
 
-    return (
-      map.get(property) || {
-        min: MIN,
-        max: MAX,
-        regex: REGEX,
-      }
-    );
-  }
+    switch (entity) {
+      case Entity.USER:
+        map = UsersValidationFactory().create();
+        break;
 
-  function addressesValidationMap(property: string): ValidationObject {
-    const map = AddressesValidationFactory().create();
+      case Entity.ADDRESS:
+        map = AddressesValidationFactory().create();
+        break;
 
-    return (
-      map.get(property) || {
-        min: MIN,
-        max: MAX,
-        regex: REGEX,
-      }
-    );
+      case Entity.PHONE:
+        map = PhonesValidationFactory().create();
+        break;
+
+      default:
+        break;
+    }
+
+    function getProperty(property: string): ValidationObject {
+      return (
+        map.get(property) || {
+          min: MIN,
+          max: MAX,
+          regex: REGEX,
+        }
+      );
+    }
+
+    return getProperty;
   }
 
   const REGEX_MODIFIER = options?.modifier || 'gi';
@@ -52,7 +65,6 @@ export default function validationFactory(options?: FactoryOptions) {
   return {
     REGEX_MODIFIER,
     UUID_VERSION,
-    usersValidationMap,
-    addressesValidationMap,
+    getEntityMap,
   };
 }

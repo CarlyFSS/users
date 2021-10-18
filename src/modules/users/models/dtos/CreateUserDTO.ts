@@ -7,11 +7,11 @@ import {
   IsOptional,
 } from 'class-validator';
 import ValidationFactory from '../../../../shared/factories/ValidationFactory/ValidationFactory';
+import Entity from '../../../../shared/utils/enums/Entity';
 import UserProperties from '../enums/UserPropertiesEnum';
 
-const { REGEX_MODIFIER, UUID_VERSION, usersValidationMap } =
-  ValidationFactory();
-const VALIDATION = usersValidationMap;
+const { REGEX_MODIFIER, UUID_VERSION, getEntityMap } = ValidationFactory();
+const VALIDATION = getEntityMap(Entity.USER);
 const P = UserProperties;
 
 export default class CreateUserDTO {

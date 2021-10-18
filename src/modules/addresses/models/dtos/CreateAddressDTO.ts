@@ -10,10 +10,11 @@ import {
   Min,
 } from 'class-validator';
 import ValidationFactory from '../../../../shared/factories/ValidationFactory/ValidationFactory';
+import Entity from '../../../../shared/utils/enums/Entity';
 import AddressPropertiesEnum from '../enums/AddressPropertiesEnum';
 
-const { REGEX_MODIFIER, addressesValidationMap } = ValidationFactory();
-const VALIDATION = addressesValidationMap;
+const { REGEX_MODIFIER, getEntityMap } = ValidationFactory();
+const VALIDATION = getEntityMap(Entity.ADDRESS);
 const P = AddressPropertiesEnum;
 
 export default class CreateAddressDTO {
