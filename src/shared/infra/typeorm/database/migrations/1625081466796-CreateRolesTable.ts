@@ -18,21 +18,28 @@ export default class CreateRolesTable1625081466796
             isGenerated: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
+            comment:
+              'A UUID is simply a 128-bit unique value that can be expressed as either a larger number or a string. Must be an *valid* UUID.',
           },
           {
             name: 'name',
             type: 'varchar',
             isNullable: false,
+            length: '10',
           },
           {
             name: 'created_at',
             type: 'timestamptz',
             default: 'now()',
+            comment: 'When the entity was created',
+            length: '24',
           },
           {
             name: 'updated_at',
             type: 'timestamptz',
             default: 'now()',
+            comment: 'When the entity was last updated',
+            length: '24',
           },
         ],
       }),

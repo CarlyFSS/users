@@ -4,7 +4,6 @@ import FakeRolesRepository from '../repositories/fakes/FakeRolesRepository';
 import ListAllRolesService from './ListAllRolesService';
 
 let listAllRolesService: ListAllRolesService;
-let rolesRepository: RolesRepository;
 
 describe('ListAllRolesService', () => {
   beforeEach(async () => {
@@ -19,12 +18,17 @@ describe('ListAllRolesService', () => {
     }).compile();
 
     listAllRolesService = module.get<ListAllRolesService>(ListAllRolesService);
-    rolesRepository = module.get<RolesRepository>(RolesRepository);
   });
 
   it('should be able to list all roles', async () => {
     const roles = await listAllRolesService.execute();
 
     expect(roles.length).toBeGreaterThan(1);
+  });
+
+  it('should be able to list paginated roles', async () => {
+    const roles = await listAllRolesService.execute(1, 2);
+
+    expect(roles.length).toBe(2);
   });
 });

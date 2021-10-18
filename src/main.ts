@@ -1,28 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import 'reflect-metadata';
-import { SwaggerModule } from '@nestjs/swagger';
-import openApiDoc from '@shared/docs/create-swagger-docs';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { ValidationPipe } from '@nestjs/common';
+import fastifyHelmet from 'fastify-helmet';
 import AppModule from './AppModule';
 import GrpcConfig from './config/GrpcConfig';
 
 async function bootstrap() {
-  const defaultPort = 3333;
+  const DEFAULT_PORT = 3333;
 
-  const PORT = +process.env.PORT || defaultPort;
+  const PORT = process.env.PORT || DEFAULT_PORT;
 
-  const app: INestApplication =
-    await NestFactory.create<NestFastifyApplication>(
-      AppModule,
-      new FastifyAdapter(),
-    );
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
   app.setGlobalPrefix('v1');
+
   app.useGlobalPipes(
     new ValidationPipe({
       always: true,
@@ -35,12 +34,12 @@ async function bootstrap() {
     }),
   );
 
-  SwaggerModule.setup('api', app, openApiDoc(app));
+  await app.register(fastifyHelmet);
 
   app.connectMicroservice<MicroserviceOptions>(GrpcConfig);
 
   await app.listen(PORT);
-  await app.startAllMicroservicesAsync();
+  await app.startAllMicroservices();
 }
 
 bootstrap();

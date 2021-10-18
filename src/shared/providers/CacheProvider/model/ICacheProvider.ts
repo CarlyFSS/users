@@ -1,6 +1,5 @@
-export default interface ICacheProvider {
-  store<T>(key: string, data: T): void;
-  storeMany?<T>(data: T): void;
-  get<T>(key: string): T;
-  delete(key: string): void;
+export default interface ICacheProvider<T> {
+  store(key: string, data: T): Promise<T | undefined>;
+  get(key: string): Promise<T | undefined>;
+  delete(key: string): Promise<T | undefined>;
 }

@@ -8,18 +8,18 @@ service RolesGrpcController {
 }
 
 message Role {
-  string id = 1;
-  string name = 2;
-  string created_at = 3;
-  string updated_at = 4;
+  string  id = 1;
+  string  name = 2;
+  string  created_at = 3;
+  string  updated_at = 4;
 }
 
 message Roles {
-  repeated Role roles = 1;
+  repeated Role  roles = 1;
 }
 
 message RoleID {
-  string id = 1;
+  string  id = 1;
 }
 
 message Empty {}

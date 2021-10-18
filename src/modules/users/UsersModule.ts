@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import RedisConfig from '@config/RedisConfig';
 import AMQPProviderModule from '@shared/providers/AMQPProvider/AMQPProviderModule';
 import UsersRepository from './infra/typeorm/repositories/UsersRepository';
@@ -15,13 +15,19 @@ import RolesModule from '../roles/RolesModule';
 import ListRoleByNameService from '../roles/services/ListRoleByNameService';
 import UsersGrpcController from './infra/grpc/routes/controllers/UsersGrpcController';
 import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProviderModule';
+import UsersCacheVerifierService from './services/UsersCacheVerifierService';
+import UsersCacheProvider from './providers/CacheProvider/implementations/UsersCacheProvider';
+import AddressesRepository from '../addresses/infra/typeorm/repositories/AddressesRepository';
+import DeleteUserService from './services/DeleteUserService';
+import RestoreUserService from './services/RestoreUserService';
+import AddressesCacheProvider from '../addresses/providers/implementations/AddressesCacheProvider';
 
 @Module({
   imports: [
     RolesModule,
     CacheModule.register(RedisConfig),
     CacheProviderModule,
-    TypeOrmModule.forFeature([User, UsersRepository]),
+    TypeOrmModule.forFeature([User, UsersRepository, AddressesRepository]),
     AMQPProviderModule,
     HashProviderModule,
   ],
@@ -31,6 +37,11 @@ import CacheProviderModule from '../../shared/providers/CacheProvider/CacheProvi
     UpdateUserService,
     ListUserService,
     ListRoleByNameService,
+    RestoreUserService,
+    DeleteUserService,
+    UsersCacheProvider,
+    AddressesCacheProvider,
+    UsersCacheVerifierService,
   ],
   exports: [TypeOrmModule],
 })

@@ -47,3 +47,5 @@ yarn.lock
 package-lock.json
 .env
 /k8s
+.env.prod
+.env.test

@@ -1,6 +1,6 @@
-import { User } from '@fireheet/entities';
+import { User } from '@fireheet/entities/typeorm/users';
 import { AbstractRepository, EntityRepository, getRepository } from 'typeorm';
-import CreateUserDTO from '../../../dtos/CreateUserDTO';
+import CreateUserDTO from '../../../models/dtos/CreateUserDTO';
 import IUsersRepository from '../../../repositories/IUsersRepository';
 
 @EntityRepository(User)
@@ -17,27 +17,37 @@ export default class UsersRepository
   }
 
   public async update(user: User): Promise<User> {
+    user.updated_at = new Date();
+
     return this.ormRepository.save(user);
   }
 
-  public async activate(user_id: string): Promise<User> {
+  public async restore(user_id: string): Promise<User | undefined> {
     const user = await this.findByID(user_id);
 
-    user.deleted_at = null;
+    if (user) {
+      user.deleted_at = undefined;
 
-    return this.ormRepository.save(user);
+      return this.ormRepository.save(user);
+    }
+
+    return undefined;
   }
 
-  public async deactivate(user_id: string): Promise<User> {
+  public async delete(user_id: string): Promise<User | undefined> {
     const user = await this.findByID(user_id);
 
-    user.deleted_at = new Date();
+    if (user) {
+      user.deleted_at = new Date();
 
-    return this.ormRepository.save(user);
+      return this.ormRepository.save(user);
+    }
+
+    return undefined;
   }
 
-  public async findByID(id: string): Promise<User | undefined> {
-    return this.ormRepository.findOne({ where: { id } });
+  public async findByID(user_id: string): Promise<User | undefined> {
+    return this.ormRepository.findOne({ where: { id: user_id } });
   }
 
   public async findByDocument(

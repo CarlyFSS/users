@@ -1,10 +1,12 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import { User, Role } from '@fireheet/entities';
+import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import CreateUserDTO from '../dtos/CreateUserDTO';
+import { ForbiddenException } from '@nestjs/common/exceptions';
+import { User } from '@fireheet/entities/typeorm/users';
+import CreateUserDTO from '../models/dtos/CreateUserDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import ListRoleByNameService from '../../roles/services/ListRoleByNameService';
 import BcryptHashProvider from '../providers/HashProvider/implementations/BcryptHashProvider';
+import RolesEnum from '../../roles/models/enums/RolesEnum';
 
 interface UserTemplate {
   role_id?: string;
@@ -24,14 +26,10 @@ export default class CreateUserService {
     private readonly hashProvider: BcryptHashProvider,
   ) {}
 
-  public async execute({
-    document_number,
-    role_id,
-    email,
-    password,
-    name,
-    birthdate,
-  }: CreateUserDTO): Promise<User> {
+  public async execute(
+    { document_number, email, password, name, birthdate }: CreateUserDTO,
+    role_id?: string,
+  ): Promise<Partial<User>> {
     const userDocumentExists = await this.usersRepository.findByDocument(
       document_number,
     );
@@ -50,31 +48,17 @@ export default class CreateUserService {
       );
     }
 
-    const splicedBirthdate = birthdate.toString().split('/');
-
-    const day = +splicedBirthdate[0];
-    const month = +splicedBirthdate[1] - 1;
-    const year = +splicedBirthdate[2];
-
-    const userBirthDate = new Date(year, month, day);
-
     const user: UserTemplate = {
       name,
       password,
       email,
       document_number,
-      birthdate: userBirthDate,
+      birthdate,
     };
 
-    let role: Role;
-
-    if (!role_id) {
-      role = await this.listRoleByName.execute('CLIENT');
-
-      user.role_id = role.id;
-    } else {
-      user.role_id = role_id;
-    }
+    user.role_id = !role_id
+      ? (await this.listRoleByName.execute(RolesEnum.CLIENT)).id
+      : role_id;
 
     const encryptedPassword = await this.hashProvider.encrypt(password);
 
@@ -84,9 +68,6 @@ export default class CreateUserService {
 
     this.eventEmitter.emit('user.created', createdUser);
 
-    delete createdUser.role_id;
-    delete createdUser.password;
-
-    return createdUser;
+    return createdUser.info;
   }
 }

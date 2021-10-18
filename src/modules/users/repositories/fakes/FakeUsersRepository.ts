@@ -1,31 +1,15 @@
-import { User } from '@fireheet/entities';
-import faker from 'faker';
+import { User } from '@fireheet/entities/typeorm/users';
 import IUsersRepository from '../IUsersRepository';
-import CreateUserDTO from '../../dtos/CreateUserDTO';
+import CreateUserDTO from '../../models/dtos/CreateUserDTO';
+import UsersMockFactory from '../../factories/mocks/UsersMockFactory';
 
 export default class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
 
-  public async create({
-    name,
-    email,
-    password,
-    role_id,
-    document_number,
-  }: CreateUserDTO): Promise<User> {
-    const user: User = {
-      name,
-      email,
-      password,
-      role_id,
-      document_number,
-      id: faker.datatype.uuid(),
-      sex: null,
-      birthdate: new Date(),
-      created_at: new Date(),
-      updated_at: new Date(),
-      deleted_at: null,
-    };
+  private readonly mockFactory = UsersMockFactory;
+
+  public async create(data: CreateUserDTO, role_id?: string): Promise<User> {
+    const user: User = this.mockFactory().createUser({ ...data, role_id });
 
     this.users.push(user);
 
@@ -40,24 +24,32 @@ export default class FakeUsersRepository implements IUsersRepository {
     return this.users[userIdx];
   }
 
-  public async deactivate(user_id: string): Promise<User | undefined> {
+  public async delete(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
-    const userIdx = this.users.indexOf(foundUser);
+    if (foundUser) {
+      const userIdx = this.users.indexOf(foundUser);
 
-    this.users[userIdx].deleted_at = new Date();
+      this.users[userIdx].deleted_at = new Date();
 
-    return this.users[userIdx];
+      return this.users[userIdx];
+    }
+
+    return undefined;
   }
 
-  public async activate(user_id: string): Promise<User | undefined> {
+  public async restore(user_id: string): Promise<User | undefined> {
     const foundUser = this.users.find(user => user.id === user_id);
 
-    const userIdx = this.users.indexOf(foundUser);
+    if (foundUser) {
+      const userIdx = this.users.indexOf(foundUser);
 
-    this.users[userIdx].deleted_at = null;
+      this.users[userIdx].deleted_at = undefined;
 
-    return this.users[userIdx];
+      return this.users[userIdx];
+    }
+
+    return undefined;
   }
 
   public async findByID(id: string): Promise<User | undefined> {

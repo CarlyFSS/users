@@ -1,7 +1,7 @@
 import { Controller, CACHE_MANAGER, Inject } from '@nestjs/common';
-import { Role } from '@fireheet/entities';
-import { Cache } from 'cache-manager-redis-store';
+import { Cache } from 'cache-manager';
 import { GrpcMethod } from '@nestjs/microservices';
+import { Role } from '@fireheet/entities/typeorm/users';
 import ListRoleService from '../../../../services/ListRoleService';
 import ListAllRolesService from '../../../../services/ListAllRolesService';
 

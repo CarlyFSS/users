@@ -8,56 +8,70 @@ import {
   Get,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UsePipes,
+  Delete,
+  Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import ErrorException from '@shared/exceptions/ErrorException';
-import { User } from '@fireheet/entities';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import ValidationException from '@shared/exceptions/ValidationException';
-import UsersCacheProvider from '@shared/providers/CacheProvider/implementations/users/UsersCacheProvider';
-import CreateUserDTO from '../../../../dtos/CreateUserDTO';
+import { User } from '@fireheet/entities/typeorm/users';
+import CreateUserDTO from '../../../../models/dtos/CreateUserDTO';
 import UpdateUserService from '../../../../services/UpdateUserService';
-import ListUserService from '../../../../services/ListUserService';
-import UpdateUserDTO from '../../../../dtos/UpdateUserDTO';
+import UpdateUserDTO from '../../../../models/dtos/UpdateUserDTO';
+import DocumentValidationPipe from '../../pipes/DocumentValidationPipe';
+import BirthdateValidationPipe from '../../pipes/BirthdateValidationPipe';
+import UserCacheVerifierService from '../../../../services/UsersCacheVerifierService';
+import DeleteUserService from '../../../../services/DeleteUserService';
+import RestoreUserService from '../../../../services/RestoreUserService';
+import UUIDValidationInterceptor from '../../../../../../shared/infra/http/interceptor/UUIDValidationInterceptor';
 
-@ApiTags('Users Routes')
-@Controller('users')
+@Controller()
 @UseFilters(ErrorException, ValidationException)
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor, UUIDValidationInterceptor)
 export default class UsersController {
   constructor(
-    private readonly userCache: UsersCacheProvider,
     private readonly createUser: CreateUserService,
-    private readonly listUser: ListUserService,
     private readonly updateUser: UpdateUserService,
+    private readonly deleteUser: DeleteUserService,
+    private readonly restoreUser: RestoreUserService,
+    private readonly userCacheVerifier: UserCacheVerifierService,
   ) {}
 
   @Post()
-  async create(@Body() data: CreateUserDTO): Promise<User> {
+  @UsePipes(DocumentValidationPipe, BirthdateValidationPipe)
+  async create(@Body() data: CreateUserDTO): Promise<Partial<User>> {
     return this.createUser.execute(data);
   }
 
-  @Patch(':id')
+  @Patch(':user_id')
   async update(
-    @Param('id')
-    id: string,
+    @Param('user_id')
+    user_id: string,
+    @Query('role_id') role_id: string,
     @Body() data: UpdateUserDTO,
-  ): Promise<User> {
-    return this.updateUser.execute(id, data);
+  ): Promise<Partial<User>> {
+    return this.updateUser.execute(user_id, data, role_id);
   }
 
-  @Get(':id')
-  async show(@Param('id') id: string): Promise<User> {
-    let user: User;
+  @Get(':user_id')
+  async show(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
+    return this.userCacheVerifier.execute(user_id);
+  }
 
-    user = this.userCache.get<User>(id);
+  @Delete(':user_id')
+  async delete(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
+    return this.deleteUser.execute(user_id);
+  }
 
-    if (!user) {
-      user = await this.listUser.execute(id);
-
-      this.userCache.store(id, user);
-    }
-
-    return user;
+  @Patch(':user_id/restore')
+  async activate(
+    @Param('user_id') user_id: string,
+  ): Promise<Partial<User> | undefined> {
+    return this.restoreUser.execute(user_id);
   }
 }

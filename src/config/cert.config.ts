@@ -14,7 +14,7 @@ export default {
         '..',
         '..',
         'certificates',
-        `${result.parsed.CERT_KEY_NAME}.key`,
+        `${result?.parsed?.CERT_KEY_NAME}.key`,
       ),
     ),
     cert: readFileSync(
@@ -24,7 +24,7 @@ export default {
         '..',
         '..',
         'certificates',
-        `${result.parsed.CERT_NAME}.pem`,
+        `${result?.parsed?.CERT_NAME}.pem`,
       ),
     ),
   },

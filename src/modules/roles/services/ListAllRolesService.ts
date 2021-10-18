@@ -1,4 +1,4 @@
-import { Role } from '@fireheet/entities';
+import { Role } from '@fireheet/entities/typeorm/users';
 import { Injectable } from '@nestjs/common';
 import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
 
@@ -6,7 +6,7 @@ import RolesRepository from '../infra/typeorm/repositories/RolesRepository';
 export default class ListAllRolesService {
   constructor(private readonly rolesRepository: RolesRepository) {}
 
-  public async execute(): Promise<Role[]> {
-    return this.rolesRepository.listAll();
+  public async execute(offset?: number, limit?: number): Promise<Role[]> {
+    return this.rolesRepository.listAll(offset, limit);
   }
 }
