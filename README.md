@@ -9,13 +9,12 @@ Test the [Users API](https://app.swaggerhub.com/apis-docs/fireheet/users-api/0.3
 
 ### Support
 
-The Fireheet Users API is an MIT-licensed open source project. 
+This API will not be updated anymore, is just for referencing old content
 
 ### Stay in touch
 
 - Author - [Carly Silva](#)
-
-
+- 
 ## License
 
 Fireheet Users API is [MIT licensed](LICENSE).
